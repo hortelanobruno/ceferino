@@ -368,6 +368,22 @@ public class NewJApplet extends javax.swing.JApplet {
     }// </editor-fold>//GEN-END:initComponents
 
 
+    public void toVisor(String caracter){
+        
+    }
+    
+    public void toMatLab(String caracter){
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAC;
     private javax.swing.JButton buttonALaX;
