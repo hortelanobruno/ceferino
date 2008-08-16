@@ -59,22 +59,22 @@ public class NewJApplet extends javax.swing.JApplet {
         buttonOperadorResta = new javax.swing.JButton();
         buttonOperadorIgual = new javax.swing.JButton();
         buttonOperadorDivision = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        buttonNumeroPI = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jButton19 = new javax.swing.JButton();
-        jButton20 = new javax.swing.JButton();
-        jButton23 = new javax.swing.JButton();
-        jButton25 = new javax.swing.JButton();
-        jButton26 = new javax.swing.JButton();
-        jButton27 = new javax.swing.JButton();
-        jButton28 = new javax.swing.JButton();
-        jButton29 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        buttonParentesisAbrir = new javax.swing.JButton();
+        buttonLogaritmoNatural = new javax.swing.JButton();
+        buttonTangente = new javax.swing.JButton();
+        buttonCoseno = new javax.swing.JButton();
+        buttonParentesisCerrar = new javax.swing.JButton();
+        buttonSeno = new javax.swing.JButton();
+        buttonLogaritmo = new javax.swing.JButton();
+        buttonElevado = new javax.swing.JButton();
+        buttonRaizCuadrada = new javax.swing.JButton();
+        buttonAlCuadrado = new javax.swing.JButton();
+        buttonExponencialALaX = new javax.swing.JButton();
+        buttonRaizX = new javax.swing.JButton();
+        buttonFraccion = new javax.swing.JButton();
+        buttonALaX = new javax.swing.JButton();
         textFieldVisor = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -117,8 +117,8 @@ public class NewJApplet extends javax.swing.JApplet {
 
         buttonOperadorDivision.setText("/");
 
-        jButton3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        jButton3.setText("π");
+        buttonNumeroPI.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        buttonNumeroPI.setText("π");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -142,7 +142,7 @@ public class NewJApplet extends javax.swing.JApplet {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buttonNumeroPI, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(4, 4, 4)
                         .addComponent(buttonComa, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -200,7 +200,7 @@ public class NewJApplet extends javax.swing.JApplet {
                                         .addComponent(buttonOperadorMultiplicacion)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3)
+                            .addComponent(buttonNumeroPI)
                             .addComponent(buttonNumero0, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(buttonComa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(buttonOperadorIgual)))
@@ -215,37 +215,37 @@ public class NewJApplet extends javax.swing.JApplet {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jButton19.setText("(");
+        buttonParentesisAbrir.setText("(");
 
-        jButton20.setText("ln");
+        buttonLogaritmoNatural.setText("ln");
 
-        jButton23.setText("tan");
+        buttonTangente.setText("tan");
 
-        jButton25.setText("cos");
+        buttonCoseno.setText("cos");
 
-        jButton26.setText(")");
+        buttonParentesisCerrar.setText(")");
 
-        jButton27.setText("sin");
+        buttonSeno.setText("sin");
 
-        jButton28.setText("log");
+        buttonLogaritmo.setText("log");
 
-        jButton29.setText("^");
+        buttonElevado.setText("^");
 
-        jButton1.setFont(new java.awt.Font("Lucida Console", 0, 11)); // NOI18N
-        jButton1.setText("√");
+        buttonRaizCuadrada.setFont(new java.awt.Font("Lucida Console", 0, 11)); // NOI18N
+        buttonRaizCuadrada.setText("√");
 
-        jButton2.setText("x²");
+        buttonAlCuadrado.setText("x²");
 
-        jButton4.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        jButton4.setText("eʸ");
+        buttonExponencialALaX.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        buttonExponencialALaX.setText("eʸ");
 
-        jButton5.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        jButton5.setText("ʸ√");
+        buttonRaizX.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        buttonRaizX.setText("ʸ√");
 
-        jButton6.setText("a b/c");
+        buttonFraccion.setText("a b/c");
 
-        jButton7.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        jButton7.setText("10ʸ");
+        buttonALaX.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        buttonALaX.setText("10ʸ");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -254,34 +254,34 @@ public class NewJApplet extends javax.swing.JApplet {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                    .addComponent(buttonFraccion, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(jButton19))
+                            .addComponent(buttonRaizCuadrada)
+                            .addComponent(buttonParentesisAbrir))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton26, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))))
+                            .addComponent(buttonParentesisCerrar, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addComponent(buttonAlCuadrado, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))))
                 .addGap(6, 6, 6)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton29, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(buttonSeno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonElevado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                    .addComponent(buttonRaizX, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton25)
+                        .addComponent(buttonCoseno)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton23))
+                        .addComponent(buttonTangente))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buttonLogaritmo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton20, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE))
+                        .addComponent(buttonLogaritmoNatural, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                        .addComponent(buttonALaX, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(buttonExponencialALaX, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -289,24 +289,24 @@ public class NewJApplet extends javax.swing.JApplet {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton23)
-                    .addComponent(jButton25)
-                    .addComponent(jButton27)
-                    .addComponent(jButton6))
+                    .addComponent(buttonTangente)
+                    .addComponent(buttonCoseno)
+                    .addComponent(buttonSeno)
+                    .addComponent(buttonFraccion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(buttonRaizCuadrada, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                    .addComponent(buttonAlCuadrado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                    .addComponent(buttonRaizX, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonALaX, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonExponencialALaX, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton19, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton26, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton29, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton28, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton20, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(buttonParentesisAbrir, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(buttonParentesisCerrar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(buttonElevado, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(buttonLogaritmo, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(buttonLogaritmoNatural, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
@@ -370,8 +370,16 @@ public class NewJApplet extends javax.swing.JApplet {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAC;
+    private javax.swing.JButton buttonALaX;
+    private javax.swing.JButton buttonAlCuadrado;
     private javax.swing.JButton buttonComa;
+    private javax.swing.JButton buttonCoseno;
     private javax.swing.JButton buttonDelete;
+    private javax.swing.JButton buttonElevado;
+    private javax.swing.JButton buttonExponencialALaX;
+    private javax.swing.JButton buttonFraccion;
+    private javax.swing.JButton buttonLogaritmo;
+    private javax.swing.JButton buttonLogaritmoNatural;
     private javax.swing.JButton buttonNumero0;
     private javax.swing.JButton buttonNumero1;
     private javax.swing.JButton buttonNumero2;
@@ -382,26 +390,18 @@ public class NewJApplet extends javax.swing.JApplet {
     private javax.swing.JButton buttonNumero7;
     private javax.swing.JButton buttonNumero8;
     private javax.swing.JButton buttonNumero9;
+    private javax.swing.JButton buttonNumeroPI;
     private javax.swing.JButton buttonOperadorDivision;
     private javax.swing.JButton buttonOperadorIgual;
     private javax.swing.JButton buttonOperadorMultiplicacion;
     private javax.swing.JButton buttonOperadorResta;
     private javax.swing.JButton buttonOperadorSuma;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton23;
-    private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton26;
-    private javax.swing.JButton jButton27;
-    private javax.swing.JButton jButton28;
-    private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton buttonParentesisAbrir;
+    private javax.swing.JButton buttonParentesisCerrar;
+    private javax.swing.JButton buttonRaizCuadrada;
+    private javax.swing.JButton buttonRaizX;
+    private javax.swing.JButton buttonSeno;
+    private javax.swing.JButton buttonTangente;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
