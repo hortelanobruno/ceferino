@@ -7,16 +7,29 @@
 package javaapplication1;
 
 import com.welsungo.math.systemEqs.SistemaEcuaciones;
+import function.FuncionExponencial;
+import function.FuncionLineal;
+import function.FuncionSegundoGrado;
+import function.FuncionTercerGrado;
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.function.PowerFunction2D;
+import org.jfree.data.statistics.Regression;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
@@ -30,6 +43,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
     private int ejexmax;
     private int ejeymin;
     private int ejeymax;
+    private XYDataset data1;
     /** Initializes the applet MinimosCuadrados */
     public void init() {
         try {
@@ -58,7 +72,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        panelGrafico = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablePuntos = new javax.swing.JTable();
@@ -75,25 +89,11 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 
         jPanel2.setPreferredSize(new java.awt.Dimension(600, 600));
 
+        panelGrafico.setLayout(new java.awt.GridLayout(0, 1));
+
         jLabel3.setFont(new java.awt.Font("Bookman Old Style", 3, 18));
         jLabel3.setText("ACA VA EL GRAFICO");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(107, 107, 107)
-                .addComponent(jLabel3)
-                .addContainerGap(157, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(156, 156, 156)
-                .addComponent(jLabel3)
-                .addContainerGap(175, Short.MAX_VALUE))
-        );
+        panelGrafico.add(jLabel3);
 
         tablePuntos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -145,15 +145,17 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboboxGrado, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(buttonOK))
+                        .addGap(107, 107, 107)
+                        .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1)
-                    .addComponent(comboboxGrado, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonOK))
-                .addGap(107, 107, 107)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,7 +166,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                 .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(82, 82, 82)
@@ -173,7 +175,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                         .addComponent(comboboxGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(buttonOK)))
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -223,16 +225,79 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         result = cambiarVariables(result);
     }
     String funcion = generarFuncion(result);
-    double[][] coordenadas = cordenadasGrafico(result);
+    
+    //ACA JFREECHART
+    
+    data1 = createSampleData1();
+    panelGrafico.removeAll();
+    JTabbedPane jtabbedpane = new JTabbedPane();
+    jtabbedpane.add("Linear", createChartPanel2(result));
+    panelGrafico.add(jtabbedpane);
+    //panelGrafico.add("HOLAAA",createChartPanel2(result));
+    jtabbedpane.setVisible(true);
+    jtabbedpane.repaint();
+    panelGrafico.repaint();
+    this.repaint();
+    
     
     
 }//GEN-LAST:event_buttonOKActionPerformed
 
+    private XYDataset createSampleData1()
+    {
+        XYSeries xyseries = new XYSeries("Series 1");
+        
+        DefaultTableModel model = (DefaultTableModel)tablePuntos.getModel();
+        for(int i = 0 ; i < model.getRowCount() ; i++){
+            xyseries.add(Double.parseDouble(model.getValueAt(i, 0).toString()),Double.parseDouble(model.getValueAt(i, 1).toString()));
+        }
+        
+//        xyseries.add(2D, 56.270000000000003D);
+//        xyseries.add(3D, 41.32D);
+//        xyseries.add(4D, 31.449999999999999D);
+//        xyseries.add(5D, 30.050000000000001D);
+//        xyseries.add(6D, 24.690000000000001D);
+//        xyseries.add(7D, 19.780000000000001D);
+//        xyseries.add(8D, 20.940000000000001D);
+//        xyseries.add(9D, 16.73D);
+//        xyseries.add(10D, 14.210000000000001D);
+//        xyseries.add(11D, 12.44D);
+        XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
+        return xyseriescollection;
+    }
+    
+    private ChartPanel createChartPanel2(double[] result)
+    {
+        NumberAxis numberaxis = new NumberAxis("X");
+        numberaxis.setAutoRangeIncludesZero(false);
+        NumberAxis numberaxis1 = new NumberAxis("Y");
+        numberaxis1.setAutoRangeIncludesZero(false);
+        XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
+        XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+        double ad[] = Regression.getPowerRegression(data1, 0);
+        PowerFunction2D powerfunction2d = new PowerFunction2D(ad[0], ad[1]);
+        //XYDataset xydataset = DatasetUtilities.sampleFunction2D(powerfunction2d, 2D, 11D, 100, "Fitted Regression Line");
+        
+        XYSeriesCollection coordenadas = cordenadasGrafico(result);
+        
+        
+        XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
+        xylineandshaperenderer1.setSeriesPaint(0, Color.blue);
+        //xyplot.setDataset(1, xydataset);
+        xyplot.setDataset(1,coordenadas);
+        xyplot.setRenderer(1, xylineandshaperenderer1);
+        JFreeChart jfreechart = new JFreeChart("Power Regression", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        ChartPanel chartpanel = new ChartPanel(jfreechart, false);
+        chartpanel.setVisible(true);
+        return chartpanel;
+    }
+    
+    
 private String generarFuncion(double[] result){
     String funcion = new String();
     String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
     if(grado.equalsIgnoreCase("Exponencial")){
-        funcion = "Y = "+result[0]+" e^"+result[1]; 
+        funcion = "Y = "+result[0]+" e^"+result[1]+"X"; 
     }else{
         if(grados == 1){
             funcion = "Y = "+result[0]+" "+result[1]+"X";
@@ -245,32 +310,40 @@ private String generarFuncion(double[] result){
     return funcion;
 }
 
-private double[][] cordenadasGrafico(double[] result){
-    double[][] coord = new double[ejexmax-ejexmin][2];
-    for(int i = 0 ; i < ejexmax-ejexmin ; i++){
-        coord[i][0] = ejexmin + i;
-    }
+private XYSeriesCollection cordenadasGrafico(double[] result){
+    XYSeries series = new XYSeries("Fitted Regression Line");
+    double step = (11D - 2D) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
+    
     String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
     if(grado.equalsIgnoreCase("Exponencial")){
-        for(int i = 0 ; i < ejexmax-ejexmin ; i++){
-            coord[i][1] = result[0]*Math.pow(Math.E, result[1]*coord[i][0]);
+        for(int i = 0 ; i < 100 ; i++){
+            FuncionExponencial exp = new FuncionExponencial(result[0], result[1]);
+            double x = 2D + (step * i);
+            series.add(x, exp.getValue(x));
         }
     }else{
         if(grados == 1){
-            for(int i = 0 ; i < ejexmax-ejexmin ; i++){
-                coord[i][1] = result[0] + result[1]*coord[i][0];
+            for(int i = 0 ; i < 100 ; i++){
+                FuncionLineal lin = new FuncionLineal(result[0], result[1]);
+                double x = 2D + (step * i);
+                series.add(x,lin.getValue(x));
             }
         }else if(grados ==2){
-            for(int i = 0 ; i < ejexmax-ejexmin ; i++){
-                coord[i][1] = result[0] + result[1]*coord[i][0] + result[2]*Math.pow(coord[i][0], 2);
+            for(int i = 0 ; i < 100 ; i++){
+                FuncionSegundoGrado seg = new FuncionSegundoGrado(result[0], result[1], result[2]);
+                double x = 2D + (step * i);
+                series.add(x,seg.getValue(x));
             }
         }else{
-            for(int i = 0 ; i < ejexmax-ejexmin ; i++){
-                coord[i][1] = result[0] + result[1]*coord[i][0] + result[2]*Math.pow(coord[i][0], 2)+ result[3]*Math.pow(coord[i][0], 3);
+            for(int i = 0 ; i < 100 ; i++){
+                FuncionTercerGrado ter = new FuncionTercerGrado(result[0], result[1], result[2], result[3]);
+                double x = 2D + (step * i);
+                series.add(x,ter.getValue(x));
             }
         }
     }
-    return coord;
+    XYSeriesCollection collection = new XYSeriesCollection(series);
+    return collection;
 }
 
 
@@ -419,9 +492,9 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel panelGrafico;
     private javax.swing.JSpinner spinnerCantPuntos;
     private javax.swing.JTable tablePuntos;
     // End of variables declaration//GEN-END:variables
