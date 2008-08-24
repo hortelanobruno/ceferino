@@ -73,7 +73,6 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 
         jPanel2 = new javax.swing.JPanel();
         panelGrafico = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablePuntos = new javax.swing.JTable();
         buttonOK = new javax.swing.JButton();
@@ -81,6 +80,8 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         spinnerCantPuntos = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         comboboxGrado = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        labelFuncion = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -90,10 +91,6 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         jPanel2.setPreferredSize(new java.awt.Dimension(600, 600));
 
         panelGrafico.setLayout(new java.awt.GridLayout(0, 1));
-
-        jLabel3.setFont(new java.awt.Font("Bookman Old Style", 3, 18));
-        jLabel3.setText("ACA VA EL GRAFICO");
-        panelGrafico.add(jLabel3);
 
         tablePuntos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -138,6 +135,8 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             }
         });
 
+        jLabel4.setText("Funcion");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -145,37 +144,49 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboboxGrado, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
-                            .addComponent(buttonOK))
+                            .addComponent(buttonOK)
+                            .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(107, 107, 107)
-                        .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1)
-                    .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(50, 50, 50)
+                                .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(82, 82, 82)
                         .addComponent(jLabel2)
                         .addGap(43, 43, 43)
                         .addComponent(comboboxGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(buttonOK)))
-                .addContainerGap(140, Short.MAX_VALUE))
+                        .addComponent(buttonOK)
+                        .addGap(69, 69, 69))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -225,7 +236,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         result = cambiarVariables(result);
     }
     String funcion = generarFuncion(result);
-    
+    labelFuncion.setText(funcion);
     //ACA JFREECHART
     
     data1 = createSampleData1();
@@ -300,11 +311,11 @@ private String generarFuncion(double[] result){
         funcion = "Y = "+result[0]+" e^"+result[1]+"X"; 
     }else{
         if(grados == 1){
-            funcion = "Y = "+result[0]+" "+result[1]+"X";
+            funcion = "Y = "+result[0]+" + "+result[1]+"X";
         }else if(grados == 2){
-            funcion = "Y = "+result[0]+" "+result[1]+"X "+result[2]+"X^2 ";
+            funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2 + ";
         }else{
-            funcion = "Y = "+result[0]+" "+result[1]+"X "+result[2]+"X^2 "+result[3]+"X^3";
+            funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2 + "+result[3]+"X^3";
         }
     }
     return funcion;
@@ -488,12 +499,13 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JComboBox comboboxGrado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelFuncion;
     private javax.swing.JPanel panelGrafico;
     private javax.swing.JSpinner spinnerCantPuntos;
     private javax.swing.JTable tablePuntos;
