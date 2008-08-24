@@ -262,17 +262,6 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         for(int i = 0 ; i < model.getRowCount() ; i++){
             xyseries.add(Double.parseDouble(model.getValueAt(i, 0).toString()),Double.parseDouble(model.getValueAt(i, 1).toString()));
         }
-        
-//        xyseries.add(2D, 56.270000000000003D);
-//        xyseries.add(3D, 41.32D);
-//        xyseries.add(4D, 31.449999999999999D);
-//        xyseries.add(5D, 30.050000000000001D);
-//        xyseries.add(6D, 24.690000000000001D);
-//        xyseries.add(7D, 19.780000000000001D);
-//        xyseries.add(8D, 20.940000000000001D);
-//        xyseries.add(9D, 16.73D);
-//        xyseries.add(10D, 14.210000000000001D);
-//        xyseries.add(11D, 12.44D);
         XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
         return xyseriescollection;
     }
@@ -286,12 +275,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
         XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
         double ad[] = Regression.getPowerRegression(data1, 0);
-        PowerFunction2D powerfunction2d = new PowerFunction2D(ad[0], ad[1]);
-        //XYDataset xydataset = DatasetUtilities.sampleFunction2D(powerfunction2d, 2D, 11D, 100, "Fitted Regression Line");
-        
         XYSeriesCollection coordenadas = cordenadasGrafico(result);
-        
-        
         XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
         xylineandshaperenderer1.setSeriesPaint(0, Color.blue);
         //xyplot.setDataset(1, xydataset);
@@ -323,32 +307,32 @@ private String generarFuncion(double[] result){
 
 private XYSeriesCollection cordenadasGrafico(double[] result){
     XYSeries series = new XYSeries("Fitted Regression Line");
-    double step = (11D - 2D) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
+    double step = (10D - 0D) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
     
     String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
     if(grado.equalsIgnoreCase("Exponencial")){
         for(int i = 0 ; i < 100 ; i++){
             FuncionExponencial exp = new FuncionExponencial(result[0], result[1]);
-            double x = 2D + (step * i);
+            double x = 1D + (step * i);
             series.add(x, exp.getValue(x));
         }
     }else{
         if(grados == 1){
             for(int i = 0 ; i < 100 ; i++){
                 FuncionLineal lin = new FuncionLineal(result[0], result[1]);
-                double x = 2D + (step * i);
+                double x = 1D + (step * i);
                 series.add(x,lin.getValue(x));
             }
         }else if(grados ==2){
             for(int i = 0 ; i < 100 ; i++){
                 FuncionSegundoGrado seg = new FuncionSegundoGrado(result[0], result[1], result[2]);
-                double x = 2D + (step * i);
+                double x = 1D + (step * i);
                 series.add(x,seg.getValue(x));
             }
         }else{
             for(int i = 0 ; i < 100 ; i++){
                 FuncionTercerGrado ter = new FuncionTercerGrado(result[0], result[1], result[2], result[3]);
-                double x = 2D + (step * i);
+                double x = 1D + (step * i);
                 series.add(x,ter.getValue(x));
             }
         }
