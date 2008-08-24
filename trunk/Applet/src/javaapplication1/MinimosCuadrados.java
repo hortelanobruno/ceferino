@@ -25,8 +25,11 @@ import javax.swing.table.DefaultTableModel;
 public class MinimosCuadrados extends javax.swing.JApplet {
 
     private int cantPuntos;
-    private ArrayList<Punto> puntos;
     private int grados;
+    private int ejexmin;
+    private int ejexmax;
+    private int ejeymin;
+    private int ejeymax;
     /** Initializes the applet MinimosCuadrados */
     public void init() {
         try {
@@ -36,6 +39,8 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                     initComponents();
                     cantPuntos=0;
                     grados=1;
+                    ejexmin=0;
+                    ejexmax=10;
                 }
             });
         } catch (Exception ex) {
@@ -217,10 +222,57 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     if(grado.equalsIgnoreCase("Exponencial")){
         result = cambiarVariables(result);
     }
-    
+    String funcion = generarFuncion(result);
+    double[][] coordenadas = cordenadasGrafico(result);
     
     
 }//GEN-LAST:event_buttonOKActionPerformed
+
+private String generarFuncion(double[] result){
+    String funcion = new String();
+    String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
+    if(grado.equalsIgnoreCase("Exponencial")){
+        funcion = "Y = "+result[0]+" e^"+result[1]; 
+    }else{
+        if(grados == 1){
+            funcion = "Y = "+result[0]+" "+result[1]+"X";
+        }else if(grados == 2){
+            funcion = "Y = "+result[0]+" "+result[1]+"X "+result[2]+"X^2 ";
+        }else{
+            funcion = "Y = "+result[0]+" "+result[1]+"X "+result[2]+"X^2 "+result[3]+"X^3";
+        }
+    }
+    return funcion;
+}
+
+private double[][] cordenadasGrafico(double[] result){
+    double[][] coord = new double[ejexmax-ejexmin][2];
+    for(int i = 0 ; i < ejexmax-ejexmin ; i++){
+        coord[i][0] = ejexmin + i;
+    }
+    String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
+    if(grado.equalsIgnoreCase("Exponencial")){
+        for(int i = 0 ; i < ejexmax-ejexmin ; i++){
+            coord[i][1] = result[0]*Math.pow(Math.E, result[1]*coord[i][0]);
+        }
+    }else{
+        if(grados == 1){
+            for(int i = 0 ; i < ejexmax-ejexmin ; i++){
+                coord[i][1] = result[0] + result[1]*coord[i][0];
+            }
+        }else if(grados ==2){
+            for(int i = 0 ; i < ejexmax-ejexmin ; i++){
+                coord[i][1] = result[0] + result[1]*coord[i][0] + result[2]*Math.pow(coord[i][0], 2);
+            }
+        }else{
+            for(int i = 0 ; i < ejexmax-ejexmin ; i++){
+                coord[i][1] = result[0] + result[1]*coord[i][0] + result[2]*Math.pow(coord[i][0], 2)+ result[3]*Math.pow(coord[i][0], 3);
+            }
+        }
+    }
+    return coord;
+}
+
 
 private double[] cambiarVariables(double[] a){
     a[0] = Math.pow(Math.E, a[0]);
