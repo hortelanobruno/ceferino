@@ -369,10 +369,12 @@ private double[][] multiplicarMatrices2(double[][] at, double[][] b){
 
 
     for (int i=0; i < grados+1; i++)
-    for (int j=0; j < 1; j++)
     {
-        for (int p=0; p < filas; p++)
-        atxb[i][j] += at[i][p]*b[p][j];
+        for (int j=0; j < 1; j++)
+        {
+            for (int p=0; p < filas; p++)
+            atxb[i][j] += at[i][p]*b[p][j];
+        }
     }
     return atxb;
 }
@@ -384,10 +386,12 @@ private double[][] multiplicarMatrices(double[][] at, double[][] a){
 
 
     for (int i=0; i < grados+1; i++)
-    for (int j=0; j < grados+1; j++)
     {
-        for (int p=0; p < filas; p++)
-        atxa[i][j] += at[i][p]*a[p][j];
+        for (int j=0; j < grados+1; j++)
+        {
+            for (int p=0; p < filas; p++)
+            atxa[i][j] += at[i][p]*a[p][j];
+        }
     }
     return atxa;
 }
