@@ -82,6 +82,10 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         comboboxGrado = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         labelFuncion = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtFieldLimiteInfX = new javax.swing.JTextField();
+        txtFieldLimiteSupX = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -137,6 +141,14 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 
         jLabel4.setText("Funcion");
 
+        jLabel3.setText("Limite Inferior Eje X:");
+
+        jLabel5.setText("Limite Superior Eje X:");
+
+        txtFieldLimiteInfX.setText("1");
+
+        txtFieldLimiteSupX.setText("10");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -158,7 +170,15 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                                 .addComponent(jLabel4)
                                 .addGap(50, 50, 50)
                                 .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtFieldLimiteSupX)
+                                    .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -180,13 +200,21 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                         .addComponent(buttonOK)
                         .addGap(69, 69, 69))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(txtFieldLimiteSupX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                         .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -297,7 +325,7 @@ private String generarFuncion(double[] result){
         if(grados == 1){
             funcion = "Y = "+result[0]+" + "+result[1]+"X";
         }else if(grados == 2){
-            funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2 + ";
+            funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2";
         }else{
             funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2 + "+result[3]+"X^3";
         }
@@ -307,7 +335,7 @@ private String generarFuncion(double[] result){
 
 private XYSeriesCollection cordenadasGrafico(double[] result){
     XYSeries series = new XYSeries("Fitted Regression Line");
-    double step = (10D - 0D) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
+    double step = (Double.parseDouble(txtFieldLimiteSupX.getText()) - Double.parseDouble(txtFieldLimiteInfX.getText())) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
     
     String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
     if(grado.equalsIgnoreCase("Exponencial")){
@@ -487,7 +515,9 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JComboBox comboboxGrado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -497,6 +527,8 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JPanel panelGrafico;
     private javax.swing.JSpinner spinnerCantPuntos;
     private javax.swing.JTable tablePuntos;
+    private javax.swing.JTextField txtFieldLimiteInfX;
+    private javax.swing.JTextField txtFieldLimiteSupX;
     // End of variables declaration//GEN-END:variables
 
 }
