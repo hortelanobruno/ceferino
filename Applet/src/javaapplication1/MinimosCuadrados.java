@@ -7,6 +7,7 @@
 package javaapplication1;
 
 import com.welsungo.math.systemEqs.SistemaEcuaciones;
+import function.FuncionEnesima;
 import function.FuncionExponencial;
 import function.FuncionLineal;
 import function.FuncionSegundoGrado;
@@ -14,6 +15,8 @@ import function.FuncionTercerGrado;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
@@ -44,8 +47,12 @@ public class MinimosCuadrados extends javax.swing.JApplet {
     private int ejeymin;
     private int ejeymax;
     private XYDataset data1;
+    private FuncionEnesima funcion;
+    
     /** Initializes the applet MinimosCuadrados */
+    @Override
     public void init() {
+        
         try {
             java.awt.EventQueue.invokeAndWait(new Runnable() {
                 public void run() {
@@ -55,6 +62,8 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                     grados=1;
                     ejexmin=0;
                     ejexmax=10;
+                    radioGrado.setSelected(true);
+                    funcion = new FuncionEnesima();
                 }
             });
         } catch (Exception ex) {
@@ -71,6 +80,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel2 = new javax.swing.JPanel();
         panelGrafico = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -78,14 +88,15 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         buttonOK = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         spinnerCantPuntos = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        comboboxGrado = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         labelFuncion = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtFieldLimiteInfX = new javax.swing.JTextField();
         txtFieldLimiteSupX = new javax.swing.JTextField();
+        spinnerGrado = new javax.swing.JSpinner();
+        radioGrado = new javax.swing.JRadioButton();
+        radioExponencial = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -130,16 +141,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             }
         });
 
-        jLabel2.setText("Grado");
-
-        comboboxGrado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primero Grado", "Segundo Grado", "Tercer Grado", "Exponencial" }));
-        comboboxGrado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboboxGradoActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setText("Funcion");
+        jLabel4.setText("Función Regresion");
 
         jLabel3.setText("Limite Inferior Eje X:");
 
@@ -148,6 +150,25 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         txtFieldLimiteInfX.setText("1");
 
         txtFieldLimiteSupX.setText("10");
+
+        spinnerGrado.setModel(new javax.swing.SpinnerNumberModel(1, 1, 50, 1));
+
+        buttonGroup1.add(radioGrado);
+        radioGrado.setText("Grado");
+        radioGrado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioGradoActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(radioExponencial);
+        radioExponencial.setSelected(true);
+        radioExponencial.setText("Exponencial");
+        radioExponencial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioExponencialActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -159,17 +180,20 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                     .addComponent(jLabel1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboboxGrado, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(buttonOK)
-                            .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(107, 107, 107)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(buttonOK)
+                                    .addComponent(radioGrado))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(spinnerGrado, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(radioExponencial))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
-                                .addGap(50, 50, 50)
-                                .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelFuncion, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))
                             .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,8 +202,9 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtFieldLimiteSupX)
-                                    .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                                    .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))))
+                    .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,10 +218,12 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                         .addGap(16, 16, 16)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(82, 82, 82)
-                        .addComponent(jLabel2)
-                        .addGap(43, 43, 43)
-                        .addComponent(comboboxGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(spinnerGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(radioGrado))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radioExponencial)
+                        .addGap(58, 58, 58)
                         .addComponent(buttonOK)
                         .addGap(69, 69, 69))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -208,13 +235,13 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(txtFieldLimiteSupX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                         .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -241,6 +268,8 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 // TODO add your handling code here:
     int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
     
+    SistemaDeEcuaciones s = new SistemaDeEcuaciones();
+    
     double[][] a = new double[filas][grados + 1];
     double[][] b = new double[filas][1];
     double[][] at = new double[grados + 1][filas];
@@ -255,16 +284,19 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     coef  = armarSistema(atxa,atxb);
     
     SistemaEcuaciones sisEcu = new SistemaEcuaciones();
-    sisEcu.setNumEcs(grados+1);
+    sisEcu.setNumEcs(Integer.parseInt(spinnerGrado.getValue().toString())+1);
     sisEcu.setCoef(coef);
     double[] result = sisEcu.getSolucion();
+    //double[] resultado;
+    //double[] result = s.resolver(atxa, atxb, resultado, Integer.parseInt(spinnerGrado.getValue().toString())+1); 
     
-    String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
+    String grado;
+    
+    if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
+    else grado = "Exponencial";
     if(grado.equalsIgnoreCase("Exponencial")){
         result = cambiarVariables(result);
     }
-    String funcion = generarFuncion(result);
-    labelFuncion.setText(funcion);
     //ACA JFREECHART
     
     data1 = createSampleData1();
@@ -273,13 +305,11 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     jtabbedpane.add("Linear", createChartPanel2(result));
     panelGrafico.add(jtabbedpane);
     //panelGrafico.add("HOLAAA",createChartPanel2(result));
+    labelFuncion.setText(generarFuncion(result));
     jtabbedpane.setVisible(true);
     jtabbedpane.repaint();
     panelGrafico.repaint();
-    this.repaint();
-    
-    
-    
+    this.repaint();    
 }//GEN-LAST:event_buttonOKActionPerformed
 
     private XYDataset createSampleData1()
@@ -308,8 +338,9 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         xylineandshaperenderer1.setSeriesPaint(0, Color.blue);
         //xyplot.setDataset(1, xydataset);
         xyplot.setDataset(1,coordenadas);
-        xyplot.setRenderer(1, xylineandshaperenderer1);
-        JFreeChart jfreechart = new JFreeChart("Power Regression", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        xyplot.setRenderer(1, xylineandshaperenderer1);// 
+        
+        JFreeChart jfreechart = new JFreeChart("Regresion " + ((spinnerGrado.isEnabled())?"de grado " + spinnerGrado.getValue().toString():"Exponencial"), JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
         return chartpanel;
@@ -317,27 +348,35 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     
     
 private String generarFuncion(double[] result){
-    String funcion = new String();
-    String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
+    String func = new String();
+    String grado;
+    
+    if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
+    else grado = "Exponencial";
     if(grado.equalsIgnoreCase("Exponencial")){
-        funcion = "Y = "+result[0]+" e^"+result[1]+"X"; 
+        func = "Y = "+result[0]+" e^"+result[1]+"X"; 
     }else{
-        if(grados == 1){
+        /*if(grados == 1){
             funcion = "Y = "+result[0]+" + "+result[1]+"X";
         }else if(grados == 2){
             funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2";
         }else{
             funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2 + "+result[3]+"X^3";
-        }
+        }*/
+        func = this.funcion.getFunctionString();
     }
-    return funcion;
+    return func;
 }
 
 private XYSeriesCollection cordenadasGrafico(double[] result){
-    XYSeries series = new XYSeries("Fitted Regression Line");
+    XYSeries series = new XYSeries("Curva de Regresion");
     double step = (Double.parseDouble(txtFieldLimiteSupX.getText()) - Double.parseDouble(txtFieldLimiteInfX.getText())) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
     
-    String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
+    String grado;
+    
+    if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
+    else grado = "Exponencial";
+    
     if(grado.equalsIgnoreCase("Exponencial")){
         for(int i = 0 ; i < 100 ; i++){
             FuncionExponencial exp = new FuncionExponencial(result[0], result[1]);
@@ -345,7 +384,7 @@ private XYSeriesCollection cordenadasGrafico(double[] result){
             series.add(x, exp.getValue(x));
         }
     }else{
-        if(grados == 1){
+        /*if(grados == 1){
             for(int i = 0 ; i < 100 ; i++){
                 FuncionLineal lin = new FuncionLineal(result[0], result[1]);
                 double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
@@ -363,7 +402,20 @@ private XYSeriesCollection cordenadasGrafico(double[] result){
                 double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
                 series.add(x,ter.getValue(x));
             }
-        }
+        }*/
+        
+        ArrayList<Double> coeficientes = new ArrayList();
+        
+        for(int i = 0;i < result.length;i++)
+            coeficientes.add(result[i]);
+        
+        this.funcion = new FuncionEnesima(coeficientes, Integer.parseInt(spinnerGrado.getValue().toString()));
+        
+        for(int i = 0; i<100;i++)
+        {
+            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
+            series.add(x,funcion.getValue(x));
+        }    
     }
     XYSeriesCollection collection = new XYSeriesCollection(series);
     return collection;
@@ -428,7 +480,11 @@ private double[][] cargarB(){
     int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
     double[][] b = new double[filas][1];
     DefaultTableModel model = (DefaultTableModel)tablePuntos.getModel();
-    String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
+    String grado;
+    
+    if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
+    else grado = "Exponencial";
+    
     if(grado.equalsIgnoreCase("Exponencial")){
         for(int i = 0 ; i < filas ; i++){
             b[i][0] = Math.log(Double.parseDouble(model.getValueAt(i, 1).toString()));
@@ -479,21 +535,15 @@ private void spinnerCantPuntosStateChanged(javax.swing.event.ChangeEvent evt) {/
     }
 }//GEN-LAST:event_spinnerCantPuntosStateChanged
 
-private void comboboxGradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxGradoActionPerformed
-// TODO add your handling code here:
-    String grado = ((DefaultComboBoxModel)comboboxGrado.getModel()).getSelectedItem().toString();
-    if(grado.equalsIgnoreCase("Primer grado")){
-        grados = 1;
-    }else if(grado.equalsIgnoreCase("Segundo grado")){
-        grados = 2;
-    }else if(grado.equalsIgnoreCase("Tercer grado")){
-        grados = 3;
-    }else if(grado.equalsIgnoreCase("Exponencial")){
-        grados = 1;
-    }else{
-        System.out.println("ERROR EN LOS GRADOS");
-    }
-}//GEN-LAST:event_comboboxGradoActionPerformed
+private void radioGradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioGradoActionPerformed
+    if(radioGrado.isSelected()) spinnerGrado.setEnabled(true);
+    else spinnerGrado.setEnabled(false);
+}//GEN-LAST:event_radioGradoActionPerformed
+
+private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioExponencialActionPerformed
+    if(radioExponencial.isSelected()) spinnerGrado.setEnabled(false);
+    else spinnerGrado.setEnabled(true);
+}//GEN-LAST:event_radioExponencialActionPerformed
 
 
 private void setLookAndFeel() throws HeadlessException {
@@ -511,10 +561,9 @@ private void setLookAndFeel() throws HeadlessException {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonOK;
-    private javax.swing.JComboBox comboboxGrado;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -525,7 +574,10 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelFuncion;
     private javax.swing.JPanel panelGrafico;
+    private javax.swing.JRadioButton radioExponencial;
+    private javax.swing.JRadioButton radioGrado;
     private javax.swing.JSpinner spinnerCantPuntos;
+    private javax.swing.JSpinner spinnerGrado;
     private javax.swing.JTable tablePuntos;
     private javax.swing.JTextField txtFieldLimiteInfX;
     private javax.swing.JTextField txtFieldLimiteSupX;
