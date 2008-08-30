@@ -169,7 +169,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(50, 50, 50)
-                                .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,26 +341,26 @@ private XYSeriesCollection cordenadasGrafico(double[] result){
     if(grado.equalsIgnoreCase("Exponencial")){
         for(int i = 0 ; i < 100 ; i++){
             FuncionExponencial exp = new FuncionExponencial(result[0], result[1]);
-            double x = 1D + (step * i);
+            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
             series.add(x, exp.getValue(x));
         }
     }else{
         if(grados == 1){
             for(int i = 0 ; i < 100 ; i++){
                 FuncionLineal lin = new FuncionLineal(result[0], result[1]);
-                double x = 1D + (step * i);
+                double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
                 series.add(x,lin.getValue(x));
             }
         }else if(grados ==2){
             for(int i = 0 ; i < 100 ; i++){
                 FuncionSegundoGrado seg = new FuncionSegundoGrado(result[0], result[1], result[2]);
-                double x = 1D + (step * i);
+                double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
                 series.add(x,seg.getValue(x));
             }
         }else{
             for(int i = 0 ; i < 100 ; i++){
                 FuncionTercerGrado ter = new FuncionTercerGrado(result[0], result[1], result[2], result[3]);
-                double x = 1D + (step * i);
+                double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
                 series.add(x,ter.getValue(x));
             }
         }
