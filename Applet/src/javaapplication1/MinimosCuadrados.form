@@ -76,7 +76,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
-                                  <Component id="labelFuncion" min="-2" pref="188" max="-2" attributes="0"/>
+                                  <Component id="labelFuncion" min="-2" pref="347" max="-2" attributes="0"/>
                               </Group>
                               <Component id="panelGrafico" min="-2" pref="450" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
