@@ -107,29 +107,42 @@ public class Main {
         
         
         ArrayList<ArrayList<Double>> aux = generarPoblacionInicial(input,input2,rango);
+        int cantIteraciones = 10;
+        int menor = 0;
+        int menor2 = 0;
+        for(int i=0 ; i < cantIteraciones ; i++){
+            ArrayList<Double> pesoCromozoma = generarPeso(aux);
+            ArrayList<Double> pesoAuxiliar = new ArrayList<Double>();
+            pesoAuxiliar.addAll(pesoCromozoma);
+            menor = buscarMenor(pesoAuxiliar);
+            pesoAuxiliar.remove(menor);
+            menor2 = buscarMenor(pesoAuxiliar);
+            pesoAuxiliar.remove(menor2);
+            //creo neuva poblacion
+            ArrayList<ArrayList<Double>> nuevaPoblacion = new ArrayList<ArrayList<Double>>();
+            //cargo los mejores 2 padres
+            nuevaPoblacion.add(aux.get(menor));
+            nuevaPoblacion.add(aux.get(menor2));
+            //genero y cargo hijos mutados
+            generarYCargarHijosMutados(nuevaPoblacion,aux.get(menor),aux.get(menor2));
+            while(nuevaPoblacion.size() <10 ){
+                menor = buscarMenor(pesoAuxiliar);
+                menor2 = buscarMenor(pesoAuxiliar);
+                generarYCargarHijosMutados(nuevaPoblacion,aux.get(menor),aux.get(menor2));
+            }
+            aux = nuevaPoblacion;
+        }
         ArrayList<Double> pesoCromozoma = generarPeso(aux);
-        ArrayList<Double> pesoAuxiliar = new ArrayList<Double>();
-        pesoAuxiliar.addAll(pesoCromozoma);
-        int menor = buscarMenor(pesoAuxiliar);
-        int menor2 = buscarMenor(pesoAuxiliar);
-        
-        ArrayList<ArrayList<Double>> nuevaPoblacion = new ArrayList<ArrayList<Double>>();
-        nuevaPoblacion.add(aux.get(menor));
-        nuevaPoblacion.add(aux.get(menor2));
-        
-        generarYCargarHijosMutados(nuevaPoblacion,aux.get(menor),aux.get(menor2));
-        
-        
-        
+        //obtengo el mejor del mundo
+        menor = buscarMenor(pesoCromozoma);
         
     }
     
     public void generarYCargarHijosMutados(ArrayList<ArrayList<Double>> pobla, ArrayList<Double> hijo1, ArrayList<Double> hijo2){
         int corte = 2;
-        
+        int invertirValor = 1;
         ArrayList<Double> hijoNuevo1 = new ArrayList<Double>();
         ArrayList<Double> hijoNuevo2 = new ArrayList<Double>();
-        
         for(int i = 0 ; i < hijo1.size() ; i++){
             if(i < corte){
                 hijoNuevo1.add(hijo1.get(i));
@@ -139,9 +152,14 @@ public class Main {
                 hijoNuevo2.add(hijo1.get(i));
             }
         }
-        
-        
-        
+        //cambiar valor
+        double aux1 = hijoNuevo1.get(invertirValor);
+        double aux2 = hijoNuevo2.get(invertirValor);
+        hijoNuevo1.toArray()[invertirValor] = aux2;
+        hijoNuevo2.toArray()[invertirValor] = aux1;
+        //agregar hijos
+        pobla.add(hijoNuevo1);
+        pobla.add(hijoNuevo2);
     }
     
     
@@ -154,7 +172,6 @@ public class Main {
                 aux2 = aux.get(i);
             }
         }
-        aux.remove(menor);
         return menor;
     }
     
