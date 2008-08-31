@@ -12,9 +12,12 @@ package algoritmogenetico;
  */
 public class GUI extends javax.swing.JFrame {
 
+    private Algoritmo algoritmo;
+    
     /** Creates new form GUI */
     public GUI() {
         initComponents();
+        algoritmo = new Algoritmo();
     }
 
     /** This method is called from within the constructor to
