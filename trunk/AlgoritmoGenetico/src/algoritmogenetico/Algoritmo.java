@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author dext
  */
-public class Main {
+public class Algoritmo {
 
     public HashMap<String,HashMap<ArrayList<String>,Double>> mapaDetodo;
     
@@ -99,7 +99,7 @@ public class Main {
         return null;
     }
     
-    public Main(){
+    public Algoritmo(){
         mapaDetodo = cargaDatos();
         List<Integer> input = obtenerDatosIngresados();
         HashMap<String,String> input2 = obtenerPriorizacion();
