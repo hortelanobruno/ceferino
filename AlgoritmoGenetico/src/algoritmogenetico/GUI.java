@@ -314,13 +314,15 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 public void cargarTabla(){
     ArrayList<ArrayList<Double>> poblacionFinal = algoritmo.poblacionFinal;
     ArrayList<Double> pesoFinal = algoritmo.pesoFinal;
-    
     DefaultTableModel model = (DefaultTableModel) tableOutput.getModel();
-    
+    vaciarTabla();
     for(int i=1 ; i < poblacionFinal.size() ; i++){
         ArrayList<Double> aux = poblacionFinal.get(i);
         model.addRow( new Double[]{aux.get(0),aux.get(1),aux.get(2),pesoFinal.get(i-1)});
     }
+}
+public void vaciarTabla() {
+        ((DefaultTableModel)tableOutput.getModel()).getDataVector().removeAllElements();
 }
 
 public ArrayList<Double> cargarRangoDefault(){
