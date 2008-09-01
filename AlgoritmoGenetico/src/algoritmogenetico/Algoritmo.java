@@ -18,6 +18,12 @@ import java.util.List;
 public class Algoritmo {
 
     public HashMap<String,HashMap<ArrayList<String>,Double>> mapaDetodo;
+    public List<Integer> datosIngresados;
+    public HashMap<String,String> priorizacion;
+    public ArrayList<Double> rangoDefault;
+    public ArrayList<Double> pesoFinal;
+    public ArrayList<ArrayList<Double>> poblacionFinal;
+    public int mejorFinal;
     
     public HashMap<String,HashMap<ArrayList<String>,Double>> cargaDatos(){
         HashMap<String,HashMap<ArrayList<String>,Double>> mapGeneral = new HashMap<String,HashMap<ArrayList<String>,Double>>();
@@ -59,7 +65,7 @@ public class Algoritmo {
         hash1.put(lista1, 0.8);
         hash1.put(lista2, 0.4);
         hash1.put(lista3, 0.6);
-        mapGeneral.put("Bebidas", hash1);
+        mapGeneral.put("Bebida", hash1);
         
         
         lista1 = new ArrayList<String>();
@@ -88,18 +94,18 @@ public class Algoritmo {
     }
     
     public List<Integer> obtenerDatosIngresados(){
-        return null;
+        return datosIngresados;
     }
     
     public HashMap<String,String> obtenerPriorizacion(){
-        return null;
+        return priorizacion;
     }
     
     public ArrayList<Double> obtenerDatosRangoDefault(){
-        return null;
+        return rangoDefault;
     }
     
-    public Algoritmo(){
+    public void iniciar(){
         mapaDetodo = cargaDatos();
         List<Integer> input = obtenerDatosIngresados();
         HashMap<String,String> input2 = obtenerPriorizacion();
@@ -135,6 +141,12 @@ public class Algoritmo {
         ArrayList<Double> pesoCromozoma = generarPeso(aux);
         //obtengo el mejor del mundo
         menor = buscarMenor(pesoCromozoma);
+        poblacionFinal = aux;
+        mejorFinal = menor;
+        pesoFinal = pesoCromozoma;
+    }
+    
+    public Algoritmo(){
         
     }
     
