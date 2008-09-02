@@ -273,7 +273,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     double[][] a = new double[filas][grados + 1];
     double[][] b = new double[filas][1];
     double[][] at = new double[grados + 1][filas];
-    double[][] atxb = new double[grados+1][1];
+    double[] atxb = new double[grados+1];
     double[][] atxa = new double[grados+1][grados+1];
     double[][] coef = new double[grados+1][grados+2];
     a = cargarValores();
@@ -281,17 +281,25 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     at = trasponerMatriz(a,filas);
     atxa = multiplicarMatrices(at,a);
     atxb = multiplicarMatrices2(at,b);
-    coef  = armarSistema(atxa,atxb);
+    //coef  = armarSistema(atxa,atxb);
     System.out.println("");
-    SistemaEcuaciones sisEcu = new SistemaEcuaciones();
+   /* SistemaEcuaciones sisEcu = new SistemaEcuaciones();
     sisEcu.setNumEcs(Integer.parseInt(spinnerGrado.getValue().toString())+1);
     sisEcu.setCoef(coef);
-    double[] result = sisEcu.getSolucion();
+    double[] result = sisEcu.getSolucion();*/
+       
+    Matriz alfas = new Matriz(atxa);
+    Vector res = new Vector(atxb);
+    Vector resultSist = Matriz.producto(Matriz.inversa(alfas), res);
+    
+    double[] result = resultSist.x;
+    
+    /*for(int i = 0;i<result.length;i++)
+        result[i]=Math.round(result[i]);*/
     //double[] resultado;
     //double[] result = s.resolver(atxa, atxb, resultado, Integer.parseInt(spinnerGrado.getValue().toString())+1); 
-    
+    System.out.println("hola");
     String grado;
-    
     if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
     else grado = "Exponencial";
     if(grado.equalsIgnoreCase("Exponencial")){
@@ -442,19 +450,19 @@ private double[][] armarSistema(double[][] atxa, double[][] atxb){
     return coef;
 }
 
-private double[][] multiplicarMatrices2(double[][] at, double[][] b){
-    double[][] atxb = new double[grados+1][1];
+private double[] multiplicarMatrices2(double[][] at, double[][] b){
+    double[] atxb = new double[grados+1];
 
     int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
 
 
     for (int i=0; i < grados+1; i++)
     {
-        for (int j=0; j < 1; j++)
-        {
+        /*for (int j=0; j < 1; j++)
+        {*/
             for (int p=0; p < filas; p++)
-            atxb[i][j] += at[i][p]*b[p][j];
-        }
+            atxb[i] += at[i][p]*b[p][0];
+        //}
     }
     return atxb;
 }
