@@ -245,7 +245,7 @@ public class GUI extends javax.swing.JFrame {
         textAreaCromozoma.setRows(5);
         jScrollPane2.setViewportView(textAreaCromozoma);
 
-        jButton2.setText("Ver mejor Cromozoma");
+        jButton2.setText("Ver mejor Cromosoma");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
