@@ -113,6 +113,7 @@ public class Algoritmo {
         
         
         ArrayList<ArrayList<Double>> aux = generarPoblacionInicial(input,input2,rango);
+        imprimirPoblacion(aux);
         int cantIteraciones = 10;
         int menor = 0;
         int menor2 = 0;
@@ -138,6 +139,7 @@ public class Algoritmo {
                 generarYCargarHijosMutados(nuevaPoblacion,aux.get(menor),aux.get(menor2));
             }
             aux = nuevaPoblacion;
+            imprimirPoblacion(aux);
         }
         ArrayList<Double> pesoCromozoma = generarPeso(aux);
         //obtengo el mejor del mundo
@@ -146,6 +148,19 @@ public class Algoritmo {
         mejorFinal = menor;
         pesoFinal = pesoCromozoma;
     }
+    
+    public void imprimirPoblacion(ArrayList<ArrayList<Double>> aux){
+        System.out.println();
+        for(int i=0 ; i< aux.size() ; i++){
+            ArrayList<Double> aux2 = aux.get(i);
+            for(int j=0 ; j< aux2.size() ; j++){
+                System.out.print(aux2.get(j)+" ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+    
     
     public Algoritmo(){
         
