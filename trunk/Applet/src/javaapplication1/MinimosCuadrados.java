@@ -267,7 +267,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOKActionPerformed
 // TODO add your handling code here:
     int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
-    
+    grados = (Integer)spinnerGrado.getValue();
     SistemaDeEcuaciones s = new SistemaDeEcuaciones();
     
     double[][] a = new double[filas][grados + 1];
@@ -282,7 +282,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     atxa = multiplicarMatrices(at,a);
     atxb = multiplicarMatrices2(at,b);
     coef  = armarSistema(atxa,atxb);
-    
+    System.out.println("");
     SistemaEcuaciones sisEcu = new SistemaEcuaciones();
     sisEcu.setNumEcs(Integer.parseInt(spinnerGrado.getValue().toString())+1);
     sisEcu.setCoef(coef);

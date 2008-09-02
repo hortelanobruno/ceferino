@@ -14,9 +14,9 @@ public class PruebaSistemaEcuaciones {
     public PruebaSistemaEcuaciones() {
         //http://www.sc.ehu.es/sbweb/fisica_/numerico/matriz/matriz1.xhtml
         //sistema de ecuaciones lineales
-        double[][] m1={{3, -1, 0}, {-2, 1, 1}, {2, -1, 4}};
+        double[][] m1={{4, 6, 14}, {6, 14, 36}, {14, 36, 98}};
         Matriz coef=new Matriz(m1);
-        double[] n1={5, 0, 15};
+        double[] n1={4, 9, 23};
         Vector ter=new Vector(n1);
         Vector solucion=Matriz.producto(Matriz.inversa(coef), ter);
         System.out.println("solución "+solucion);
