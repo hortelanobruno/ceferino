@@ -49,6 +49,7 @@ public class FuncionEnesima
     {
         StringBuilder sb = new StringBuilder();
         
+        sb.append("f(X) = ");
         for(int i = this.getGrado();i>-1;i--)
         {
             double co = this.coef.get(i);
@@ -56,18 +57,18 @@ public class FuncionEnesima
             {
                 if(i == 0) 
                 {
-                    if(co != 0) sb.append(String.valueOf(co));
+                    if(co != 0.0) sb.append(String.valueOf(co));
                 }
                 else
                 {
                     if(i == 1)
                     {   
-                        if(co != 1)sb.append(co + "X" + " + ");
+                        if(Math.abs(co) != 1.0)sb.append(co + "X" + " + ");
                         else sb.append("X" + " + ");
                     }
                     else
                     {
-                        if(co != 1) sb.append(co + "X^" + i + " + ");
+                        if(Math.abs(co) != 1.0) sb.append(co + "X^" + i + " + ");
                         else  sb.append("X^" + i + " + ");
                     }
                 }
@@ -77,7 +78,7 @@ public class FuncionEnesima
         if( (ult == '+')) 
             return sb.toString().substring(0, sb.toString().length()-2);
         else 
-            return sb.toString().substring(0, sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length());
     }
 
     public int getGrado() {

@@ -6,30 +6,26 @@
 
 package javaapplication1;
 
-import com.welsungo.math.systemEqs.SistemaEcuaciones;
 import function.FuncionEnesima;
 import function.FuncionExponencial;
-import function.FuncionLineal;
-import function.FuncionSegundoGrado;
-import function.FuncionTercerGrado;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.util.List;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.function.PowerFunction2D;
-import org.jfree.data.statistics.Regression;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -48,6 +44,8 @@ public class MinimosCuadrados extends javax.swing.JApplet {
     private int ejeymax;
     private XYDataset data1;
     private FuncionEnesima funcion;
+    private DefaultTableModel model;
+    private JTabbedPane jtabbedpane;
     
     /** Initializes the applet MinimosCuadrados */
     @Override
@@ -63,7 +61,32 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                     ejexmin=0;
                     ejexmax=10;
                     radioGrado.setSelected(true);
+                    panelGrafico.removeAll();
+                    jtabbedpane = new JTabbedPane();
+                    panelGrafico.add(jtabbedpane);
+                    jtabbedpane.setVisible(true);
+                    jtabbedpane.repaint();
+                    panelGrafico.repaint();
+                     NumberAxis numberaxis = new NumberAxis("X");
+                    numberaxis.setAutoRangeIncludesZero(false);
+                    NumberAxis numberaxis1 = new NumberAxis("Y");
+                    numberaxis1.setAutoRangeIncludesZero(false);
+                    XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
+                    XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+                    JFreeChart jfreechart = new JFreeChart("Regresion ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+                    ChartPanel chartpanel = new ChartPanel(jfreechart, false);
+                    chartpanel.setVisible(true);
+                    jtabbedpane.add("Regresion",chartpanel);
+                     jtabbedpane.setVisible(true);
+                    jtabbedpane.repaint();
+                    panelGrafico.repaint();
                     funcion = new FuncionEnesima();
+                    model =(DefaultTableModel) tablePuntos.getModel();
+                    model.addTableModelListener(new TableModelListener() {
+                        public void tableChanged(TableModelEvent e) {
+                            tableListener(e);
+                        }
+                    });
                 }
             });
         } catch (Exception ex) {
@@ -141,7 +164,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             }
         });
 
-        jLabel4.setText("Función Regresion");
+        jLabel4.setText("Función Regresión: ");
 
         jLabel3.setText("Limite Inferior Eje X:");
 
@@ -202,7 +225,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtFieldLimiteSupX)
                                     .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))
-                            .addComponent(panelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)))
+                            .addComponent(panelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)))
                     .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -210,39 +233,41 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(82, 82, 82)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(spinnerGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(radioGrado))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radioExponencial)
+                        .addGap(58, 58, 58)
+                        .addComponent(buttonOK))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(16, 16, 16)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(82, 82, 82)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(spinnerGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(radioGrado))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(radioExponencial)
-                                .addGap(58, 58, 58)
-                                .addComponent(buttonOK))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(txtFieldLimiteSupX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(80, 80, 80)
-                                .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel5)
+                            .addComponent(txtFieldLimiteSupX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(80, 80, 80)
+                        .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addComponent(jLabel4)))
-                .addContainerGap(68, Short.MAX_VALUE))
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -269,14 +294,14 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 // TODO add your handling code here:
     int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
     grados = (Integer)spinnerGrado.getValue();
-    SistemaDeEcuaciones s = new SistemaDeEcuaciones();
+   // SistemaDeEcuaciones s = new SistemaDeEcuaciones();
     
     double[][] a = new double[filas][grados + 1];
     double[][] b = new double[filas][1];
     double[][] at = new double[grados + 1][filas];
     double[] atxb = new double[grados+1];
     double[][] atxa = new double[grados+1][grados+1];
-    double[][] coef = new double[grados+1][grados+2];
+   // double[][] coef = new double[grados+1][grados+2];
     a = cargarValores();
     b = cargarB();
     at = trasponerMatriz(a,filas);
@@ -310,8 +335,9 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     
     data1 = createSampleData1();
     panelGrafico.removeAll();
-    JTabbedPane jtabbedpane = new JTabbedPane();
-    jtabbedpane.add("Linear", createChartPanel2(result));
+    jtabbedpane = new JTabbedPane();
+   
+    jtabbedpane.add("Regresion", createChartPanel2(result));
     panelGrafico.add(jtabbedpane);
     //panelGrafico.add("HOLAAA",createChartPanel2(result));
     labelFuncion.setText(generarFuncion(result));
@@ -321,11 +347,66 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     this.repaint();    
 }//GEN-LAST:event_buttonOKActionPerformed
 
+    private void tableListener(TableModelEvent e)
+    {
+        if(e.getColumn() > -1)
+        {
+            int col = e.getColumn();
+            boolean flag = false;
+           
+            if(col == 0)
+            { 
+                if( (model.getValueAt(e.getLastRow(), col) != null)&&
+                    (model.getValueAt(e.getLastRow(), col+1)) != null 
+                  ) 
+                    flag= true;
+            }
+            else
+            {
+                if( (model.getValueAt(e.getLastRow(), col-1) != null )&&
+                    (model.getValueAt(e.getLastRow(), col)) != null
+                  ) 
+                    flag= true;
+            }
+            if(flag)
+            {           
+              //  JOptionPane.showMessageDialog(null, "flag true");
+
+                if(tablePuntos.isCursorSet())
+                {
+                    JOptionPane.showMessageDialog(null, "flag true y no editando");
+                    data1 = createSampleData1();
+                    panelGrafico.removeAll();
+                    jtabbedpane = new JTabbedPane();
+                    panelGrafico.add(jtabbedpane);
+                    jtabbedpane.setVisible(true);
+                    jtabbedpane.repaint();
+                    panelGrafico.repaint();
+                    NumberAxis numberaxis = new NumberAxis("X");
+                    numberaxis.setAutoRangeIncludesZero(false);
+                    NumberAxis numberaxis1 = new NumberAxis("Y");
+                    numberaxis1.setAutoRangeIncludesZero(false);
+                    XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true); 
+                    XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+                    JFreeChart jfreechart = new JFreeChart("Regresion ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+                    ChartPanel chartpanel = new ChartPanel(jfreechart, false);
+                    chartpanel.setVisible(true);
+                    jtabbedpane.add("Regresion",chartpanel);
+                    jtabbedpane.setVisible(true);
+                    jtabbedpane.repaint();
+                    panelGrafico.repaint();
+                }
+                else JOptionPane.showMessageDialog(null, "No grafico puntos");
+            }
+           
+        }
+    }
+    
     private XYDataset createSampleData1()
     {
         XYSeries xyseries = new XYSeries("Series 1");
         
-        DefaultTableModel model = (DefaultTableModel)tablePuntos.getModel();
+        //DefaultTableModel model = (DefaultTableModel)tablePuntos.getModel();
         for(int i = 0 ; i < model.getRowCount() ; i++){
             xyseries.add(Double.parseDouble(model.getValueAt(i, 0).toString()),Double.parseDouble(model.getValueAt(i, 1).toString()));
         }
@@ -341,7 +422,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         numberaxis1.setAutoRangeIncludesZero(false);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
         XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-        double ad[] = Regression.getPowerRegression(data1, 0);
+       // double ad[] = Regression.getPowerRegression(data1, 0);
         XYSeriesCollection coordenadas = cordenadasGrafico(result);
         XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
         xylineandshaperenderer1.setSeriesPaint(0, Color.blue);
@@ -436,7 +517,7 @@ private double[] cambiarVariables(double[] a){
     return a;
 }
 
-private double[][] armarSistema(double[][] atxa, double[][] atxb){
+/*private double[][] armarSistema(double[][] atxa, double[][] atxb){
     double[][] coef = new double[grados+1][grados+2];
     
     for(int i = 0 ; i < grados+1 ; i++ ){
@@ -449,7 +530,7 @@ private double[][] armarSistema(double[][] atxa, double[][] atxb){
     }
     
     return coef;
-}
+}*/
 
 private double[] multiplicarMatrices2(double[][] at, double[][] b){
     double[] atxb = new double[grados+1];
@@ -488,7 +569,7 @@ private double[][] multiplicarMatrices(double[][] at, double[][] a){
 private double[][] cargarB(){
     int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
     double[][] b = new double[filas][1];
-    DefaultTableModel model = (DefaultTableModel)tablePuntos.getModel();
+    model = (DefaultTableModel)tablePuntos.getModel();
     String grado;
     
     if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
