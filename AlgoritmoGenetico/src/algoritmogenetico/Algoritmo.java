@@ -126,12 +126,13 @@ public class Algoritmo {
             pesoAuxiliar.remove(menor2);
             //creo neuva poblacion
             ArrayList<ArrayList<Double>> nuevaPoblacion = new ArrayList<ArrayList<Double>>();
+            nuevaPoblacion.add(generarInput(input, rango));
             //cargo los mejores 2 padres
             nuevaPoblacion.add(aux.get(menor));
             nuevaPoblacion.add(aux.get(menor2));
             //genero y cargo hijos mutados
             generarYCargarHijosMutados(nuevaPoblacion,aux.get(menor),aux.get(menor2));
-            while(nuevaPoblacion.size() <10 ){
+            while(nuevaPoblacion.size() <11 ){
                 menor = buscarMenor(pesoAuxiliar);
                 menor2 = buscarMenor(pesoAuxiliar);
                 generarYCargarHijosMutados(nuevaPoblacion,aux.get(menor),aux.get(menor2));
@@ -192,7 +193,7 @@ public class Algoritmo {
         ArrayList<Double> auxaux = null;
         ArrayList<Double> top = new ArrayList<Double>();
         top = aux.get(0);
-        for(int i = 1 ; i < 10 ; i++){
+        for(int i = 1 ; i < aux.size() ; i++){
             auxaux = new ArrayList<Double>();
             auxaux = aux.get(i);
             double aux2 = 0;
@@ -204,11 +205,7 @@ public class Algoritmo {
         return lista;
     }
     
-    public ArrayList<ArrayList<Double>> generarPoblacionInicial(List<Integer> input, HashMap<String,String> input2, ArrayList<Double> rango){
-        //desp es 10x9
-        HashMap<ArrayList<String>,Double> aux;
-        ArrayList<ArrayList<Double>> matriz = new ArrayList<ArrayList<Double>>();
-        //carga de primer fila
+    public ArrayList<Double> generarInput(List<Integer> input, ArrayList<Double> rango){
         ArrayList<Double> auxout = new ArrayList<Double>();
         for(int i = 0 ; i < 3 ; i++){
             if(input.get(i) == 1){
@@ -221,7 +218,15 @@ public class Algoritmo {
                 auxout.add(rango.get(2));
             }
         }
-        matriz.add(auxout);
+        return auxout;
+    }
+    public ArrayList<ArrayList<Double>> generarPoblacionInicial(List<Integer> input, HashMap<String,String> input2, ArrayList<Double> rango){
+        //desp es 10x9
+        HashMap<ArrayList<String>,Double> aux;
+        ArrayList<ArrayList<Double>> matriz = new ArrayList<ArrayList<Double>>();
+        //carga de primer fila
+        
+        matriz.add(generarInput(input,rango));
         String priorizacion = null;
         for(int i = 0 ; i < 9 ; i++){
             ArrayList<Double> auxaux = new ArrayList<Double>();
