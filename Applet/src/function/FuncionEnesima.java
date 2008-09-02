@@ -54,13 +54,30 @@ public class FuncionEnesima
             double co = this.coef.get(i);
             if(co != 0.0f)
             {
-                if(i == 0) sb.append(String.valueOf(co));
+                if(i == 0) 
+                {
+                    if(co != 0) sb.append(String.valueOf(co));
+                }
                 else
-                if(i == 1) sb.append(co + "X" + " + ");
-                else sb.append(co + "X^" + i + " + ");
+                {
+                    if(i == 1)
+                    {   
+                        if(co != 1)sb.append(co + "X" + " + ");
+                        else sb.append("X" + " + ");
+                    }
+                    else
+                    {
+                        if(co != 1) sb.append(co + "X^" + i + " + ");
+                        else  sb.append("X^" + i + " + ");
+                    }
+                }
             }
         }
-        return sb.toString().substring(0, sb.toString().length());
+        char ult = sb.toString().charAt(sb.toString().length()-2);
+        if( (ult == '+')) 
+            return sb.toString().substring(0, sb.toString().length()-2);
+        else 
+            return sb.toString().substring(0, sb.toString().length()-1);
     }
 
     public int getGrado() {
