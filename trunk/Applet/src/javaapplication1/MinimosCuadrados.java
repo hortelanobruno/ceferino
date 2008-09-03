@@ -9,7 +9,6 @@ package javaapplication1;
 import function.FuncionEnesima;
 import function.FuncionExponencial;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -122,13 +121,18 @@ public class MinimosCuadrados extends javax.swing.JApplet
         spinnerGrado = new javax.swing.JSpinner();
         radioGrado = new javax.swing.JRadioButton();
         radioExponencial = new javax.swing.JRadioButton();
+        lblSol = new javax.swing.JLabel();
+        lblTituloErrorGlobal = new javax.swing.JLabel();
+        lblErrorGlobal = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lblCoefRegr = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setStub(null);
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(600, 600));
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 600));
 
         panelGrafico.setLayout(new java.awt.GridLayout(0, 1));
 
@@ -195,15 +199,20 @@ public class MinimosCuadrados extends javax.swing.JApplet
             }
         });
 
+        lblSol.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+
+        lblTituloErrorGlobal.setText("Error Global: ");
+
+        jLabel2.setText("Coeficiente de Regresión (R2): ");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,13 +221,12 @@ public class MinimosCuadrados extends javax.swing.JApplet
                                     .addComponent(radioGrado))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(spinnerGrado, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(radioExponencial))
+                            .addComponent(radioExponencial)
+                            .addComponent(jLabel1)
+                            .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelFuncion, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE))
+                            .addComponent(panelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
@@ -227,49 +235,79 @@ public class MinimosCuadrados extends javax.swing.JApplet
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtFieldLimiteSupX)
                                     .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))
-                            .addComponent(panelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)))
-                    .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblCoefRegr, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(lblTituloErrorGlobal)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblErrorGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 312, Short.MAX_VALUE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblSol, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(spinnerGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(radioGrado))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(radioExponencial)
-                        .addGap(58, 58, 58)
-                        .addComponent(buttonOK))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(txtFieldLimiteSupX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(80, 80, 80)
-                        .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(63, 63, 63)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(49, 49, 49)
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(16, 16, 16)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(82, 82, 82)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(spinnerGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(radioGrado))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(radioExponencial)
+                            .addGap(58, 58, 58)
+                            .addComponent(buttonOK))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel3)
+                                .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5)
+                                .addComponent(txtFieldLimiteSupX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel4))))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addComponent(jLabel4))
+                        .addComponent(lblTituloErrorGlobal))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(61, Short.MAX_VALUE))
+                        .addComponent(lblErrorGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblSol, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(lblCoefRegr, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                        .addGap(24, 24, 24))))
         );
 
         jMenu1.setText("File");
@@ -284,14 +322,60 @@ public class MinimosCuadrados extends javax.swing.JApplet
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 725, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1102, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private boolean hayMuchasSoluciones(double[] result)
+    {
+        for(int i = 0;i<result.length;i++)
+        {
+            if(String.valueOf(result[i]).equalsIgnoreCase("nan")) return true;
+        }
+        return false;
+    }
+    
+    private double calcularErrorGlobal()
+    {
+        double err = 0;
+        for(int i = 0;i<this.model.getRowCount();i++)
+            err += Math.pow(funcion.getValue(Double.parseDouble(model.getValueAt(i, 0).toString()))-Double.parseDouble(model.getValueAt(i, 1).toString()),2);
+        
+        return err;
+    }
+    
+    private double calcularPromY()
+    {
+        double sum =0;
+        for(int i = 0;i<this.model.getRowCount();i++)
+            sum += Double.parseDouble(model.getValueAt(i, 1).toString());
+        
+        return (sum/this.model.getRowCount());
+        
+    }
+    
+    private double calcularCoeficienteRegresion(double erGlo)
+    {
+        double denominador = 0;
+        double promY = this.calcularPromY();
+        
+        for(int i = 0;i<this.model.getRowCount();i++)        
+            denominador+= Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY,2);
+
+        return erGlo/denominador;
+    }
+    
+    private void calcularErrores()
+    {
+        double erGlo = this.calcularErrorGlobal();
+        lblErrorGlobal.setText(String.valueOf(erGlo));
+        lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion(erGlo)));
+    }
 private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOKActionPerformed
 // TODO add your handling code here:
     int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
@@ -328,6 +412,9 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     
     double[] result = resultSist.x;
     
+    
+    
+    
     /*for(int i = 0;i<result.length;i++)
         result[i]=Math.round(result[i]);*/
     //double[] resultado;
@@ -353,6 +440,9 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     jtabbedpane.repaint();
     panelGrafico.repaint();
     this.repaint();    
+    
+    if(hayMuchasSoluciones(result)) lblSol.setText("Hay infinitas Soluciones.");
+    else calcularErrores();
 }//GEN-LAST:event_buttonOKActionPerformed
 
     private void tableListener(TableModelEvent e)
@@ -662,6 +752,7 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonOK;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -671,6 +762,10 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelFuncion;
+    private javax.swing.JLabel lblCoefRegr;
+    private javax.swing.JLabel lblErrorGlobal;
+    private javax.swing.JLabel lblSol;
+    private javax.swing.JLabel lblTituloErrorGlobal;
     private javax.swing.JPanel panelGrafico;
     private javax.swing.JRadioButton radioExponencial;
     private javax.swing.JRadioButton radioGrado;
