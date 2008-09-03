@@ -26,6 +26,11 @@ public class FuncionExponencial {
         this.a = a;
         this.b = b;
     }
+    
+    public FuncionExponencial()
+    {
+        
+    }
 
     /**
      * Returns the function value.
