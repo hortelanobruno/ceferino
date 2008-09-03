@@ -34,7 +34,9 @@ import org.jfree.data.xy.XYSeriesCollection;
  *
  * @author  Administrador
  */
-public class MinimosCuadrados extends javax.swing.JApplet {
+public class MinimosCuadrados extends javax.swing.JApplet 
+{
+    private static final long serialVersionUID = -4246192305944890157L;
 
     private int cantPuntos;
     private int grados;
@@ -170,7 +172,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 
         jLabel5.setText("Limite Superior Eje X:");
 
-        txtFieldLimiteInfX.setText("1");
+        txtFieldLimiteInfX.setText("0");
 
         txtFieldLimiteSupX.setText("10");
 
@@ -216,7 +218,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelFuncion, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))
+                                .addComponent(labelFuncion, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
@@ -225,7 +227,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtFieldLimiteSupX)
                                     .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))
-                            .addComponent(panelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)))
+                            .addComponent(panelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)))
                     .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -305,6 +307,9 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     a = cargarValores();
     b = cargarB();
     at = trasponerMatriz(a,filas);
+   // Matriz ata = Matriz.producto(new Matriz(at),new Matriz(a));
+    //Matriz atb = Matriz.producto(new Matriz(at),new Matriz(b));
+    
     atxa = multiplicarMatrices(at,a);
     atxb = multiplicarMatrices2(at,b);
     //coef  = armarSistema(atxa,atxb);
@@ -314,6 +319,9 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     sisEcu.setCoef(coef);
     double[] result = sisEcu.getSolucion();*/
        
+   /* Matriz alfas = new Matriz(atxa);
+    Vector res = new Vector(atxb);*/
+    
     Matriz alfas = new Matriz(atxa);
     Vector res = new Vector(atxb);
     Vector resultSist = Matriz.producto(Matriz.inversa(alfas), res);
@@ -324,7 +332,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         result[i]=Math.round(result[i]);*/
     //double[] resultado;
     //double[] result = s.resolver(atxa, atxb, resultado, Integer.parseInt(spinnerGrado.getValue().toString())+1); 
-    System.out.println("hola");
+    //System.out.println("hola");
     String grado;
     if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
     else grado = "Exponencial";
@@ -396,7 +404,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     jtabbedpane.repaint();
                     panelGrafico.repaint();
                 }
-                else JOptionPane.showMessageDialog(null, "No grafico puntos");
+                //else JOptionPane.showMessageDialog(null, "No grafico puntos");
             }
            
         }
