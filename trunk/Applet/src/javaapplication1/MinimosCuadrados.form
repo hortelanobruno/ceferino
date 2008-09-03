@@ -253,12 +253,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Limite Inferior Eje X:"/>
+            <Property name="text" type="java.lang.String" value="L&#xed;mite Inferior Eje X:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Limite Superior Eje X:"/>
+            <Property name="text" type="java.lang.String" value="L&#xed;mite Superior Eje X:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtFieldLimiteInfX">

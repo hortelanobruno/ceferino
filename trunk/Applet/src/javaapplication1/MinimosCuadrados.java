@@ -74,10 +74,10 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     numberaxis1.setAutoRangeIncludesZero(false);
                     XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
                     XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-                    JFreeChart jfreechart = new JFreeChart("Regresion ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+                    JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
                     ChartPanel chartpanel = new ChartPanel(jfreechart, false);
                     chartpanel.setVisible(true);
-                    jtabbedpane.add("Regresion",chartpanel);
+                    jtabbedpane.add("Regresión",chartpanel);
                      jtabbedpane.setVisible(true);
                     jtabbedpane.repaint();
                     panelGrafico.repaint();
@@ -172,9 +172,9 @@ public class MinimosCuadrados extends javax.swing.JApplet
 
         jLabel4.setText("Función Regresión: ");
 
-        jLabel3.setText("Limite Inferior Eje X:");
+        jLabel3.setText("Límite Inferior Eje X:");
 
-        jLabel5.setText("Limite Superior Eje X:");
+        jLabel5.setText("Límite Superior Eje X:");
 
         txtFieldLimiteInfX.setText("0");
 
@@ -199,7 +199,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
             }
         });
 
-        lblSol.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblSol.setFont(new java.awt.Font("Tahoma", 1, 14));
 
         lblTituloErrorGlobal.setText("Error Global: ");
 
@@ -432,7 +432,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     panelGrafico.removeAll();
     jtabbedpane = new JTabbedPane();
    
-    jtabbedpane.add("Regresion", createChartPanel2(result));
+    jtabbedpane.add("Regresión", createChartPanel2(result));
     panelGrafico.add(jtabbedpane);
     //panelGrafico.add("HOLAAA",createChartPanel2(result));
     labelFuncion.setText(generarFuncion(result));
@@ -442,7 +442,13 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     this.repaint();    
     
     if(hayMuchasSoluciones(result)) lblSol.setText("Hay infinitas Soluciones.");
-    else calcularErrores();
+    else
+    {
+        lblErrorGlobal.setText("");
+        lblCoefRegr.setText("");
+        calcularErrores();
+        lblSol.setText("");
+    }
 }//GEN-LAST:event_buttonOKActionPerformed
 
     private void tableListener(TableModelEvent e)
@@ -486,10 +492,10 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     numberaxis1.setAutoRangeIncludesZero(false);
                     XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true); 
                     XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-                    JFreeChart jfreechart = new JFreeChart("Regresion ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+                    JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
                     ChartPanel chartpanel = new ChartPanel(jfreechart, false);
                     chartpanel.setVisible(true);
-                    jtabbedpane.add("Regresion",chartpanel);
+                    jtabbedpane.add("Regresión",chartpanel);
                     jtabbedpane.setVisible(true);
                     jtabbedpane.repaint();
                     panelGrafico.repaint();
@@ -528,7 +534,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         xyplot.setDataset(1,coordenadas);
         xyplot.setRenderer(1, xylineandshaperenderer1);// 
         
-        JFreeChart jfreechart = new JFreeChart("Regresion " + ((spinnerGrado.isEnabled())?"de grado " + spinnerGrado.getValue().toString():"Exponencial"), JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        JFreeChart jfreechart = new JFreeChart("Regresión " + ((spinnerGrado.isEnabled())?"de grado " + spinnerGrado.getValue().toString():"Exponencial"), JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
         return chartpanel;
@@ -557,7 +563,7 @@ private String generarFuncion(double[] result){
 }
 
 private XYSeriesCollection cordenadasGrafico(double[] result){
-    XYSeries series = new XYSeries("Curva de Regresion");
+    XYSeries series = new XYSeries("Curva de Regresión");
     double step = (Double.parseDouble(txtFieldLimiteSupX.getText()) - Double.parseDouble(txtFieldLimiteInfX.getText())) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
     
     String grado;
