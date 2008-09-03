@@ -64,7 +64,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     ejexmin=0;
                     ejexmax=10;
                     radioGrado.setSelected(true);
-                    panelGrafico.removeAll();
+                 /*   panelGrafico.removeAll();
                     jtabbedpane = new JTabbedPane();
                     panelGrafico.add(jtabbedpane);
                     jtabbedpane.setVisible(true);
@@ -82,11 +82,12 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     jtabbedpane.add("Regresión",chartpanel);
                      jtabbedpane.setVisible(true);
                     jtabbedpane.repaint();
-                    panelGrafico.repaint();
+                    panelGrafico.repaint();*/
                     funcion = new FuncionEnesima();
                     funcExp = new FuncionExponencial();
                     model =(DefaultTableModel) tablePuntos.getModel();
-                     generarEjemploParabola2();
+                    cmbEjemplos.setSelectedIndex(1);
+                    generarEjemploParabola2();
                     model.addTableModelListener(new TableModelListener() {
                         public void tableChanged(TableModelEvent e) {
                             tableListener(e);
