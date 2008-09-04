@@ -7,7 +7,9 @@
 package algoritmogenetico;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -51,15 +53,18 @@ public class GUI extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        spinnerAlta = new javax.swing.JSpinner();
-        spinnerMedia = new javax.swing.JSpinner();
-        spinnerBaja = new javax.swing.JSpinner();
+        tfAltaRango1 = new javax.swing.JTextField();
+        tfMediaRango1 = new javax.swing.JTextField();
+        tfAltaRango2 = new javax.swing.JTextField();
+        tfMediaRango2 = new javax.swing.JTextField();
+        tfBajaRango1 = new javax.swing.JTextField();
+        tfBajaRango2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableOutput = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        textAreaCromozoma = new javax.swing.JTextArea();
+        textAreaCromosoma = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -84,7 +89,7 @@ public class GUI extends javax.swing.JFrame {
 
         comboBoxBebidaPriorizacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Champagne", "Vino", "Agua mineral", "Jugo", "Cerveza", "Sidra", "Gaseosa", "Wisky" }));
 
-        comboBoxLocalizacionPriorizacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Club de bariio", "Hotel 5 estrellas", "Hotel 3 estrellas", "Hotel 2 estrellas", "Country", "Local bailable" }));
+        comboBoxLocalizacionPriorizacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Club de barrio", "Hotel 5 estrellas", "Hotel 4 estrellas", "Hotel 3 estrellas", "Country", "Local bailable" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -151,11 +156,23 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel7.setText("Baja");
 
-        spinnerAlta.setModel(new javax.swing.SpinnerNumberModel(0.8d, 0.1d, 1.0d, 0.1d));
+        tfAltaRango1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tfAltaRango1.setText("0.7");
 
-        spinnerMedia.setModel(new javax.swing.SpinnerNumberModel(0.6d, 0.1d, 1.0d, 0.1d));
+        tfMediaRango1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tfMediaRango1.setText("0.4");
 
-        spinnerBaja.setModel(new javax.swing.SpinnerNumberModel(0.3d, 0.1d, 1.0d, 0.1d));
+        tfAltaRango2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tfAltaRango2.setText("1");
+
+        tfMediaRango2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tfMediaRango2.setText("0.6");
+
+        tfBajaRango1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tfBajaRango1.setText("0.1");
+
+        tfBajaRango2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tfBajaRango2.setText("0.3");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -164,32 +181,42 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addGap(55, 55, 55)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tfBajaRango1)
+                    .addComponent(tfMediaRango1)
+                    .addComponent(tfAltaRango1, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spinnerBaja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinnerMedia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinnerAlta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                    .addComponent(tfMediaRango2, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                    .addComponent(tfBajaRango2, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                    .addComponent(tfAltaRango2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(spinnerAlta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(spinnerMedia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(spinnerBaja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(tfAltaRango1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(tfMediaRango1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfMediaRango2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(tfBajaRango1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfBajaRango2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(tfAltaRango2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButton1.setText("Generar Algoritmo");
@@ -241,9 +268,9 @@ public class GUI extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
         );
 
-        textAreaCromozoma.setColumns(20);
-        textAreaCromozoma.setRows(5);
-        jScrollPane2.setViewportView(textAreaCromozoma);
+        textAreaCromosoma.setColumns(20);
+        textAreaCromosoma.setRows(5);
+        jScrollPane2.setViewportView(textAreaCromosoma);
 
         jButton2.setText("Ver mejor Cromosoma");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -259,7 +286,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createSequentialGroup()
@@ -297,7 +324,7 @@ public class GUI extends javax.swing.JFrame {
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     ArrayList<Integer> datosIngresados = cargarDatosIngresados();
     HashMap<String,String> priorizacion = cargarPriorizacion();
-    ArrayList<Double> rangoDefault = cargarRangoDefault();
+    double[][] rangoDefault = cargarRangoDefault();
     algoritmo.datosIngresados = datosIngresados;
     algoritmo.priorizacion = priorizacion;
     algoritmo.rangoDefault = rangoDefault;
@@ -309,6 +336,67 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
 private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 // TODO add your handling code here:
+    textAreaCromosoma.setText("");
+    int aux = tableOutput.getRowCount();
+    DefaultTableModel model = (DefaultTableModel) tableOutput.getModel();
+    HashMap<String,HashMap<ArrayList<String>,Double>> mapa = algoritmo.getMapaDetodo();
+    int aux2 = 0;
+    for(int i=0 ; i < aux ; i++){
+        if(Double.parseDouble(model.getValueAt(i, 3).toString()) == 0D){
+            textAreaCromosoma.append("Cromosoma Numero:"+ (++aux2) +"\n\n");
+            textAreaCromosoma.append("Comida:\n");
+            HashMap<ArrayList<String>,Double> lista1 = mapa.get("Comida");
+            Iterator it = lista1.keySet().iterator();
+            Collection<Double> col = lista1.values();
+            Iterator it2 = col.iterator();
+            while(it2.hasNext()){
+                Double valor = (Double) it2.next();
+                ArrayList<String> listaa = (ArrayList<String>) it.next();
+                if(valor == Double.parseDouble(model.getValueAt(i, 0).toString())){
+                    for(int j=0 ; j < listaa.size() ; j++){
+                        textAreaCromosoma.append("\t"+listaa.get(j)+"\n");
+                    }
+                    break;
+                }
+            }
+            
+            textAreaCromosoma.append("\n");
+            textAreaCromosoma.append("Bebida:\n");
+            lista1 = mapa.get("Bebida");
+            it = lista1.keySet().iterator();
+            col = lista1.values();
+            it2 = col.iterator();
+            while(it2.hasNext()){
+                Double valor = (Double) it2.next();
+                ArrayList<String> listaa = (ArrayList<String>) it.next();
+                if(valor == Double.parseDouble(model.getValueAt(i, 1).toString())){
+                    for(int j=0 ; j < listaa.size() ; j++){
+                        textAreaCromosoma.append("\t"+listaa.get(j)+"\n");
+                        
+                    }
+                    break;
+                }
+            }
+            textAreaCromosoma.append("\n");
+            textAreaCromosoma.append("Localizacion:\n");
+            lista1 = mapa.get("Localizacion");
+            it = lista1.keySet().iterator();
+            col = lista1.values();
+            it2 = col.iterator();
+            while(it2.hasNext()){
+                Double valor = (Double) it2.next();
+                ArrayList<String> listaa = (ArrayList<String>) it.next();
+                if(valor == Double.parseDouble(model.getValueAt(i, 2).toString())){
+                    for(int j=0 ; j < listaa.size() ; j++){
+                        textAreaCromosoma.append("\t"+listaa.get(j)+"\n");
+                        
+                    }
+                    break;
+                }
+            }
+            textAreaCromosoma.append("\n\n\n");
+        }
+    }
 }//GEN-LAST:event_jButton2ActionPerformed
 
 public void cargarTabla(){
@@ -316,20 +404,23 @@ public void cargarTabla(){
     ArrayList<Double> pesoFinal = algoritmo.pesoFinal;
     DefaultTableModel model = (DefaultTableModel) tableOutput.getModel();
     vaciarTabla();
-    for(int i=1 ; i < poblacionFinal.size() ; i++){
+    for(int i=2 ; i < poblacionFinal.size() ; i++){
         ArrayList<Double> aux = poblacionFinal.get(i);
-        model.addRow( new Double[]{aux.get(0),aux.get(1),aux.get(2),pesoFinal.get(i-1)});
+        model.addRow( new Double[]{aux.get(0),aux.get(1),aux.get(2),pesoFinal.get(i)});
     }
 }
 public void vaciarTabla() {
         ((DefaultTableModel)tableOutput.getModel()).getDataVector().removeAllElements();
 }
 
-public ArrayList<Double> cargarRangoDefault(){
-    ArrayList<Double> aux = new ArrayList<Double>();
-    aux.add((Double) spinnerAlta.getValue());
-    aux.add((Double) spinnerMedia.getValue());
-    aux.add((Double) spinnerBaja.getValue());
+public double[][] cargarRangoDefault(){
+    double[][] aux = new double[3][2];
+    aux[0][0] = Double.parseDouble(tfAltaRango1.getText());
+    aux[0][1] = Double.parseDouble(tfAltaRango2.getText());
+    aux[1][0] = Double.parseDouble(tfMediaRango1.getText());
+    aux[1][1] = Double.parseDouble(tfMediaRango2.getText());
+    aux[2][0] = Double.parseDouble(tfBajaRango1.getText());
+    aux[2][1] = Double.parseDouble(tfBajaRango2.getText());
     return aux;
 }
 
@@ -342,7 +433,7 @@ public HashMap<String,String> cargarPriorizacion(){
         hash.put("Bebida", comboBoxBebidaPriorizacion.getSelectedItem().toString());
     }
     if(checkBoxLocalizacion.isSelected()){
-        hash.put("Comida", comboBoxLocalizacionPriorizacion.getSelectedItem().toString());
+        hash.put("Localizacion", comboBoxLocalizacionPriorizacion.getSelectedItem().toString());
     }   
     return hash;
 }
@@ -393,11 +484,14 @@ public ArrayList<Integer> cargarDatosIngresados(){
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner spinnerAlta;
-    private javax.swing.JSpinner spinnerBaja;
-    private javax.swing.JSpinner spinnerMedia;
     private javax.swing.JTable tableOutput;
-    private javax.swing.JTextArea textAreaCromozoma;
+    private javax.swing.JTextArea textAreaCromosoma;
+    private javax.swing.JTextField tfAltaRango1;
+    private javax.swing.JTextField tfAltaRango2;
+    private javax.swing.JTextField tfBajaRango1;
+    private javax.swing.JTextField tfBajaRango2;
+    private javax.swing.JTextField tfMediaRango1;
+    private javax.swing.JTextField tfMediaRango2;
     // End of variables declaration//GEN-END:variables
 
 }
