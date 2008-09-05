@@ -126,7 +126,6 @@ public class MinimosCuadrados extends javax.swing.JApplet
         atxa = multiplicarMatrices(at,a);
         atxb = multiplicarMatrices2(at,b);
         //coef  = armarSistema(atxa,atxb);
-        System.out.println("");
        /* SistemaEcuaciones sisEcu = new SistemaEcuaciones();
         sisEcu.setNumEcs(Integer.parseInt(spinnerGrado.getValue().toString())+1);
         sisEcu.setCoef(coef);
@@ -215,6 +214,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
         lblCoefRegr = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cmbEjemplos = new javax.swing.JComboBox();
+        btnClean = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -243,7 +243,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
         });
         jScrollPane1.setViewportView(tablePuntos);
 
-        buttonOK.setText("Ok");
+        buttonOK.setText("Graficar");
         buttonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonOKActionPerformed(evt);
@@ -303,6 +303,13 @@ public class MinimosCuadrados extends javax.swing.JApplet
             }
         });
 
+        btnClean.setText("Limpiar");
+        btnClean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -315,8 +322,10 @@ public class MinimosCuadrados extends javax.swing.JApplet
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(buttonOK)
-                                    .addComponent(radioGrado))
+                                    .addComponent(radioGrado)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(btnClean, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(buttonOK, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(spinnerGrado, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(radioExponencial)
@@ -400,7 +409,10 @@ public class MinimosCuadrados extends javax.swing.JApplet
                         .addComponent(lblTituloErrorGlobal))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(lblErrorGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblErrorGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnClean)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -861,6 +873,52 @@ private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     }
 }//GEN-LAST:event_cmbEjemplosActionPerformed
 
+private void cleanComponentes() 
+{
+    this.spinnerGrado.setEnabled(true);
+    this.radioExponencial.setSelected(false);
+    this.radioGrado.setSelected(true);
+    this.spinnerCantPuntos.setValue(1);
+    this.spinnerGrado.setValue(1);
+    this.lblCoefRegr.setText("");
+    this.lblErrorGlobal.setText("");
+    this.labelFuncion.setText("");
+    
+    for(int i = 0; i<model.getRowCount()-1;i++)
+        model.removeRow(i);
+    model.setValueAt(null, 0, 0);
+    model.setValueAt(null, 0, 1);
+}
+
+private void limpiar()
+{
+    cleanComponentes();
+    data1=null;
+    panelGrafico.removeAll();
+    jtabbedpane = new JTabbedPane();
+    panelGrafico.add(jtabbedpane);
+    jtabbedpane.setVisible(true);
+    jtabbedpane.repaint();
+    panelGrafico.repaint();
+     NumberAxis numberaxis = new NumberAxis("X");
+    numberaxis.setAutoRangeIncludesZero(false);
+    NumberAxis numberaxis1 = new NumberAxis("Y");
+    numberaxis1.setAutoRangeIncludesZero(false);
+    XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
+    XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+    JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+    ChartPanel chartpanel = new ChartPanel(jfreechart, false);
+    chartpanel.setVisible(true);
+    jtabbedpane.add("Regresión",chartpanel);
+    jtabbedpane.setVisible(true);
+    jtabbedpane.repaint();
+    panelGrafico.repaint();
+}
+
+private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanActionPerformed
+    limpiar();
+}//GEN-LAST:event_btnCleanActionPerformed
+
 
 private void setLookAndFeel() throws HeadlessException {
         try {
@@ -877,6 +935,7 @@ private void setLookAndFeel() throws HeadlessException {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClean;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonOK;
     private javax.swing.JComboBox cmbEjemplos;
