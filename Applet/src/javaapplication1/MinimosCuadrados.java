@@ -11,8 +11,8 @@ import function.FuncionExponencial;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -39,10 +39,6 @@ public class MinimosCuadrados extends javax.swing.JApplet
 
     private int cantPuntos;
     private int grados;
-    private int ejexmin;
-    private int ejexmax;
-    private int ejeymin;
-    private int ejeymax;
     private XYDataset data1;
     private FuncionEnesima funcion;
     private FuncionExponencial funcExp;
@@ -61,8 +57,6 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     initComponents();
                     cantPuntos=0;
                     grados=1;
-                    ejexmin=0;
-                    ejexmax=10;
                     radioGrado.setSelected(true);
                  /*   panelGrafico.removeAll();
                     jtabbedpane = new JTabbedPane();
@@ -215,9 +209,6 @@ public class MinimosCuadrados extends javax.swing.JApplet
         jLabel6 = new javax.swing.JLabel();
         cmbEjemplos = new javax.swing.JComboBox();
         btnClean = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
 
         setStub(null);
 
@@ -266,8 +257,18 @@ public class MinimosCuadrados extends javax.swing.JApplet
         jLabel5.setText("Límite Superior Eje X:");
 
         txtFieldLimiteInfX.setText("0");
+        txtFieldLimiteInfX.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFieldLimiteInfXKeyPressed(evt);
+            }
+        });
 
         txtFieldLimiteSupX.setText("5");
+        txtFieldLimiteSupX.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFieldLimiteSupXKeyPressed(evt);
+            }
+        });
 
         spinnerGrado.setModel(new javax.swing.SpinnerNumberModel(1, 1, 50, 1));
 
@@ -426,14 +427,6 @@ public class MinimosCuadrados extends javax.swing.JApplet
                         .addGap(24, 24, 24))))
         );
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -521,37 +514,30 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                   ) 
                     flag= true;
             }
+            
             if(flag)
             {           
-              //  JOptionPane.showMessageDialog(null, "flag true");
-
-                if(tablePuntos.isCursorSet())
-                {
-                    JOptionPane.showMessageDialog(null, "flag true y no editando");
-                    data1 = createSampleData1();
-                    panelGrafico.removeAll();
-                    jtabbedpane = new JTabbedPane();
-                    panelGrafico.add(jtabbedpane);
-                    jtabbedpane.setVisible(true);
-                    jtabbedpane.repaint();
-                    panelGrafico.repaint();
-                    NumberAxis numberaxis = new NumberAxis("X");
-                    numberaxis.setAutoRangeIncludesZero(false);
-                    NumberAxis numberaxis1 = new NumberAxis("Y");
-                    numberaxis1.setAutoRangeIncludesZero(false);
-                    XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true); 
-                    XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-                    JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
-                    ChartPanel chartpanel = new ChartPanel(jfreechart, false);
-                    chartpanel.setVisible(true);
-                    jtabbedpane.add("Regresión",chartpanel);
-                    jtabbedpane.setVisible(true);
-                    jtabbedpane.repaint();
-                    panelGrafico.repaint();
-                }
-                //else JOptionPane.showMessageDialog(null, "No grafico puntos");
+                data1 = createSampleData1();
+                panelGrafico.removeAll();
+                jtabbedpane = new JTabbedPane();
+                panelGrafico.add(jtabbedpane);
+                jtabbedpane.setVisible(true);
+                jtabbedpane.repaint();
+                panelGrafico.repaint();
+                NumberAxis numberaxis = new NumberAxis("X");
+                numberaxis.setAutoRangeIncludesZero(false);
+                NumberAxis numberaxis1 = new NumberAxis("Y");
+                numberaxis1.setAutoRangeIncludesZero(false);
+                XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true); 
+                XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+                JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+                ChartPanel chartpanel = new ChartPanel(jfreechart, false);
+                chartpanel.setVisible(true);
+                jtabbedpane.add("Regresión",chartpanel);
+                jtabbedpane.setVisible(true);
+                jtabbedpane.repaint();
+                panelGrafico.repaint();
             }
-           
         }
     }
     
@@ -919,6 +905,15 @@ private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     limpiar();
 }//GEN-LAST:event_btnCleanActionPerformed
 
+private void txtFieldLimiteSupXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldLimiteSupXKeyPressed
+    if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        graficar();
+}//GEN-LAST:event_txtFieldLimiteSupXKeyPressed
+
+private void txtFieldLimiteInfXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldLimiteInfXKeyPressed
+    if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        graficar();
+}//GEN-LAST:event_txtFieldLimiteInfXKeyPressed
 
 private void setLookAndFeel() throws HeadlessException {
         try {
@@ -945,9 +940,6 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelFuncion;
