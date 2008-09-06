@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package function;
+
 
 /**
  * A function in the form y = a + e^bx.
