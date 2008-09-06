@@ -340,9 +340,15 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     int aux = tableOutput.getRowCount();
     DefaultTableModel model = (DefaultTableModel) tableOutput.getModel();
     HashMap<String,HashMap<ArrayList<String>,Double>> mapa = algoritmo.getMapaDetodo();
+    double aux3 = Double.parseDouble(model.getValueAt(0, 3).toString());
+    for(int q=1 ; q < aux ; q++){
+        if(aux3 > Double.parseDouble(model.getValueAt(q, 3).toString())){
+            aux3 = Double.parseDouble(model.getValueAt(q, 3).toString());
+        }
+    }
     int aux2 = 0;
     for(int i=0 ; i < aux ; i++){
-        if(Double.parseDouble(model.getValueAt(i, 3).toString()) == 0D){
+        if(Double.parseDouble(model.getValueAt(i, 3).toString()) == aux3){
             textAreaCromosoma.append("Cromosoma Numero:"+ (++aux2) +"\n\n");
             textAreaCromosoma.append("Comida:\n");
             HashMap<ArrayList<String>,Double> lista1 = mapa.get("Comida");
