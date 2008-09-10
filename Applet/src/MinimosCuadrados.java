@@ -801,7 +801,7 @@ private void generarEjemploParabola3()
 
 private void generarEjemploExponencial()
 {
-    this.spinnerCantPuntos.setValue(3);
+    this.spinnerCantPuntos.setValue(4);
     this.radioExponencial.setSelected(true);
     this.spinnerGrado.setEnabled(false);
     for(int i =0; i<this.model.getRowCount();i++)
@@ -813,7 +813,7 @@ private void generarEjemploExponencial()
 }
 
 private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEjemplosActionPerformed
-       
+    
     if(cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Recta"))
     {
         this.grado = "1";
