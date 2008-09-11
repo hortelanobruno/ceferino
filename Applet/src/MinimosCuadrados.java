@@ -79,7 +79,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     funcExp = new FuncionExponencial();
                     model =(DefaultTableModel) tablePuntos.getModel();
                     cmbEjemplos.setSelectedIndex(1);
-                    generarEjemploParabola2();
+                   
                     model.addTableModelListener(new TableModelListener() {
                         public void tableChanged(TableModelEvent e) {
                             tableListener(e);
@@ -94,7 +94,8 @@ public class MinimosCuadrados extends javax.swing.JApplet
 
     private void graficar()
     {
-        int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());       
+        int filas = model.getRowCount();       
+        //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());       
         
         if(spinnerGrado.isEnabled()) grados = (Integer)spinnerGrado.getValue();  //   VER !!! para exponencial no hay grados. Putea a veces
         else grados = 1;
@@ -134,9 +135,11 @@ public class MinimosCuadrados extends javax.swing.JApplet
 
 
 
-
-        /*for(int i = 0;i<result.length;i++)
-            result[i]=Math.round(result[i]);*/
+        if(chkTruncar.isSelected())
+        {
+            for(int i = 0;i<result.length;i++)
+               result[i]= Math.floor(result[i] * 100.0)/100.0;
+        }
         //double[] resultado;
         //double[] result = s.resolver(atxa, atxb, resultado, Integer.parseInt(spinnerGrado.getValue().toString())+1); 
         //System.out.println("hola");
@@ -207,6 +210,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
         jLabel6 = new javax.swing.JLabel();
         cmbEjemplos = new javax.swing.JComboBox();
         btnClean = new javax.swing.JButton();
+        chkTruncar = new javax.swing.JCheckBox();
 
         setStub(null);
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
@@ -310,6 +314,8 @@ public class MinimosCuadrados extends javax.swing.JApplet
             }
         });
 
+        chkTruncar.setText("Truncar");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -328,7 +334,9 @@ public class MinimosCuadrados extends javax.swing.JApplet
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbEjemplos, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbEjemplos, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(chkTruncar))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -369,7 +377,8 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     .addComponent(jLabel3)
                     .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(cmbEjemplos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbEjemplos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkTruncar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -530,7 +539,10 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         
         //DefaultTableModel model = (DefaultTableModel)tablePuntos.getModel();
         for(int i = 0 ; i < model.getRowCount() ; i++){
-            xyseries.add(Double.parseDouble(model.getValueAt(i, 0).toString()),Double.parseDouble(model.getValueAt(i, 1).toString()));
+            if( (model.getValueAt(i, 0)!=null) &&(model.getValueAt(i, 1)!= null))
+            {
+                xyseries.add(Double.parseDouble(model.getValueAt(i, 0).toString()),Double.parseDouble(model.getValueAt(i, 1).toString()));
+            }
         }
         XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
         return xyseriescollection;
@@ -657,7 +669,8 @@ private double[] cambiarVariables(double[] a){
 private double[] multiplicarMatrices2(double[][] at, double[][] b){
     double[] atxb = new double[grados+1];
 
-    int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+    int filas = model.getRowCount();
+    //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
 
 
     for (int i=0; i < grados+1; i++)
@@ -674,7 +687,8 @@ private double[] multiplicarMatrices2(double[][] at, double[][] b){
 private double[][] multiplicarMatrices(double[][] at, double[][] a){
     double[][] atxa = new double[grados+1][grados+1];
 
-    int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+    int filas = model.getRowCount();
+    //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
 
 
     for (int i=0; i < grados+1; i++)
@@ -689,7 +703,8 @@ private double[][] multiplicarMatrices(double[][] at, double[][] a){
 }
 
 private double[][] cargarB(){
-    int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+    int filas = model.getRowCount();
+//    int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
     double[][] b = new double[filas][1];
     model = (DefaultTableModel)tablePuntos.getModel();
     
@@ -709,7 +724,8 @@ private double[][] cargarB(){
 }
 
 private double[][] cargarValores(){
-    int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+    int filas = model.getRowCount();
+    //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
     double[][] a = new double[filas][grados+1];
    
     for(int j = 0 ; j < model.getRowCount() ; j++  ){
@@ -756,32 +772,48 @@ private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//
     else spinnerGrado.setEnabled(true);
 }//GEN-LAST:event_radioExponencialActionPerformed
 
+/*public void vaciarTabla() 
+{
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
+}*/
+
+
 private void generarEjemploRecta()
 {
     this.spinnerCantPuntos.setValue(4);
     this.spinnerGrado.setEnabled(true);
     this.radioGrado.setSelected(true);
     this.spinnerGrado.setValue(1);
-    for(int i =0; i<this.model.getRowCount();i++)
+    for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
     {
-        model.setValueAt(i, i  , 0);
-        model.setValueAt(i, i  , 1);
+        model.addRow(new Double[]{(double)i,(double)i});
+        /*model.setValueAt(i, i  , 0);
+        model.setValueAt(i, i  , 1);*/
     }
     graficar();
 }
 
 private void generarEjemploParabola2()
 {
-    this.spinnerCantPuntos.setValue(4);
     this.spinnerGrado.setEnabled(true);
     this.radioGrado.setSelected(true);
     this.spinnerGrado.setValue(2);
-    for(int i =0; i<this.model.getRowCount();i++)
+    
+    for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
     {
-        model.setValueAt(i, i  , 0);
-        model.setValueAt(Math.pow(i, 2), i  , 1);
+        model.addRow(new Double[]{(double)i,Math.pow(i, 2)});
+        /*model.setValueAt(i, i  , 0);
+        model.setValueAt(Math.pow(i, 2), i  , 1);*/
     }
     graficar();
+    this.spinnerCantPuntos.setValue(4);
+    if(model.getRowCount() > 4)
+    {
+        model.removeRow(7);
+        model.removeRow(6);
+        model.removeRow(5);
+        model.removeRow(4);
+    }
 }
 
 private void generarEjemploParabola3()
@@ -790,10 +822,11 @@ private void generarEjemploParabola3()
     this.spinnerGrado.setEnabled(true);
     this.radioGrado.setSelected(true);
     this.spinnerGrado.setValue(3);
-    for(int i =0; i<this.model.getRowCount();i++)
+    for(int i =0; i < Constantes.DEFAULT_NUMEBER_POINTS;i++)
     {
-        model.setValueAt(i, i  , 0);
-        model.setValueAt(Math.pow(i, 3), i  , 1);
+        model.addRow(new Double[]{(double)i,Math.pow(i, 3)});
+        /*model.setValueAt(i, i  , 0);
+        model.setValueAt(Math.pow(i, 3), i  , 1);*/
     }
     graficar();
 }
@@ -804,16 +837,25 @@ private void generarEjemploExponencial()
     this.spinnerCantPuntos.setValue(4);
     this.radioExponencial.setSelected(true);
     this.spinnerGrado.setEnabled(false);
-    for(int i =0; i<this.model.getRowCount();i++)
+    for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
     {
-        model.setValueAt(i, i  ,0);
-        model.setValueAt(Math.pow(3, i), i  ,1);
+        model.addRow(new Double[]{(double)i,Math.pow(3, i)});
+        /*model.setValueAt(i, i  ,0);
+        model.setValueAt(Math.pow(3, i), i  ,1);*/
     }
     graficar();
 }
 
 private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEjemplosActionPerformed
     
+    /*if(model.getRowCount() > 1)
+    {
+         for(int i = 0; i<model.getRowCount()-1;i++)
+            model.removeRow(i);
+        model.setValueAt(0, 0, 0);
+        model.setValueAt(0, 0, 1);
+    }*/
+   ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
     if(cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Recta"))
     {
         this.grado = "1";
@@ -916,6 +958,7 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JButton btnClean;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonOK;
+    private javax.swing.JCheckBox chkTruncar;
     private javax.swing.JComboBox cmbEjemplos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
