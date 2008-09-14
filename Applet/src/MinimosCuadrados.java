@@ -48,6 +48,8 @@ public class MinimosCuadrados extends javax.swing.JApplet
     private String colorEjes;
     private int formHeight;
     private int formWidth;
+    private int cantDecimales;
+    private boolean truncar;
     
     private boolean cargarEjemplo;
     private double[][] points;
@@ -203,6 +205,9 @@ public class MinimosCuadrados extends javax.swing.JApplet
         else this.grado = this.param_Grado;
         
         if(this.cargarEjemplo) setPoints();
+        
+        if(this.truncar) this.chkTruncar.setSelected(true);
+        else this.chkTruncar.setSelected(false);
     }
     
     private boolean loadParams()
@@ -224,6 +229,8 @@ public class MinimosCuadrados extends javax.swing.JApplet
             this.cargarEjemplo = Boolean.parseBoolean(this.getParameter("cargarEjemplo"));
             this.param_Grado = this.getParameter("grado"); // grado = 1 o grado = exp
             this.nombreEjemplo = this.getParameter("nombreEjemplo");
+            this.cantDecimales = Integer.parseInt(this.getParameter("cantDecimales"));
+            this.truncar = Boolean.parseBoolean(this.getParameter("truncar"));
                     
             
             if(cargarEjemplo) loadPoints();
@@ -289,7 +296,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
         if(chkTruncar.isSelected())
         {
             DecimalFormat df = new DecimalFormat();
-            df.setMaximumFractionDigits(4);
+            df.setMaximumFractionDigits(this.cantDecimales);
             
             for(int i = 0;i<result.length;i++)
             {
@@ -640,7 +647,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
         if(chkTruncar.isSelected())
         {
             DecimalFormat df = new DecimalFormat();
-            df.setMaximumFractionDigits(4);
+            df.setMaximumFractionDigits(this.cantDecimales);
             String aux = df.format(erGlo);
             aux = aux.replace(',', '.');
             erGlo = Double.parseDouble(aux);

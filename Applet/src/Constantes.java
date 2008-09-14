@@ -15,4 +15,6 @@ public class Constantes
     public static final boolean DEFAULT_LOAD_FIRST_EXAMPLE = true;
     public static final int DEFAULT_NUMEBER_POINTS = 4;
     public static final int DEFAULT_GRADO = 1;
+    public static final int DEFAULT_CANT_DEC = 4;
+    public static final boolean DEFAULT_TRUNCATE = false;
 }
