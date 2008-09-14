@@ -4,12 +4,11 @@
  * Created on 23 de agosto de 2008, 14:16
  */
 
-
-
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
@@ -29,12 +28,34 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
- * @author  Administrador
+ * @author  Ignacio Cicero, Nerina Gaggero y Bruno Hortelano - Universidad Argentina de la Empresa (UADE)
  */
 public class MinimosCuadrados extends javax.swing.JApplet 
 {
     private static final long serialVersionUID = -4246192305944890157L;
 
+    /* PARAMETROS */
+    
+    private String fondoForm;
+    private String fondoGrafico;
+    private String font;
+    private int fontSize;
+    private String fontColor;
+    private int anchoTrazoGrafico;
+    private int xMin;
+    private int xMax;
+    private String idioma;
+    private String colorEjes;
+    private int formHeight;
+    private int formWidth;
+    
+    private boolean cargarEjemplo;
+    private double[][] points;
+    private String param_Grado;
+    private String nombreEjemplo;
+    
+    /* FIN PARAMETROS */
+    
     private int cantPuntos;
     private int grados;
     private XYDataset data1;
@@ -56,6 +77,13 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     cantPuntos=0;
                     grados=1;
                     radioGrado.setSelected(true);
+                    fontSize = 0;
+                    xMax = 0;
+                    xMin = 0;
+                    formHeight = 0;
+                    formWidth = 0;
+                    boolean ok = loadParams();
+                    if(ok) setParams();
                  /*   panelGrafico.removeAll();
                     jtabbedpane = new JTabbedPane();
                     panelGrafico.add(jtabbedpane);
@@ -89,6 +117,122 @@ public class MinimosCuadrados extends javax.swing.JApplet
             });
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+    
+    private void traducir()
+    {
+        this.lblEjemplos.setText("Examples");
+        this.lblFuncReg.setText("Regression function");
+        this.lblLimInf.setText("X axis inferior limit");
+        this.lblLimSup.setText("X axis superior limit");
+        this.lblTituloCoefReg.setText("Regression coeficient");
+        this.lblTituloErrorGlobal.setText("Global error");
+        this.btnClean.setText("Clear");
+        this.buttonOK.setText("Graphic");
+        this.radioGrado.setText("Grade");
+        this.chkTruncar.setText("Truncate");
+        this.lblCantPuntos.setText("Number of points");
+    }
+    
+    private void loadPoints()
+    {
+        /* value = "(1.3,5);(3,4);(3,5.4)..... "  */
+        
+        String auxPoints = this.getParameter("puntos");
+        if(auxPoints == null) return;
+        String [] pares = auxPoints.split(";"); /* pares [0] => (1.3,5)  pares[1] => (3,4) */
+        this.points = new double[pares.length][2];
+        for(int i = 0; i< pares.length;i++)
+        {
+            pares[i] = pares[i].replace('(', ' '); // pares[0] => 1.3,5)
+            pares[i] = pares[i].replace(')', ' '); // pares[0] => 1.3,5
+            String [] xy = pares[i].split(","); // xy[0] => 1,3   xy[1] => 5
+            this.points[i][0] = Double.valueOf(xy[0]); //points[i][0] => 1,3
+            this.points[i][1] = Double.valueOf(xy[1]); //points[i][1] => 5
+        }
+    }
+    
+    private void setPoints()
+    {
+        this.spinnerCantPuntos.setValue(this.points.length);
+        for(int i =0; i < this.points.length; i++)
+        {
+            this.model.setValueAt(points[i][0], i, 0);
+            this.model.setValueAt(points[i][1], i, 1);
+        }
+        
+        if(this.grado.equalsIgnoreCase("exponencial"))
+        {
+            this.radioExponencial.setSelected(true);
+            this.radioGrado.setSelected(false);
+        }
+        else
+        {
+            this.radioExponencial.setSelected(false);
+            this.radioGrado.setSelected(true);
+            this.spinnerGrado.setValue(Integer.valueOf(this.grado));
+        }
+        
+        this.cmbEjemplos.addItem(this.nombreEjemplo);
+        this.graficar();
+    }
+    
+    private void setParams()    
+    {
+        if(xMax == 0) txtFieldLimiteSupX.setText(String.valueOf(Constantes.DEFAULT_XMax));
+        else txtFieldLimiteSupX.setText(String.valueOf(xMax));
+        
+        if(xMin == 0) txtFieldLimiteInfX.setText(String.valueOf(Constantes.DEFAULT_XMin));
+        else txtFieldLimiteSupX.setText(String.valueOf(xMin));
+        
+        if(formHeight == 0)
+        {
+            if(formWidth == 0) this.setSize(Constantes.DEFAULT_FRAME_WIDTH, Constantes.DEFAULT_FRAME_HEIGHT);
+            else this.setSize(formWidth, Constantes.DEFAULT_FRAME_HEIGHT);
+        }
+        else
+        {
+             if(formWidth == 0) this.setSize(Constantes.DEFAULT_FRAME_WIDTH, formHeight);
+             else this.setSize(formWidth, formHeight);
+        }
+        
+        if(this.idioma.equalsIgnoreCase("en")) traducir();
+        
+        if(this.param_Grado.equalsIgnoreCase("exp")) this.grado = "Exponencial";
+        else this.grado = this.param_Grado;
+        
+        if(this.cargarEjemplo) setPoints();
+    }
+    
+    private boolean loadParams()
+    {
+        try
+        {
+            this.fondoForm = this.getParameter("fondoForm");
+            this.fondoGrafico = this.getParameter("fondoGrafico");
+            this.font = this.getParameter("font");
+            this.fontSize = Integer.parseInt(this.getParameter("fontSize"));
+            this.fontColor = this.getParameter("fontColor");
+            this.anchoTrazoGrafico = Integer.valueOf(this.getParameter("anchoTrazo"));
+            this.xMin = Integer.parseInt(this.getParameter("xMin"));
+            this.xMax = Integer.parseInt(this.getParameter("xMax"));
+            this.idioma = this.getParameter("idioma");
+            this.colorEjes = this.getParameter("colorEjes");
+            this.formWidth = Integer.parseInt(this.getParameter("formWidth"));
+            this.formHeight = Integer.parseInt(this.getParameter("formHeight"));
+            this.cargarEjemplo = Boolean.parseBoolean(this.getParameter("cargarEjemplo"));
+            this.param_Grado = this.getParameter("grado"); // grado = 1 o grado = exp
+            this.nombreEjemplo = this.getParameter("nombreEjemplo");
+                    
+            
+            if(cargarEjemplo) loadPoints();
+            
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
         }
     }
 
@@ -137,8 +281,16 @@ public class MinimosCuadrados extends javax.swing.JApplet
 
         if(chkTruncar.isSelected())
         {
+            DecimalFormat df = new DecimalFormat();
+            df.setMaximumFractionDigits(4);
             for(int i = 0;i<result.length;i++)
-               result[i]= Math.floor(result[i] * 100.0)/100.0;
+            {
+               //result[i]= Math.floor(result[i] * 100.0)/100.0;
+               result[i]= Math.round(result[i]);
+                /*String aux = df.format(result[i]);
+                aux.replace(',', '.');
+                result[i] = Double.valueOf(aux);*/
+            }
         }
         //double[] resultado;
         //double[] result = s.resolver(atxa, atxb, resultado, Integer.parseInt(spinnerGrado.getValue().toString())+1); 
@@ -191,12 +343,12 @@ public class MinimosCuadrados extends javax.swing.JApplet
         jScrollPane1 = new javax.swing.JScrollPane();
         tablePuntos = new javax.swing.JTable();
         buttonOK = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblCantPuntos = new javax.swing.JLabel();
         spinnerCantPuntos = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
+        lblFuncReg = new javax.swing.JLabel();
         labelFuncion = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblLimInf = new javax.swing.JLabel();
+        lblLimSup = new javax.swing.JLabel();
         txtFieldLimiteInfX = new javax.swing.JTextField();
         txtFieldLimiteSupX = new javax.swing.JTextField();
         spinnerGrado = new javax.swing.JSpinner();
@@ -205,9 +357,9 @@ public class MinimosCuadrados extends javax.swing.JApplet
         lblSol = new javax.swing.JLabel();
         lblTituloErrorGlobal = new javax.swing.JLabel();
         lblErrorGlobal = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblTituloCoefReg = new javax.swing.JLabel();
         lblCoefRegr = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblEjemplos = new javax.swing.JLabel();
         cmbEjemplos = new javax.swing.JComboBox();
         btnClean = new javax.swing.JButton();
         chkTruncar = new javax.swing.JCheckBox();
@@ -244,7 +396,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
             }
         });
 
-        jLabel1.setText("Cantidad Puntos");
+        lblCantPuntos.setText("Cantidad de Puntos");
 
         spinnerCantPuntos.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
         spinnerCantPuntos.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -253,11 +405,11 @@ public class MinimosCuadrados extends javax.swing.JApplet
             }
         });
 
-        jLabel4.setText("Función Regresión: ");
+        lblFuncReg.setText("Función Regresión: ");
 
-        jLabel3.setText("Límite Inferior Eje X:");
+        lblLimInf.setText("Límite Inferior Eje X:");
 
-        jLabel5.setText("Límite Superior Eje X:");
+        lblLimSup.setText("Límite Superior Eje X:");
 
         txtFieldLimiteInfX.setText("0");
         txtFieldLimiteInfX.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -296,9 +448,9 @@ public class MinimosCuadrados extends javax.swing.JApplet
 
         lblTituloErrorGlobal.setText("Error Global: ");
 
-        jLabel2.setText("Coeficiente de Regresión (R2): ");
+        lblTituloCoefReg.setText("Coeficiente de Regresión (R2): ");
 
-        jLabel6.setText("Ejemplos:");
+        lblEjemplos.setText("Ejemplos:");
 
         cmbEjemplos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ejemplo Recta", "Ejemplo Parabola 2º Grado", "Ejemplo Parabola 3º Grado", "Ejemplo Exponencial" }));
         cmbEjemplos.addActionListener(new java.awt.event.ActionListener() {
@@ -325,14 +477,14 @@ public class MinimosCuadrados extends javax.swing.JApplet
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
+                            .addComponent(lblLimInf)
+                            .addComponent(lblLimSup))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtFieldLimiteSupX)
                             .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
+                        .addComponent(lblEjemplos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbEjemplos, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -341,13 +493,13 @@ public class MinimosCuadrados extends javax.swing.JApplet
                         .addGap(12, 12, 12)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
+                                .addComponent(lblFuncReg)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1)
+                                    .addComponent(lblCantPuntos)
                                     .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnClean)
                                     .addComponent(buttonOK)
@@ -363,7 +515,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblErrorGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
+                                .addComponent(lblTituloCoefReg)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblCoefRegr, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(lblSol, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -374,19 +526,19 @@ public class MinimosCuadrados extends javax.swing.JApplet
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(lblLimInf)
                     .addComponent(txtFieldLimiteInfX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
+                    .addComponent(lblEjemplos)
                     .addComponent(cmbEjemplos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkTruncar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
+                            .addComponent(lblLimSup)
                             .addComponent(txtFieldLimiteSupX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel1)
+                        .addComponent(lblCantPuntos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spinnerCantPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(16, 16, 16)
@@ -405,7 +557,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(52, 52, 52)
-                        .addComponent(jLabel4))
+                        .addComponent(lblFuncReg))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(labelFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -420,7 +572,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
                 .addGap(29, 29, 29)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(lblTituloCoefReg)
                         .addGap(20, 20, 20))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lblCoefRegr, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -877,8 +1029,12 @@ private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             }
             else
             {
-                this.grado = "Exponencial";
-                generarEjemploExponencial();
+                if(cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Exponencial"))
+                {
+                    this.grado = "Exponencial";
+                    generarEjemploExponencial();
+                }
+                else this.setPoints();
             }
         }
     }
@@ -960,18 +1116,18 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JButton buttonOK;
     private javax.swing.JCheckBox chkTruncar;
     private javax.swing.JComboBox cmbEjemplos;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelFuncion;
+    private javax.swing.JLabel lblCantPuntos;
     private javax.swing.JLabel lblCoefRegr;
+    private javax.swing.JLabel lblEjemplos;
     private javax.swing.JLabel lblErrorGlobal;
+    private javax.swing.JLabel lblFuncReg;
+    private javax.swing.JLabel lblLimInf;
+    private javax.swing.JLabel lblLimSup;
     private javax.swing.JLabel lblSol;
+    private javax.swing.JLabel lblTituloCoefReg;
     private javax.swing.JLabel lblTituloErrorGlobal;
     private javax.swing.JPanel panelGrafico;
     private javax.swing.JRadioButton radioExponencial;
