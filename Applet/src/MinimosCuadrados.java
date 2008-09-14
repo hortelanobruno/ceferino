@@ -241,8 +241,15 @@ public class MinimosCuadrados extends javax.swing.JApplet
         int filas = model.getRowCount();       
         //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());       
         
-        if(spinnerGrado.isEnabled()) grados = (Integer)spinnerGrado.getValue();  //   VER !!! para exponencial no hay grados. Putea a veces
-        else grados = 1;
+        if(spinnerGrado.isEnabled()){
+            grados = (Integer)spinnerGrado.getValue();
+            if(grados >= filas){
+                grados = filas - 1;
+            }
+        }  
+        else{
+            grados = 1;
+        }
         
         if(spinnerGrado.isEnabled()) this.grado = spinnerGrado.getValue().toString();
         else this.grado = "Exponencial";
@@ -283,13 +290,14 @@ public class MinimosCuadrados extends javax.swing.JApplet
         {
             DecimalFormat df = new DecimalFormat();
             df.setMaximumFractionDigits(4);
+            
             for(int i = 0;i<result.length;i++)
             {
                //result[i]= Math.floor(result[i] * 100.0)/100.0;
-               result[i]= Math.round(result[i]);
-                /*String aux = df.format(result[i]);
-                aux.replace(',', '.');
-                result[i] = Double.valueOf(aux);*/
+              // result[i]= Math.round(result[i]);
+               String aux = df.format(result[i]);
+               aux = aux.replace(',', '.');
+               result[i] = Double.parseDouble(aux);
             }
         }
         //double[] resultado;
@@ -629,8 +637,25 @@ public class MinimosCuadrados extends javax.swing.JApplet
     private void calcularErrores()
     {
         double erGlo = this.calcularErrorGlobal();
-        lblErrorGlobal.setText(String.valueOf(erGlo));
-        lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion(erGlo)));
+        if(chkTruncar.isSelected())
+        {
+            DecimalFormat df = new DecimalFormat();
+            df.setMaximumFractionDigits(4);
+            String aux = df.format(erGlo);
+            aux = aux.replace(',', '.');
+            erGlo = Double.parseDouble(aux);
+            lblErrorGlobal.setText(String.valueOf(erGlo));
+            double cr = this.calcularCoeficienteRegresion(erGlo);
+            String aux2 = df.format(cr);
+            aux2 = aux2.replace(',', '.');
+            cr = Double.parseDouble(aux2);
+            lblCoefRegr.setText(String.valueOf(aux2));
+        }
+        else
+        {
+            lblErrorGlobal.setText(String.valueOf(erGlo));
+            lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion(erGlo)));
+        }
     }
 private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOKActionPerformed
 // TODO add your handling code here:
@@ -681,6 +706,20 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 jtabbedpane.setVisible(true);
                 jtabbedpane.repaint();
                 panelGrafico.repaint();
+                int aux2 = model.getRowCount();
+                boolean bool = true;
+                if(aux2>1){
+                    for(int i=0 ; i < aux2 ; i++){
+                        Object aux3 = model.getValueAt(i, 0);
+                        Object aux4 = model.getValueAt(i, 1);
+                        if(( aux3 == null) || (aux4 == null)){
+                            bool = false;
+                        }
+                    }
+                    if(bool){
+                        graficar();
+                    }
+                }
             }
         }
     }
@@ -785,7 +824,8 @@ private XYSeriesCollection cordenadasGrafico(double[] result){
         for(int i = 0;i < result.length;i++)
             coeficientes.add(result[i]);
         
-        this.funcion = new FuncionEnesima(coeficientes, Integer.parseInt(spinnerGrado.getValue().toString()));
+
+        this.funcion = new FuncionEnesima(coeficientes, grados);
         
         for(int i = 0; i<100;i++)
         {
@@ -905,6 +945,20 @@ private void spinnerCantPuntosStateChanged(javax.swing.event.ChangeEvent evt) {/
             ((DefaultTableModel)tablePuntos.getModel()).removeRow(tablePuntos.getRowCount() -1);
         }
         cantPuntos = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+        int aux2 = model.getRowCount();
+        boolean bool = true;
+        if(aux2>1){
+            for(int i=0 ; i < aux2 ; i++){
+                Object aux3 = model.getValueAt(i, 0);
+                Object aux4 = model.getValueAt(i, 1);
+                if(( aux3 == null) || (aux4 == null)){
+                    bool = false;
+                }
+            }
+            if(bool){
+                graficar();
+            }
+        }
     }else{
         int aux = Integer.parseInt(spinnerCantPuntos.getValue().toString()) - cantPuntos;
         for(int i = 0 ; i < aux ; i++){
@@ -932,10 +986,12 @@ private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//
 
 private void generarEjemploRecta()
 {
+    
     this.spinnerCantPuntos.setValue(4);
     this.spinnerGrado.setEnabled(true);
     this.radioGrado.setSelected(true);
     this.spinnerGrado.setValue(1);
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
     for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
     {
         model.addRow(new Double[]{(double)i,(double)i});
@@ -947,10 +1003,12 @@ private void generarEjemploRecta()
 
 private void generarEjemploParabola2()
 {
+    
     this.spinnerGrado.setEnabled(true);
     this.radioGrado.setSelected(true);
     this.spinnerGrado.setValue(2);
-    
+    this.spinnerCantPuntos.setValue(4);
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
     for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
     {
         model.addRow(new Double[]{(double)i,Math.pow(i, 2)});
@@ -958,22 +1016,16 @@ private void generarEjemploParabola2()
         model.setValueAt(Math.pow(i, 2), i  , 1);*/
     }
     graficar();
-    this.spinnerCantPuntos.setValue(4);
-    if(model.getRowCount() > 4)
-    {
-        model.removeRow(7);
-        model.removeRow(6);
-        model.removeRow(5);
-        model.removeRow(4);
-    }
 }
 
 private void generarEjemploParabola3()
 {
+    
     this.spinnerCantPuntos.setValue(4);
     this.spinnerGrado.setEnabled(true);
     this.radioGrado.setSelected(true);
     this.spinnerGrado.setValue(3);
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
     for(int i =0; i < Constantes.DEFAULT_NUMEBER_POINTS;i++)
     {
         model.addRow(new Double[]{(double)i,Math.pow(i, 3)});
@@ -986,9 +1038,11 @@ private void generarEjemploParabola3()
 
 private void generarEjemploExponencial()
 {
+    
     this.spinnerCantPuntos.setValue(4);
     this.radioExponencial.setSelected(true);
     this.spinnerGrado.setEnabled(false);
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
     for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
     {
         model.addRow(new Double[]{(double)i,Math.pow(3, i)});
@@ -1007,7 +1061,7 @@ private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         model.setValueAt(0, 0, 0);
         model.setValueAt(0, 0, 1);
     }*/
-   ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
+   
     if(cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Recta"))
     {
         this.grado = "1";
