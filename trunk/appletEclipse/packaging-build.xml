@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Packaging Generator" default="_packaging_generation_">
-<target name="_packaging_generation_" depends=""/>
+<target name="_packaging_generation_" depends="N65540"/>
+<target name="N65540" description="Applet.jar">
+<mkdir dir="dist"/>
+<jar destfile="dist/Applet.jar">
+<zipfileset dir=".">
+<include name="swing-layout-1.0.3.jar"/>
+</zipfileset>
+<zipfileset dir=".">
+<include name="jcommon-1.0.13.jar"/>
+</zipfileset>
+<zipfileset dir=".">
+<include name="jfreechart-1.0.10.jar"/>
+</zipfileset>
+<zipfileset dir=".">
+<include name="jmi.jar"/>
+</zipfileset>
+<zipfileset dir=".">
+<include name="java.policy.applet"/>
+</zipfileset>
+<zipfileset dir="bin" includes="**/*.class"/>
+</jar>
+</target>
 </project>

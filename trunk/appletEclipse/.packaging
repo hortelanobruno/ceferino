@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<configurations/>
+<configurations>
+<archive destination="dist" exploded="false" name="Applet.jar" used="true">
+<folder excludes="" includes="**/*.class" location="bin" name="bin" prefix="" project="" projectLocation="bin" used="true"/>
+<file location="swing-layout-1.0.3.jar" name="swing-layout-1.0.3.jar" prefix="" project="" projectLocation="swing-layout-1.0.3.jar" used="true"/>
+<file location="jcommon-1.0.13.jar" name="jcommon-1.0.13.jar" prefix="" project="" projectLocation="jcommon-1.0.13.jar" used="true"/>
+<file location="jfreechart-1.0.10.jar" name="jfreechart-1.0.10.jar" prefix="" project="" projectLocation="jfreechart-1.0.10.jar" used="true"/>
+<file location="jmi.jar" name="jmi.jar" prefix="" project="" projectLocation="jmi.jar" used="true"/>
+<file location="java.policy.applet" name="java.policy.applet" prefix="" project="" projectLocation="java.policy.applet" used="true"/>
+</archive>
+</configurations>
