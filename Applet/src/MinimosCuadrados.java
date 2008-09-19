@@ -621,24 +621,57 @@ public class MinimosCuadrados extends javax.swing.JApplet
         return err;
     }
     
-    private double calcularPromY()
+    private double calcularProm(int index)
     {
         double sum =0;
         for(int i = 0;i<this.model.getRowCount();i++)
-            sum += Double.parseDouble(model.getValueAt(i, 1).toString());
+            sum += Double.parseDouble(model.getValueAt(i, index).toString());
         
         return (sum/this.model.getRowCount());
     }
     
-    private double calcularCoeficienteRegresion(double erGlo)
+    private double calcularSumaXY()
     {
-        double denominador = 0;
+        double sum =0;
+        for(int i = 0;i<this.model.getRowCount();i++)
+            sum += Double.parseDouble(model.getValueAt(i, 0).toString())*Double.parseDouble(model.getValueAt(i, 1).toString());
+        return sum;
+    }
+    
+    private double calcularSuma2(int index)
+    {
+        double sum =0;
+        for(int i = 0;i<this.model.getRowCount();i++)
+            sum += Math.pow(Double.parseDouble(model.getValueAt(i, index).toString()),2);
+         
+         return sum;
+    }
+    
+    private double calcularCoeficienteRegresion()
+    {
+        /*double denominador = 0;
         double promY = this.calcularPromY();
         
         for(int i = 0;i<this.model.getRowCount();i++)        
             denominador+= Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY,2);
 
-        return erGlo/denominador;
+        return erGlo/denominador;*/
+        int n = model.getRowCount();
+        
+        double coefReg = 0d;
+        double promY = this.calcularProm(1);
+        double promX = this.calcularProm(0);
+        double sumaXY = this.calcularSumaXY();
+        double numerador = sumaXY - n*promY*promX;
+        
+        double sumaX2 = this.calcularSuma2(0);
+        double sumaY2 = this.calcularSuma2(1);
+        double denom1 = sumaX2 - n*Math.pow(promX, 2);
+        double denom2 = sumaY2 - n*Math.pow(promY, 2);
+        double denominador = Math.pow(denom1 * denom2, 0.5);
+        
+        coefReg = numerador/denominador;
+        return coefReg;
     }
     
     private void calcularErrores()
@@ -652,7 +685,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
             aux = aux.replace(',', '.');
             erGlo = Double.parseDouble(aux);
             lblErrorGlobal.setText(String.valueOf(erGlo));
-            double cr = this.calcularCoeficienteRegresion(erGlo);
+            double cr = this.calcularCoeficienteRegresion();
             String aux2 = df.format(cr);
             aux2 = aux2.replace(',', '.');
             cr = Double.parseDouble(aux2);
@@ -661,7 +694,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
         else
         {
             lblErrorGlobal.setText(String.valueOf(erGlo));
-            lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion(erGlo)));
+            lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion()));
         }
     }
 private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOKActionPerformed
