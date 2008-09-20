@@ -7,12 +7,12 @@ package metodo;
  */
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTabbedPane;
@@ -97,25 +97,6 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     ejemplos = new HashMap<String, double[][]>();
                     boolean ok = loadParams();
                     if(ok) setParams();
-                 /*   panelGrafico.removeAll();
-                    jtabbedpane = new JTabbedPane();
-                    panelGrafico.add(jtabbedpane);
-                    jtabbedpane.setVisible(true);
-                    jtabbedpane.repaint();
-                    panelGrafico.repaint();
-                     NumberAxis numberaxis = new NumberAxis("X");
-                    numberaxis.setAutoRangeIncludesZero(false);
-                    NumberAxis numberaxis1 = new NumberAxis("Y");
-                    numberaxis1.setAutoRangeIncludesZero(false);
-                    XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
-                    XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-                    JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
-                    ChartPanel chartpanel = new ChartPanel(jfreechart, false);
-                    chartpanel.setVisible(true);
-                    jtabbedpane.add("Regresión",chartpanel);
-                     jtabbedpane.setVisible(true);
-                    jtabbedpane.repaint();
-                    panelGrafico.repaint();*/
                     funcion = new FuncionEnesima();
                     funcExp = new FuncionExponencial();
                     if(cantEjemplos>0){
@@ -221,6 +202,22 @@ public class MinimosCuadrados extends javax.swing.JApplet
         if(xMin == 0) txtFieldLimiteInfX.setText(String.valueOf(Constantes.DEFAULT_XMin));
         else txtFieldLimiteSupX.setText(String.valueOf(xMin));
         
+        if(!fondoForm.equalsIgnoreCase("")){
+            if(fondoForm.equalsIgnoreCase("blue")){
+                this.setBackground(Color.BLUE);
+            }
+            if(fondoForm.equalsIgnoreCase("red")){
+                this.setBackground(Color.RED);
+            }
+            if(fondoForm.equalsIgnoreCase("green")){
+                this.setBackground(Color.GREEN);
+            }
+        }
+        
+    //font,fontSize,fontColor
+        
+        this.setFont(new Font(Font.SERIF,Font.ITALIC,10));
+        
         if(formHeight == 0)
         {
             if(formWidth == 0) this.setSize(Constantes.DEFAULT_FRAME_WIDTH, Constantes.DEFAULT_FRAME_HEIGHT);
@@ -253,6 +250,8 @@ public class MinimosCuadrados extends javax.swing.JApplet
         {
             if(this.getParameter("fondoForm") != null){
                 this.fondoForm = this.getParameter("fondoForm");
+            }else{
+                 this.fondoForm = "";
             }
             System.out.println("1");
             if(this.getParameter("fondoGrafico") != null){
@@ -261,14 +260,20 @@ public class MinimosCuadrados extends javax.swing.JApplet
             System.out.println("2");
             if(this.getParameter("font") != null){
                 this.font = this.getParameter("font");
+            }else{
+                this.font = "";
             }
             System.out.println("3");
             if(this.getParameter("fontSize") != null){
                 this.fontSize = Integer.parseInt(this.getParameter("fontSize"));
+            }else{
+                this.fontSize = 0;
             }
             System.out.println("4");
             if(this.getParameter("fontColor") != null){
                 this.fontColor = this.getParameter("fontColor");
+            }else{
+                this.fontColor = "";
             }
             System.out.println("5");
             if(this.getParameter("anchoTrazo") != null){
@@ -684,25 +689,57 @@ public class MinimosCuadrados extends javax.swing.JApplet
         return err;
     }
     
-    private double calcularPromY()
+     private double calcularProm(int index)
     {
         double sum =0;
         for(int i = 0;i<this.model.getRowCount();i++)
-            sum += Double.parseDouble(model.getValueAt(i, 1).toString());
+            sum += Double.parseDouble(model.getValueAt(i, index).toString());
         
         return (sum/this.model.getRowCount());
     }
     
-    private double calcularCoeficienteRegresion(double erGlo)
+    private double calcularSumaXY()
     {
-        double denominador = 0;
+        double sum =0;
+        for(int i = 0;i<this.model.getRowCount();i++)
+            sum += Double.parseDouble(model.getValueAt(i, 0).toString())*Double.parseDouble(model.getValueAt(i, 1).toString());
+        return sum;
+    }
+    
+    private double calcularSuma2(int index)
+    {
+        double sum =0;
+        for(int i = 0;i<this.model.getRowCount();i++)
+            sum += Math.pow(Double.parseDouble(model.getValueAt(i, index).toString()),2);
+         
+         return sum;
+    }
+    
+    private double calcularCoeficienteRegresion()
+    {
+        /*double denominador = 0;
         double promY = this.calcularPromY();
         
         for(int i = 0;i<this.model.getRowCount();i++)        
             denominador+= Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY,2);
-        System.out.println("Denominador" + denominador);
-        System.out.println("erGLo " + erGlo);
-        return 1 - denominador;
+
+        return erGlo/denominador;*/
+        int n = model.getRowCount();
+        
+        double coefReg = 0d;
+        double promY = this.calcularProm(1);
+        double promX = this.calcularProm(0);
+        double sumaXY = this.calcularSumaXY();
+        double numerador = sumaXY - n*promY*promX;
+        
+        double sumaX2 = this.calcularSuma2(0);
+        double sumaY2 = this.calcularSuma2(1);
+        double denom1 = sumaX2 - n*Math.pow(promX, 2);
+        double denom2 = sumaY2 - n*Math.pow(promY, 2);
+        double denominador = Math.pow(denom1 * denom2, 0.5);
+        
+        coefReg = numerador/denominador;
+        return coefReg;
     }
     
     private void calcularErrores()
@@ -716,7 +753,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
             aux = aux.replace(',', '.');
             erGlo = Double.parseDouble(aux);
             lblErrorGlobal.setText(String.valueOf(erGlo));
-            double cr = this.calcularCoeficienteRegresion(erGlo);
+            double cr = this.calcularCoeficienteRegresion();
             String aux2 = df.format(cr);
             aux2 = aux2.replace(',', '.');
             cr = Double.parseDouble(aux2);
@@ -725,9 +762,54 @@ public class MinimosCuadrados extends javax.swing.JApplet
         else
         {
             lblErrorGlobal.setText(String.valueOf(erGlo));
-            lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion(erGlo)));
+            lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion()));
         }
     }
+//    
+//    private double calcularPromY()
+//    {
+//        double sum =0;
+//        for(int i = 0;i<this.model.getRowCount();i++)
+//            sum += Double.parseDouble(model.getValueAt(i, 1).toString());
+//        
+//        return (sum/this.model.getRowCount());
+//    }
+//    
+//    private double calcularCoeficienteRegresion(double erGlo)
+//    {
+//        double denominador = 0;
+//        double promY = this.calcularPromY();
+//        
+//        for(int i = 0;i<this.model.getRowCount();i++)        
+//            denominador+= Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY,2);
+//        System.out.println("Denominador" + denominador);
+//        System.out.println("erGLo " + erGlo);
+//        return 1 - denominador;
+//    }
+//    
+//    private void calcularErrores()
+//    {
+//        double erGlo = this.calcularErrorGlobal();
+//        if(chkTruncar.isSelected())
+//        {
+//            DecimalFormat df = new DecimalFormat();
+//            df.setMaximumFractionDigits(this.cantDecimales);
+//            String aux = df.format(erGlo);
+//            aux = aux.replace(',', '.');
+//            erGlo = Double.parseDouble(aux);
+//            lblErrorGlobal.setText(String.valueOf(erGlo));
+//            double cr = this.calcularCoeficienteRegresion(erGlo);
+//            String aux2 = df.format(cr);
+//            aux2 = aux2.replace(',', '.');
+//            cr = Double.parseDouble(aux2);
+//            lblCoefRegr.setText(String.valueOf(aux2));
+//        }
+//        else
+//        {
+//            lblErrorGlobal.setText(String.valueOf(erGlo));
+//            lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion(erGlo)));
+//        }
+//    }
 private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOKActionPerformed
 // TODO add your handling code here:
     graficar();
