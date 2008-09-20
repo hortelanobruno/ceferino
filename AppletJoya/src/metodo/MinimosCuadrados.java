@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.awt.color.ColorSpace;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -87,7 +88,8 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     cantPuntos=0;
                     grados=1;
                     radioGrado.setSelected(true);
-                    fontSize = 0;
+                    fontSize = 14;
+                    font = "Tahoma";
                     xMax = 0;
                     xMin = 0;
                     formHeight = 0;
@@ -200,23 +202,43 @@ public class MinimosCuadrados extends javax.swing.JApplet
         else txtFieldLimiteSupX.setText(String.valueOf(xMax));
         
         if(xMin == 0) txtFieldLimiteInfX.setText(String.valueOf(Constantes.DEFAULT_XMin));
-        else txtFieldLimiteSupX.setText(String.valueOf(xMin));
-        
+        else txtFieldLimiteInfX.setText(String.valueOf(xMin));
+
+               
         if(!fondoForm.equalsIgnoreCase("")){
-            if(fondoForm.equalsIgnoreCase("blue")){
-                this.setBackground(Color.BLUE);
-            }
-            if(fondoForm.equalsIgnoreCase("red")){
-                this.setBackground(Color.RED);
-            }
-            if(fondoForm.equalsIgnoreCase("green")){
-                this.setBackground(Color.GREEN);
-            }
+           //jPanel2.setBackground(new Color(0x fondoForm)); 
+            int i = Integer.valueOf(fondoForm, 16).intValue();
+            jPanel2.setBackground(new Color(i));
         }
         
-    //font,fontSize,fontColor
+        if(!fontColor.equalsIgnoreCase("")){
+            int i = Integer.valueOf(fontColor, 16).intValue();
+                lblLimInf.setForeground(new Color(i));
+                labelFuncion.setForeground(new Color(i));
+                lblCantPuntos.setForeground(new Color(i));
+                lblCoefRegr.setForeground(new Color(i));
+                lblEjemplos.setForeground(new Color(i));
+                lblErrorGlobal.setForeground(new Color(i));
+                lblFuncReg.setForeground(new Color(i));
+                lblLimSup.setForeground(new Color(i));
+                lblSol.setForeground(new Color(i));
+                lblTituloCoefReg.setForeground(new Color(i));
+                lblTituloErrorGlobal.setForeground(new Color(i));
+        }
         
-        this.setFont(new Font(Font.SERIF,Font.ITALIC,10));
+        lblLimInf.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        labelFuncion.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblCantPuntos.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblCoefRegr.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblEjemplos.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblErrorGlobal.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblFuncReg.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblLimSup.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblSol.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblTituloCoefReg.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        lblTituloErrorGlobal.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        
+        
         
         if(formHeight == 0)
         {
@@ -717,29 +739,29 @@ public class MinimosCuadrados extends javax.swing.JApplet
     
     private double calcularCoeficienteRegresion()
     {
-        /*double denominador = 0;
-        double promY = this.calcularPromY();
-        
+        double denominador = 0;
+        double erGlo = this.calcularErrorGlobal();
+        double promY = this.calcularProm(1);
         for(int i = 0;i<this.model.getRowCount();i++)        
             denominador+= Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY,2);
 
-        return erGlo/denominador;*/
-        int n = model.getRowCount();
-        
-        double coefReg = 0d;
-        double promY = this.calcularProm(1);
-        double promX = this.calcularProm(0);
-        double sumaXY = this.calcularSumaXY();
-        double numerador = sumaXY - n*promY*promX;
-        
-        double sumaX2 = this.calcularSuma2(0);
-        double sumaY2 = this.calcularSuma2(1);
-        double denom1 = sumaX2 - n*Math.pow(promX, 2);
-        double denom2 = sumaY2 - n*Math.pow(promY, 2);
-        double denominador = Math.pow(denom1 * denom2, 0.5);
-        
-        coefReg = numerador/denominador;
-        return coefReg;
+        return (1- (erGlo/denominador));
+//        int n = model.getRowCount();
+//        
+//        double coefReg = 0d;
+//        double promY = this.calcularProm(1);
+//        double promX = this.calcularProm(0);
+//        double sumaXY = this.calcularSumaXY();
+//        double numerador = sumaXY - n*promY*promX;
+//        
+//        double sumaX2 = this.calcularSuma2(0);
+//        double sumaY2 = this.calcularSuma2(1);
+//        double denom1 = sumaX2 - n*Math.pow(promX, 2);
+//        double denom2 = sumaY2 - n*Math.pow(promY, 2);
+//        double denominador = Math.pow(denom1 * denom2, 0.5);
+//        
+//        coefReg = numerador/denominador;
+//        return coefReg;
     }
     
     private void calcularErrores()
@@ -900,6 +922,11 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         numberaxis1.setAutoRangeIncludesZero(false);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
         XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+        if(!fondoGrafico.equalsIgnoreCase("")){
+           //jPanel2.setBackground(new Color(0x fondoForm)); 
+            int i = Integer.valueOf(fondoGrafico, 16).intValue();
+            xyplot.setBackgroundPaint(new Color(i));
+        }
        // double ad[] = Regression.getPowerRegression(data1, 0);
         XYSeriesCollection coordenadas = cordenadasGrafico(result);
         XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
