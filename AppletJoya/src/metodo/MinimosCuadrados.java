@@ -137,37 +137,27 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 
     private void loadPoints() {
         /* value = "(1.3,5);(3,4);(3,5.4)..... "  */
-        System.out.println("1");
         int size = Integer.parseInt(this.getParameter("cantEjemplos"));
-        System.out.println("2");
         String[] nombreEjemplos = new String[size];
-        System.out.println("3");
-        for (int i = 0; i < size; i++) {
-            System.out.println("4");
+        
+        for (int i = 0; i < size; i++)
             nombreEjemplos[i] = this.getParameter("nombreEjemplo" + (i + 1));
-            System.out.println("5");
-        }
-        for (int i = 0; i < size; i++) {
-            System.out.println("6");
+        
+        for (int i = 0; i < size; i++) 
+        {
             String aux = this.getParameter("puntos" + (i + 1));
-            System.out.println("7");
             String[] pares = aux.split(";"); /* pares [0] => (1.3,5)  pares[1] => (3,4) */
-            System.out.println("8");
             double[][] points = new double[pares.length][2];
-            System.out.println("9");
-            for (int j = 0; j < pares.length; j++) {
-                System.out.println("10");
+            for (int j = 0; j < pares.length; j++) 
+            {
                 pares[j] = pares[j].replace('(', ' '); // pares[0] => 1.3,5)
                 pares[j] = pares[j].replace(')', ' '); // pares[0] => 1.3,5
                 String[] xy = pares[j].split(","); // xy[0] => 1,3   xy[1] => 5
                 points[j][0] = Double.valueOf(xy[0]); //points[i][0] => 1,3
                 points[j][1] = Double.valueOf(xy[1]); //points[i][1] => 5
-                System.out.println("11");
             }
-            System.out.println("12");
             ejemplos.put(nombreEjemplos[i], points);
         }
-        System.out.println("13");
     }
 
     private void setPoints() {
@@ -209,6 +199,8 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             radioExponencial.setBackground(new Color(i));
             jScrollPane1.setBackground(new Color(i));
             panelGrafico.setBackground(new Color(i));
+            btnClean.setBackground(new Color(i));
+            buttonOK.setBackground(new Color(i));
         }
 
         if (!fontColor.equalsIgnoreCase("")) {
@@ -224,6 +216,9 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             lblSol.setForeground(new Color(i));
             lblTituloCoefReg.setForeground(new Color(i));
             lblTituloErrorGlobal.setForeground(new Color(i));
+            chkTruncar.setForeground(new Color(i));
+            radioExponencial.setForeground(new Color(i));
+            radioGrado.setForeground(new Color(i));
         }
 
         lblLimInf.setFont(new java.awt.Font(this.font, 1, this.fontSize));
@@ -237,7 +232,9 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         lblSol.setFont(new java.awt.Font(this.font, 1, this.fontSize));
         lblTituloCoefReg.setFont(new java.awt.Font(this.font, 1, this.fontSize));
         lblTituloErrorGlobal.setFont(new java.awt.Font(this.font, 1, this.fontSize));
-
+        chkTruncar.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        radioExponencial.setFont(new java.awt.Font(this.font, 1, this.fontSize));
+        radioGrado.setFont(new java.awt.Font(this.font, 1, this.fontSize));
 
 
         if (formHeight == 0) {
@@ -283,77 +280,77 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             }else{
                 this.colorTrazo = "";
             }
+            
             if (this.getParameter("fondoForm") != null) {
                 this.fondoForm = this.getParameter("fondoForm");
             } else {
                 this.fondoForm = "";
             }
-            System.out.println("1");
+            
             if (this.getParameter("fondoGrafico") != null) {
                 this.fondoGrafico = this.getParameter("fondoGrafico");
             }
-            System.out.println("2");
+            
             if (this.getParameter("font") != null) {
                 this.font = this.getParameter("font");
             } else {
                 this.font = "";
             }
-            System.out.println("3");
+            
             if (this.getParameter("fontSize") != null) {
                 this.fontSize = Integer.parseInt(this.getParameter("fontSize"));
             } else {
                 this.fontSize = 0;
             }
-            System.out.println("4");
+            
             if (this.getParameter("fontColor") != null) {
                 this.fontColor = this.getParameter("fontColor");
             } else {
                 this.fontColor = "";
             }
-            System.out.println("5");
+            
             if (this.getParameter("anchoTrazo") != null) {
                 this.anchoTrazoGrafico = Integer.valueOf(this.getParameter("anchoTrazo"));
             }
-            System.out.println("6");
+            
             if (this.getParameter("xMin") != null) {
                 this.xMin = Integer.parseInt(this.getParameter("xMin"));
             }
-            System.out.println("7");
+            
             if (this.getParameter("xMax") != null) {
                 this.xMax = Integer.parseInt(this.getParameter("xMax"));
             }
-            System.out.println(this.idioma);
+            
             if (this.getParameter("idioma") != null) {
                 this.idioma = this.getParameter("idioma");
             }
-            System.out.println(this.idioma);
+            
             if (this.getParameter("colorEjes") != null) {
                 this.colorEjes = this.getParameter("colorEjes");
             }
-            System.out.println("11");
+            
             if (this.getParameter("grado") != null) {
                 this.param_Grado = this.getParameter("grado"); // grado = 1 o grado = exp
             }
-            System.out.println("12");
+            
             if (this.getParameter("cantEjemplos") != null) {
                 this.cantEjemplos = Integer.parseInt(this.getParameter("cantEjemplos"));
             }
-            System.out.println("13");
+            
             if (this.getParameter("cantDecimales") != null) {
                 this.cantDecimales = Integer.parseInt(this.getParameter("cantDecimales"));
             }
-            System.out.println("14");
+            
             if (this.getParameter("truncar") != null) {
                 this.truncar = Boolean.parseBoolean(this.getParameter("truncar"));
             }
-            System.out.println("15");
+            
             if (cantEjemplos > 0) {
                 loadPoints();
             }
-            System.out.println("16");
+            
             return true;
         } catch (Exception e) {
-            System.out.println("EXCEPCION");
             return false;
         }
     }
