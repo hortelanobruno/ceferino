@@ -6,15 +6,14 @@ package metodo;
  * Created on 23 de agosto de 2008, 14:16
  */
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
-import java.awt.color.ColorSpace;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -55,8 +54,6 @@ public class MinimosCuadrados extends javax.swing.JApplet {
     private int xMax;
     private String idioma;
     private String colorEjes;
-    private int formHeight;
-    private int formWidth;
     private int cantDecimales;
     private boolean truncar;
     private String param_Grado;
@@ -76,24 +73,24 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 
     /** Initializes the applet MinimosCuadrados */
     @Override
-    public void init() {
-
-        try {
-            java.awt.EventQueue.invokeAndWait(new Runnable() {
-
-                public void run() {
+    public void init() 
+    {
+        try 
+        {
+            java.awt.EventQueue.invokeAndWait(new Runnable() 
+            {
+                public void run() 
+                {
                     setLookAndFeel();
                     initComponents();
                     cantPuntos = 0;
                     grados = 1;
                     radioGrado.setSelected(true);
-                    fontSize = 14;
-                    font = "Tahoma";
-                    xMax = 0;
-                    xMin = 0;
-                    formHeight = 0;
-                    formWidth = 0;
-                    idioma = "es";
+                    fontSize = Constantes.DEFAULT_FONT_SIZE;
+                    font = Constantes.DEFAULT_FONT;
+                    xMax = Constantes.DEFAULT_XMax;
+                    xMin = Constantes.DEFAULT_XMin;
+                    idioma = Constantes.DEFAULT_LANGUAGE;
                     model = (DefaultTableModel) tablePuntos.getModel();
                     ejemplos = new HashMap<String, double[][]>();
                     boolean ok = loadParams();
@@ -110,6 +107,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                     }
                     model.addTableModelListener(new TableModelListener() {
 
+                        @Override
                         public void tableChanged(TableModelEvent e) {
                             tableListener(e);
                         }
@@ -121,7 +119,8 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         }
     }
 
-    private void traducir() {
+    private void traducir() 
+    {
         this.lblEjemplos.setText("Examples");
         this.lblFuncReg.setText("Regression function");
         this.lblLimInf.setText("X axis inferior limit");
@@ -236,21 +235,6 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         radioExponencial.setFont(new java.awt.Font(this.font, 1, this.fontSize));
         radioGrado.setFont(new java.awt.Font(this.font, 1, this.fontSize));
 
-
-        if (formHeight == 0) {
-            if (formWidth == 0) {
-                this.setSize(Constantes.DEFAULT_FRAME_WIDTH, Constantes.DEFAULT_FRAME_HEIGHT);
-            } else {
-                this.setSize(formWidth, Constantes.DEFAULT_FRAME_HEIGHT);
-            }
-        } else {
-            if (formWidth == 0) {
-                this.setSize(Constantes.DEFAULT_FRAME_WIDTH, formHeight);
-            } else {
-                this.setSize(formWidth, formHeight);
-            }
-        }
-
         if (this.idioma.equalsIgnoreCase("en")) {
             traducir();
         }
@@ -272,9 +256,10 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         }
     }
 
-    private boolean loadParams() {
-        try {
-            
+    private boolean loadParams() 
+    {
+        try 
+        {       
             if(this.getParameter("colorTrazo") != null){
                 this.colorTrazo = this.getParameter("colorTrazo");
             }else{
@@ -350,15 +335,17 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             }
             
             return true;
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             return false;
         }
     }
 
-    private void graficar() {
+    private void graficar() 
+    {
         int filas = model.getRowCount();
-        //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());       
-
+    
         if (spinnerGrado.isEnabled()) {
             grados = (Integer) spinnerGrado.getValue();
             if (grados >= filas) {
@@ -372,30 +359,19 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             this.grado = spinnerGrado.getValue().toString();
         } else {
             this.grado = "Exponencial";
-        // SistemaDeEcuaciones s = new SistemaDeEcuaciones();
         }
+        
         double[][] a = new double[filas][grados + 1];
         double[][] b = new double[filas][1];
         double[][] at = new double[grados + 1][filas];
         double[] atxb = new double[grados + 1];
         double[][] atxa = new double[grados + 1][grados + 1];
-        // double[][] coef = new double[grados+1][grados+2];
+        
         a = cargarValores();
         b = cargarB();
         at = trasponerMatriz(a, filas);
-        // Matriz ata = Matriz.producto(new Matriz(at),new Matriz(a));
-        //Matriz atb = Matriz.producto(new Matriz(at),new Matriz(b));
-
         atxa = multiplicarMatrices(at, a);
-        atxb = multiplicarMatrices2(at, b);
-        //coef  = armarSistema(atxa,atxb);
-       /* SistemaEcuaciones sisEcu = new SistemaEcuaciones();
-        sisEcu.setNumEcs(Integer.parseInt(spinnerGrado.getValue().toString())+1);
-        sisEcu.setCoef(coef);
-        double[] result = sisEcu.getSolucion();*/
-
-        /* Matriz alfas = new Matriz(atxa);
-        Vector res = new Vector(atxb);*/
+        atxb = multiplicarMatrices2(at, b);      
 
         Matriz alfas = new Matriz(atxa);
         Vector res = new Vector(atxb);
@@ -403,44 +379,41 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 
         double[] result = resultSist.x;
 
-
-
         if (chkTruncar.isSelected()) {
             DecimalFormat df = new DecimalFormat();
             df.setMaximumFractionDigits(this.cantDecimales);
 
-            for (int i = 0; i < result.length; i++) {
-                //result[i]= Math.floor(result[i] * 100.0)/100.0;
-                // result[i]= Math.round(result[i]);
+            for (int i = 0; i < result.length; i++) 
+            {
                 String aux = df.format(result[i]);
                 aux = aux.replace(',', '.');
                 result[i] = Double.parseDouble(aux);
             }
         }
-        //double[] resultado;
-        //double[] result = s.resolver(atxa, atxb, resultado, Integer.parseInt(spinnerGrado.getValue().toString())+1); 
-        //System.out.println("hola");
-
+        
         if (this.grado.equalsIgnoreCase("Exponencial")) {
             result = cambiarVariables(result);
         }
-        //ACA JFREECHART
 
         data1 = createSampleData1();
         panelGrafico.removeAll();
         jtabbedpane = new JTabbedPane();
 
-        jtabbedpane.add("Regresión", createChartPanel2(result));
+        if(this.idioma.equalsIgnoreCase("ES")) jtabbedpane.add("Regresión", createChartPanel2(result));
+        else jtabbedpane.add("Regression", createChartPanel2(result));
+        
         panelGrafico.add(jtabbedpane);
-        //panelGrafico.add("HOLAAA",createChartPanel2(result));
         labelFuncion.setText(generarFuncion(result));
         jtabbedpane.setVisible(true);
         jtabbedpane.repaint();
         panelGrafico.repaint();
         this.repaint();
 
-        if (hayMuchasSoluciones(result)) {
-            lblSol.setText("Matriz singular.");
+        if (hayMuchasSoluciones(result)) 
+        {
+            //lblSol.setText("Matriz singular.");
+            if(this.idioma.equalsIgnoreCase("ES")) JOptionPane.showMessageDialog(this, "Matriz Singular","Minimos Cuadrados",JOptionPane.ERROR_MESSAGE);
+            else JOptionPane.showMessageDialog(this, "Singular Matrix","Minimos Cuadrados",JOptionPane.ERROR_MESSAGE);
             labelFuncion.setText("");
         } else {
             lblErrorGlobal.setText("");
@@ -746,22 +719,6 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             denominador += Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY, 2);
         }
         return (1 - (erGlo / denominador));
-//        int n = model.getRowCount();
-//        
-//        double coefReg = 0d;
-//        double promY = this.calcularProm(1);
-//        double promX = this.calcularProm(0);
-//        double sumaXY = this.calcularSumaXY();
-//        double numerador = sumaXY - n*promY*promX;
-//        
-//        double sumaX2 = this.calcularSuma2(0);
-//        double sumaY2 = this.calcularSuma2(1);
-//        double denom1 = sumaX2 - n*Math.pow(promX, 2);
-//        double denom2 = sumaY2 - n*Math.pow(promY, 2);
-//        double denominador = Math.pow(denom1 * denom2, 0.5);
-//        
-//        coefReg = numerador/denominador;
-//        return coefReg;
     }
 
     private void calcularErrores() {
@@ -783,51 +740,6 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion()));
         }
     }
-//    
-//    private double calcularPromY()
-//    {
-//        double sum =0;
-//        for(int i = 0;i<this.model.getRowCount();i++)
-//            sum += Double.parseDouble(model.getValueAt(i, 1).toString());
-//        
-//        return (sum/this.model.getRowCount());
-//    }
-//    
-//    private double calcularCoeficienteRegresion(double erGlo)
-//    {
-//        double denominador = 0;
-//        double promY = this.calcularPromY();
-//        
-//        for(int i = 0;i<this.model.getRowCount();i++)        
-//            denominador+= Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY,2);
-//        System.out.println("Denominador" + denominador);
-//        System.out.println("erGLo " + erGlo);
-//        return 1 - denominador;
-//    }
-//    
-//    private void calcularErrores()
-//    {
-//        double erGlo = this.calcularErrorGlobal();
-//        if(chkTruncar.isSelected())
-//        {
-//            DecimalFormat df = new DecimalFormat();
-//            df.setMaximumFractionDigits(this.cantDecimales);
-//            String aux = df.format(erGlo);
-//            aux = aux.replace(',', '.');
-//            erGlo = Double.parseDouble(aux);
-//            lblErrorGlobal.setText(String.valueOf(erGlo));
-//            double cr = this.calcularCoeficienteRegresion(erGlo);
-//            String aux2 = df.format(cr);
-//            aux2 = aux2.replace(',', '.');
-//            cr = Double.parseDouble(aux2);
-//            lblCoefRegr.setText(String.valueOf(aux2));
-//        }
-//        else
-//        {
-//            lblErrorGlobal.setText(String.valueOf(erGlo));
-//            lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion(erGlo)));
-//        }
-//    }
 private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOKActionPerformed
 // TODO add your handling code here:
             graficar();
@@ -850,7 +762,8 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 }
             }
 
-            if (flag) {
+            if (flag) 
+            {
                 data1 = createSampleData1();
                 panelGrafico.removeAll();
                 jtabbedpane = new JTabbedPane();
@@ -909,36 +822,23 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         numberaxis1.setAutoRangeIncludesZero(false);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
         XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-//        XYSeries ejex = new XYSeries("Eje X");
-//        XYSeries ejey = new XYSeries("Eje y");
-//        double aux1 = Double.parseDouble(txtFieldLimiteInfX.getText()) -10D;
-//        double aux2 = Double.parseDouble(txtFieldLimiteSupX.getText()) +10D;
-//        for(double i = aux1 ; i < aux2 ; i++)
-//        {
-//            ejex.add(0D, i);
-//            ejey.add(i, 0D);
-//        }
+
         if (!fondoGrafico.equalsIgnoreCase("")) {
-            //jPanel2.setBackground(new Color(0x fondoForm)); 
             int i = Integer.valueOf(fondoGrafico, 16).intValue();
             xyplot.setBackgroundPaint(new Color(i));
         }
         xyplot.setDomainZeroBaselineVisible(true);
         xyplot.setRangeZeroBaselineVisible(true);
-        // double ad[] = Regression.getPowerRegression(data1, 0);
         XYSeriesCollection coordenadas = cordenadasGrafico(result);
-//        coordenadas.addSeries(ejex);
-//        coordenadas.addSeries(ejey);
         XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
+        
         if (!colorTrazo.equalsIgnoreCase("")) {
-            //jPanel2.setBackground(new Color(0x fondoForm)); 
             int i = Integer.valueOf(colorTrazo, 16).intValue();
             xylineandshaperenderer1.setSeriesPaint(0, new Color(i));
         } else {
             xylineandshaperenderer1.setSeriesPaint(0, Color.black);
         }
 
-        //xyplot.setDataset(1, xydataset);
         xyplot.setDataset(1, coordenadas);
         xyplot.setRenderer(1, xylineandshaperenderer1);// 
         if (idioma.equalsIgnoreCase("es")) {
@@ -957,7 +857,6 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private String generarFuncion(double[] result) {
         String func = new String();
 
-
         if (spinnerGrado.isEnabled()) {
             grado = spinnerGrado.getValue().toString();
         } else {
@@ -966,23 +865,18 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         if (grado.equalsIgnoreCase("Exponencial")) {
             func = "Y = " + result[0] + " e^" + result[1] + "X";
         } else {
-            /*if(grados == 1){
-            funcion = "Y = "+result[0]+" + "+result[1]+"X";
-            }else if(grados == 2){
-            funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2";
-            }else{
-            funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2 + "+result[3]+"X^3";
-            }*/
             func = this.funcion.getFunctionString();
         }
         return func;
     }
 
     private XYSeriesCollection cordenadasGrafico(double[] result) {
-        XYSeries series = new XYSeries("Curva de Regresión");
+        
+        XYSeries series;
+        if(this.idioma.equalsIgnoreCase("ES")) series = new XYSeries("Curva de Regresión");
+        else series = new XYSeries("Regression Curve");
+        
         double step = (Double.parseDouble(txtFieldLimiteSupX.getText()) - Double.parseDouble(txtFieldLimiteInfX.getText())) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
-
-
 
         if (spinnerGrado.isEnabled()) {
             grado = spinnerGrado.getValue().toString();
@@ -996,26 +890,6 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 series.add(x, funcExp.getValue(x));
             }
         } else {
-            /*if(grados == 1){
-            for(int i = 0 ; i < 100 ; i++){
-            FuncionLineal lin = new FuncionLineal(result[0], result[1]);
-            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
-            series.add(x,lin.getValue(x));
-            }
-            }else if(grados ==2){
-            for(int i = 0 ; i < 100 ; i++){
-            FuncionSegundoGrado seg = new FuncionSegundoGrado(result[0], result[1], result[2]);
-            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
-            series.add(x,seg.getValue(x));
-            }
-            }else{
-            for(int i = 0 ; i < 100 ; i++){
-            FuncionTercerGrado ter = new FuncionTercerGrado(result[0], result[1], result[2], result[3]);
-            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
-            series.add(x,ter.getValue(x));
-            }
-            }*/
-
             ArrayList<Double> coeficientes = new ArrayList();
 
             for (int i = 0; i < result.length; i++) {
@@ -1037,33 +911,16 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         return a;
     }
 
-    /*private double[][] armarSistema(double[][] atxa, double[][] atxb){
-    double[][] coef = new double[grados+1][grados+2];
-    
-    for(int i = 0 ; i < grados+1 ; i++ ){
-    for(int j = 0 ; j < grados+1 ; j++){
-    coef[i][j] = atxa[i][j];
-    }
-    }
-    for(int k = 0 ; k < grados+1 ; k++){
-    coef[k][grados+1] = atxb[k][0];
-    }
-    
-    return coef;
-    }*/
     private double[] multiplicarMatrices2(double[][] at, double[][] b) {
         double[] atxb = new double[grados + 1];
 
         int filas = model.getRowCount();
-        //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
 
-
-        for (int i = 0; i < grados + 1; i++) {
-            /*for (int j=0; j < 1; j++)
-            {*/
-            for (int p = 0; p < filas; p++) {
+        for (int i = 0; i < grados + 1; i++) 
+        {
+            for (int p = 0; p < filas; p++) 
+            {
                 atxb[i] += at[i][p] * b[p][0];
-            //}
             }
         }
         return atxb;
@@ -1073,12 +930,13 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         double[][] atxa = new double[grados + 1][grados + 1];
 
         int filas = model.getRowCount();
-        //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
 
-
-        for (int i = 0; i < grados + 1; i++) {
-            for (int j = 0; j < grados + 1; j++) {
-                for (int p = 0; p < filas; p++) {
+        for (int i = 0; i < grados + 1; i++) 
+        {
+            for (int j = 0; j < grados + 1; j++) 
+            {
+                for (int p = 0; p < filas; p++) 
+                {
                     atxa[i][j] += at[i][p] * a[p][j];
                 }
             }
@@ -1088,7 +946,6 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
     private double[][] cargarB() {
         int filas = model.getRowCount();
-//    int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
         double[][] b = new double[filas][1];
         model = (DefaultTableModel) tablePuntos.getModel();
 
@@ -1111,7 +968,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
     private double[][] cargarValores() {
         int filas = model.getRowCount();
-        //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+        
         double[][] a = new double[filas][grados + 1];
 
         for (int j = 0; j < model.getRowCount(); j++) {
@@ -1179,10 +1036,6 @@ private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//
     }
 }//GEN-LAST:event_radioExponencialActionPerformed
 
-    /*public void vaciarTabla() 
-    {
-    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
-    }*/
     private void generarEjemploRecta() {
 
         this.spinnerCantPuntos.setValue(4);
@@ -1192,8 +1045,6 @@ private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//
         ((DefaultTableModel) tablePuntos.getModel()).getDataVector().removeAllElements();
         for (int i = 0; i < Constantes.DEFAULT_NUMEBER_POINTS; i++) {
             model.addRow(new Double[]{(double) i, (double) i});
-        /*model.setValueAt(i, i  , 0);
-        model.setValueAt(i, i  , 1);*/
         }
         graficar();
     }
@@ -1207,8 +1058,6 @@ private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//
         ((DefaultTableModel) tablePuntos.getModel()).getDataVector().removeAllElements();
         for (int i = 0; i < Constantes.DEFAULT_NUMEBER_POINTS; i++) {
             model.addRow(new Double[]{(double) i, Math.pow(i, 2)});
-        /*model.setValueAt(i, i  , 0);
-        model.setValueAt(Math.pow(i, 2), i  , 1);*/
         }
         graficar();
     }
@@ -1222,8 +1071,6 @@ private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//
         ((DefaultTableModel) tablePuntos.getModel()).getDataVector().removeAllElements();
         for (int i = 0; i < Constantes.DEFAULT_NUMEBER_POINTS; i++) {
             model.addRow(new Double[]{(double) i, Math.pow(i, 3)});
-        /*model.setValueAt(i, i  , 0);
-        model.setValueAt(Math.pow(i, 3), i  , 1);*/
         }
         graficar();
     }
@@ -1236,21 +1083,11 @@ private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//
         ((DefaultTableModel) tablePuntos.getModel()).getDataVector().removeAllElements();
         for (int i = 0; i < Constantes.DEFAULT_NUMEBER_POINTS; i++) {
             model.addRow(new Double[]{(double) i, Math.pow(3, i)});
-        /*model.setValueAt(i, i  ,0);
-        model.setValueAt(Math.pow(3, i), i  ,1);*/
         }
         graficar();
     }
 
 private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEjemplosActionPerformed
-
-    /*if(model.getRowCount() > 1)
-    {
-    for(int i = 0; i<model.getRowCount()-1;i++)
-    model.removeRow(i);
-    model.setValueAt(0, 0, 0);
-    model.setValueAt(0, 0, 1);
-    }*/
 
     if (cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Recta")) {
         this.grado = "1";
@@ -1310,7 +1147,8 @@ private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
-        jtabbedpane.add("Regresión", chartpanel);
+        if(this.idioma.equalsIgnoreCase("ES")) jtabbedpane.add("Regresión", chartpanel);
+        else jtabbedpane.add("Regression", chartpanel);
         jtabbedpane.setVisible(true);
         jtabbedpane.repaint();
         panelGrafico.repaint();
@@ -1374,5 +1212,4 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JTextField txtFieldLimiteInfX;
     private javax.swing.JTextField txtFieldLimiteSupX;
     // End of variables declaration//GEN-END:variables
-
 }
