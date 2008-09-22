@@ -5,6 +5,7 @@ package metodo;
  *
  * Created on 23 de agosto de 2008, 14:16
  */
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
@@ -40,11 +41,12 @@ import org.jfree.data.xy.XYSeriesCollection;
  *
  * @author  Ignacio Cicero, Nerina Gaggero y Bruno Hortelano - Universidad Argentina de la Empresa (UADE)
  */
-public class MinimosCuadrados extends javax.swing.JApplet {
-
+public class PruebaMinimosCuadrados extends javax.swing.JApplet 
+{
     private static final long serialVersionUID = -4246192305944890157L;
 
     /* PARAMETROS */
+    
     private String fondoForm;
     private String fondoGrafico;
     private String font;
@@ -60,11 +62,13 @@ public class MinimosCuadrados extends javax.swing.JApplet {
     private int cantDecimales;
     private boolean truncar;
     private String param_Grado;
-    private HashMap<String, double[][]> ejemplos;
+    private HashMap<String,double[][]> ejemplos;
     private int cantEjemplos;
     private String colorTrazo;
     
     /* FIN PARAMETROS */
+    
+    
     private int cantPuntos;
     private int grados;
     private XYDataset data1;
@@ -73,19 +77,18 @@ public class MinimosCuadrados extends javax.swing.JApplet {
     private DefaultTableModel model;
     private JTabbedPane jtabbedpane;
     private String grado;
-
+    
     /** Initializes the applet MinimosCuadrados */
     @Override
     public void init() {
-
+        
         try {
             java.awt.EventQueue.invokeAndWait(new Runnable() {
-
                 public void run() {
                     setLookAndFeel();
                     initComponents();
-                    cantPuntos = 0;
-                    grados = 1;
+                    cantPuntos=0;
+                    grados=1;
                     radioGrado.setSelected(true);
                     fontSize = 14;
                     font = "Tahoma";
@@ -94,22 +97,19 @@ public class MinimosCuadrados extends javax.swing.JApplet {
                     formHeight = 0;
                     formWidth = 0;
                     idioma = "es";
-                    model = (DefaultTableModel) tablePuntos.getModel();
+                    model =(DefaultTableModel) tablePuntos.getModel();
                     ejemplos = new HashMap<String, double[][]>();
                     boolean ok = loadParams();
-                    if (ok) {
-                        setParams();
-                    }
+                    if(ok) setParams();
                     funcion = new FuncionEnesima();
                     funcExp = new FuncionExponencial();
-                    if (cantEjemplos > 0) {
+                    if(cantEjemplos>0){
                         DefaultComboBoxModel model = (DefaultComboBoxModel) cmbEjemplos.getModel();
-                        cmbEjemplos.setSelectedIndex(model.getSize() - 1);
-                    } else {
+                        cmbEjemplos.setSelectedIndex(model.getSize() -1);
+                    }else{
                         cmbEjemplos.setSelectedIndex(1);
                     }
                     model.addTableModelListener(new TableModelListener() {
-
                         public void tableChanged(TableModelEvent e) {
                             tableListener(e);
                         }
@@ -120,8 +120,9 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             ex.printStackTrace();
         }
     }
-
-    private void traducir() {
+    
+    private void traducir()
+    {
         this.lblEjemplos.setText("Examples");
         this.lblFuncReg.setText("Regression function");
         this.lblLimInf.setText("X axis inferior limit");
@@ -134,32 +135,34 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         this.chkTruncar.setText("Truncate");
         this.lblCantPuntos.setText("Number of points");
     }
-
-    private void loadPoints() {
+    
+    private void loadPoints()
+    {
         /* value = "(1.3,5);(3,4);(3,5.4)..... "  */
         System.out.println("1");
         int size = Integer.parseInt(this.getParameter("cantEjemplos"));
         System.out.println("2");
         String[] nombreEjemplos = new String[size];
         System.out.println("3");
-        for (int i = 0; i < size; i++) {
+        for(int i=0 ; i<size ; i++){
             System.out.println("4");
-            nombreEjemplos[i] = this.getParameter("nombreEjemplo" + (i + 1));
+            nombreEjemplos[i] = this.getParameter("nombreEjemplo"+(i+1));
             System.out.println("5");
         }
-        for (int i = 0; i < size; i++) {
+        for(int i=0 ; i < size ; i++){
             System.out.println("6");
-            String aux = this.getParameter("puntos" + (i + 1));
+            String aux = this.getParameter("puntos"+(i+1));
             System.out.println("7");
-            String[] pares = aux.split(";"); /* pares [0] => (1.3,5)  pares[1] => (3,4) */
+            String [] pares = aux.split(";"); /* pares [0] => (1.3,5)  pares[1] => (3,4) */
             System.out.println("8");
             double[][] points = new double[pares.length][2];
             System.out.println("9");
-            for (int j = 0; j < pares.length; j++) {
+            for(int j = 0; j< pares.length; j++)
+            {
                 System.out.println("10");
                 pares[j] = pares[j].replace('(', ' '); // pares[0] => 1.3,5)
                 pares[j] = pares[j].replace(')', ' '); // pares[0] => 1.3,5
-                String[] xy = pares[j].split(","); // xy[0] => 1,3   xy[1] => 5
+                String [] xy = pares[j].split(","); // xy[0] => 1,3   xy[1] => 5
                 points[j][0] = Double.valueOf(xy[0]); //points[i][0] => 1,3
                 points[j][1] = Double.valueOf(xy[1]); //points[i][1] => 5
                 System.out.println("11");
@@ -169,39 +172,42 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         }
         System.out.println("13");
     }
-
-    private void setPoints() {
+    
+    private void setPoints()
+    {
         String aux = cmbEjemplos.getSelectedItem().toString();
         double[][] points = ejemplos.get(aux);
         this.spinnerCantPuntos.setValue(points.length);
-        for (int i = 0; i < points.length; i++) {
+        for(int i =0; i < points.length; i++)
+        {
             this.model.setValueAt(points[i][0], i, 0);
             this.model.setValueAt(points[i][1], i, 1);
         }
-
-        if (this.grado.equalsIgnoreCase("exponencial")) {
+        
+        if(this.grado.equalsIgnoreCase("exponencial"))
+        {
             this.radioExponencial.setSelected(true);
             this.radioGrado.setSelected(false);
-        } else {
+        }
+        else
+        {
             this.radioExponencial.setSelected(false);
             this.radioGrado.setSelected(true);
             this.spinnerGrado.setValue(Integer.valueOf(this.grado));
         }
         this.graficar();
     }
+    
+    private void setParams()    
+    {
+        if(xMax == 0) txtFieldLimiteSupX.setText(String.valueOf(Constantes.DEFAULT_XMax));
+        else txtFieldLimiteSupX.setText(String.valueOf(xMax));
+        
+        if(xMin == 0) txtFieldLimiteInfX.setText(String.valueOf(Constantes.DEFAULT_XMin));
+        else txtFieldLimiteInfX.setText(String.valueOf(xMin));
 
-    private void setParams() {
-        if (xMax == 0) {
-            txtFieldLimiteSupX.setText(String.valueOf(Constantes.DEFAULT_XMax));
-        } else {
-            txtFieldLimiteSupX.setText(String.valueOf(xMax));
-        }
-        if (xMin == 0) {
-            txtFieldLimiteInfX.setText(String.valueOf(Constantes.DEFAULT_XMin));
-        } else {
-            txtFieldLimiteInfX.setText(String.valueOf(xMin));
-        }
-        if (!fondoForm.equalsIgnoreCase("")) {
+               
+        if(!fondoForm.equalsIgnoreCase("")){
             int i = Integer.valueOf(fondoForm, 16).intValue();
             jPanel2.setBackground(new Color(i));
             chkTruncar.setBackground(new Color(i));
@@ -210,22 +216,22 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             jScrollPane1.setBackground(new Color(i));
             panelGrafico.setBackground(new Color(i));
         }
-
-        if (!fontColor.equalsIgnoreCase("")) {
+        
+        if(!fontColor.equalsIgnoreCase("")){
             int i = Integer.valueOf(fontColor, 16).intValue();
-            lblLimInf.setForeground(new Color(i));
-            labelFuncion.setForeground(new Color(i));
-            lblCantPuntos.setForeground(new Color(i));
-            lblCoefRegr.setForeground(new Color(i));
-            lblEjemplos.setForeground(new Color(i));
-            lblErrorGlobal.setForeground(new Color(i));
-            lblFuncReg.setForeground(new Color(i));
-            lblLimSup.setForeground(new Color(i));
-            lblSol.setForeground(new Color(i));
-            lblTituloCoefReg.setForeground(new Color(i));
-            lblTituloErrorGlobal.setForeground(new Color(i));
+                lblLimInf.setForeground(new Color(i));
+                labelFuncion.setForeground(new Color(i));
+                lblCantPuntos.setForeground(new Color(i));
+                lblCoefRegr.setForeground(new Color(i));
+                lblEjemplos.setForeground(new Color(i));
+                lblErrorGlobal.setForeground(new Color(i));
+                lblFuncReg.setForeground(new Color(i));
+                lblLimSup.setForeground(new Color(i));
+                lblSol.setForeground(new Color(i));
+                lblTituloCoefReg.setForeground(new Color(i));
+                lblTituloErrorGlobal.setForeground(new Color(i));
         }
-
+        
         lblLimInf.setFont(new java.awt.Font(this.font, 1, this.fontSize));
         labelFuncion.setFont(new java.awt.Font(this.font, 1, this.fontSize));
         lblCantPuntos.setFont(new java.awt.Font(this.font, 1, this.fontSize));
@@ -237,167 +243,159 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         lblSol.setFont(new java.awt.Font(this.font, 1, this.fontSize));
         lblTituloCoefReg.setFont(new java.awt.Font(this.font, 1, this.fontSize));
         lblTituloErrorGlobal.setFont(new java.awt.Font(this.font, 1, this.fontSize));
-
-
-
-        if (formHeight == 0) {
-            if (formWidth == 0) {
-                this.setSize(Constantes.DEFAULT_FRAME_WIDTH, Constantes.DEFAULT_FRAME_HEIGHT);
-            } else {
-                this.setSize(formWidth, Constantes.DEFAULT_FRAME_HEIGHT);
-            }
-        } else {
-            if (formWidth == 0) {
-                this.setSize(Constantes.DEFAULT_FRAME_WIDTH, formHeight);
-            } else {
-                this.setSize(formWidth, formHeight);
-            }
+        
+        
+        
+        if(formHeight == 0)
+        {
+            if(formWidth == 0) this.setSize(Constantes.DEFAULT_FRAME_WIDTH, Constantes.DEFAULT_FRAME_HEIGHT);
+            else this.setSize(formWidth, Constantes.DEFAULT_FRAME_HEIGHT);
         }
-
-        if (this.idioma.equalsIgnoreCase("en")) {
-            traducir();
+        else
+        {
+             if(formWidth == 0) this.setSize(Constantes.DEFAULT_FRAME_WIDTH, formHeight);
+             else this.setSize(formWidth, formHeight);
         }
-        if (this.param_Grado.equalsIgnoreCase("exp")) {
-            this.grado = "Exponencial";
-        } else {
-            this.grado = this.param_Grado;
-        }
+        
+        if(this.idioma.equalsIgnoreCase("en")) traducir();
+        
+        if(this.param_Grado.equalsIgnoreCase("exp")) this.grado = "Exponencial";
+        else this.grado = this.param_Grado;
+        
         Object[] nomEjemplos = ejemplos.keySet().toArray();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel) cmbEjemplos.getModel();
-        for (int i = 0; i < nomEjemplos.length; i++) {
+        for(int i = 0 ; i < nomEjemplos.length ; i++){
             modelo.addElement(nomEjemplos[i].toString());
         }
-
-        if (this.truncar) {
-            this.chkTruncar.setSelected(true);
-        } else {
-            this.chkTruncar.setSelected(false);
-        }
+        
+        if(this.truncar) this.chkTruncar.setSelected(true);
+        else this.chkTruncar.setSelected(false);
     }
-
-    private boolean loadParams() {
-        try {
-            
+    
+    private boolean loadParams()
+    {
+        try
+        {
             if(this.getParameter("colorTrazo") != null){
                 this.colorTrazo = this.getParameter("colorTrazo");
             }else{
                 this.colorTrazo = "";
             }
-            if (this.getParameter("fondoForm") != null) {
+            if(this.getParameter("fondoForm") != null){
                 this.fondoForm = this.getParameter("fondoForm");
-            } else {
-                this.fondoForm = "";
+            }else{
+                 this.fondoForm = "";
             }
             System.out.println("1");
-            if (this.getParameter("fondoGrafico") != null) {
+            if(this.getParameter("fondoGrafico") != null){
                 this.fondoGrafico = this.getParameter("fondoGrafico");
             }
             System.out.println("2");
-            if (this.getParameter("font") != null) {
+            if(this.getParameter("font") != null){
                 this.font = this.getParameter("font");
-            } else {
+            }else{
                 this.font = "";
             }
             System.out.println("3");
-            if (this.getParameter("fontSize") != null) {
+            if(this.getParameter("fontSize") != null){
                 this.fontSize = Integer.parseInt(this.getParameter("fontSize"));
-            } else {
+            }else{
                 this.fontSize = 0;
             }
             System.out.println("4");
-            if (this.getParameter("fontColor") != null) {
+            if(this.getParameter("fontColor") != null){
                 this.fontColor = this.getParameter("fontColor");
-            } else {
+            }else{
                 this.fontColor = "";
             }
             System.out.println("5");
-            if (this.getParameter("anchoTrazo") != null) {
+            if(this.getParameter("anchoTrazo") != null){
                 this.anchoTrazoGrafico = Integer.valueOf(this.getParameter("anchoTrazo"));
             }
             System.out.println("6");
-            if (this.getParameter("xMin") != null) {
+            if(this.getParameter("xMin") != null){
                 this.xMin = Integer.parseInt(this.getParameter("xMin"));
             }
             System.out.println("7");
-            if (this.getParameter("xMax") != null) {
+            if(this.getParameter("xMax") != null){
                 this.xMax = Integer.parseInt(this.getParameter("xMax"));
             }
             System.out.println(this.idioma);
-            if (this.getParameter("idioma") != null) {
+            if(this.getParameter("idioma") != null){
                 this.idioma = this.getParameter("idioma");
             }
             System.out.println(this.idioma);
-            if (this.getParameter("colorEjes") != null) {
+            if(this.getParameter("colorEjes") != null){
                 this.colorEjes = this.getParameter("colorEjes");
             }
             System.out.println("11");
-            if (this.getParameter("grado") != null) {
+            if(this.getParameter("grado") != null){
                 this.param_Grado = this.getParameter("grado"); // grado = 1 o grado = exp
             }
             System.out.println("12");
-            if (this.getParameter("cantEjemplos") != null) {
+            if(this.getParameter("cantEjemplos") != null){
                 this.cantEjemplos = Integer.parseInt(this.getParameter("cantEjemplos"));
             }
             System.out.println("13");
-            if (this.getParameter("cantDecimales") != null) {
+            if(this.getParameter("cantDecimales") != null){
                 this.cantDecimales = Integer.parseInt(this.getParameter("cantDecimales"));
             }
             System.out.println("14");
-            if (this.getParameter("truncar") != null) {
-                this.truncar = Boolean.parseBoolean(this.getParameter("truncar"));
+            if(this.getParameter("truncar") != null){
+                this.truncar = Boolean.parseBoolean(this.getParameter("truncar"));    
             }
             System.out.println("15");
-            if (cantEjemplos > 0) {
-                loadPoints();
-            }
+            if(cantEjemplos>0) loadPoints();
             System.out.println("16");
             return true;
-        } catch (Exception e) {
+        }
+        catch(Exception e)
+        {
             System.out.println("EXCEPCION");
             return false;
         }
     }
 
-    private void graficar() {
-        int filas = model.getRowCount();
+    private void graficar()
+    {
+        int filas = model.getRowCount();       
         //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());       
-
-        if (spinnerGrado.isEnabled()) {
-            grados = (Integer) spinnerGrado.getValue();
-            if (grados >= filas) {
+        
+        if(spinnerGrado.isEnabled()){
+            grados = (Integer)spinnerGrado.getValue();
+            if(grados >= filas){
                 grados = filas - 1;
             }
-        } else {
+        }  
+        else{
             grados = 1;
         }
+        
+        if(spinnerGrado.isEnabled()) this.grado = spinnerGrado.getValue().toString();
+        else this.grado = "Exponencial";
+       // SistemaDeEcuaciones s = new SistemaDeEcuaciones();
 
-        if (spinnerGrado.isEnabled()) {
-            this.grado = spinnerGrado.getValue().toString();
-        } else {
-            this.grado = "Exponencial";
-        // SistemaDeEcuaciones s = new SistemaDeEcuaciones();
-        }
         double[][] a = new double[filas][grados + 1];
         double[][] b = new double[filas][1];
         double[][] at = new double[grados + 1][filas];
-        double[] atxb = new double[grados + 1];
-        double[][] atxa = new double[grados + 1][grados + 1];
-        // double[][] coef = new double[grados+1][grados+2];
+        double[] atxb = new double[grados+1];
+        double[][] atxa = new double[grados+1][grados+1];
+       // double[][] coef = new double[grados+1][grados+2];
         a = cargarValores();
         b = cargarB();
-        at = trasponerMatriz(a, filas);
-        // Matriz ata = Matriz.producto(new Matriz(at),new Matriz(a));
+        at = trasponerMatriz(a,filas);
+       // Matriz ata = Matriz.producto(new Matriz(at),new Matriz(a));
         //Matriz atb = Matriz.producto(new Matriz(at),new Matriz(b));
 
-        atxa = multiplicarMatrices(at, a);
-        atxb = multiplicarMatrices2(at, b);
+        atxa = multiplicarMatrices(at,a);
+        atxb = multiplicarMatrices2(at,b);
         //coef  = armarSistema(atxa,atxb);
        /* SistemaEcuaciones sisEcu = new SistemaEcuaciones();
         sisEcu.setNumEcs(Integer.parseInt(spinnerGrado.getValue().toString())+1);
         sisEcu.setCoef(coef);
         double[] result = sisEcu.getSolucion();*/
 
-        /* Matriz alfas = new Matriz(atxa);
+       /* Matriz alfas = new Matriz(atxa);
         Vector res = new Vector(atxb);*/
 
         Matriz alfas = new Matriz(atxa);
@@ -408,23 +406,25 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 
 
 
-        if (chkTruncar.isSelected()) {
+        if(chkTruncar.isSelected())
+        {
             DecimalFormat df = new DecimalFormat();
             df.setMaximumFractionDigits(this.cantDecimales);
-
-            for (int i = 0; i < result.length; i++) {
-                //result[i]= Math.floor(result[i] * 100.0)/100.0;
-                // result[i]= Math.round(result[i]);
-                String aux = df.format(result[i]);
-                aux = aux.replace(',', '.');
-                result[i] = Double.parseDouble(aux);
+            
+            for(int i = 0;i<result.length;i++)
+            {
+               //result[i]= Math.floor(result[i] * 100.0)/100.0;
+              // result[i]= Math.round(result[i]);
+               String aux = df.format(result[i]);
+               aux = aux.replace(',', '.');
+               result[i] = Double.parseDouble(aux);
             }
         }
         //double[] resultado;
         //double[] result = s.resolver(atxa, atxb, resultado, Integer.parseInt(spinnerGrado.getValue().toString())+1); 
         //System.out.println("hola");
 
-        if (this.grado.equalsIgnoreCase("Exponencial")) {
+        if(this.grado.equalsIgnoreCase("Exponencial")){
             result = cambiarVariables(result);
         }
         //ACA JFREECHART
@@ -440,12 +440,15 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         jtabbedpane.setVisible(true);
         jtabbedpane.repaint();
         panelGrafico.repaint();
-        this.repaint();
+        this.repaint();    
 
-        if (hayMuchasSoluciones(result)) {
+        if(hayMuchasSoluciones(result))
+        {
             lblSol.setText("Matriz singular.");
             labelFuncion.setText("");
-        } else {
+        }
+        else
+        {
             lblErrorGlobal.setText("");
             lblCoefRegr.setText("");
             calcularErrores();
@@ -459,7 +462,7 @@ public class MinimosCuadrados extends javax.swing.JApplet {
      * always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -694,61 +697,66 @@ public class MinimosCuadrados extends javax.swing.JApplet {
         );
 
         getContentPane().add(jPanel2);
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private boolean hayMuchasSoluciones(double[] result) {
-        for (int i = 0; i < result.length; i++) {
-            if (String.valueOf(result[i]).equalsIgnoreCase("nan")) {
-                return true;
-            }
+    
+    private boolean hayMuchasSoluciones(double[] result)
+    {
+        for(int i = 0;i<result.length;i++)
+        {
+            if(String.valueOf(result[i]).equalsIgnoreCase("nan")) return true;
         }
         return false;
     }
-
-    private double calcularErrorGlobal() {
+    
+    private double calcularErrorGlobal()
+    {
         double err = 0;
-        for (int i = 0; i < this.model.getRowCount(); i++) {
-            if (radioGrado.isSelected()) {
-                err += Math.pow(funcion.getValue(Double.parseDouble(model.getValueAt(i, 0).toString())) - Double.parseDouble(model.getValueAt(i, 1).toString()), 2);
-            } else {
-                err += Math.pow(funcExp.getValue(Double.parseDouble(model.getValueAt(i, 0).toString())) - Double.parseDouble(model.getValueAt(i, 1).toString()), 2);
-            }
+        for(int i = 0;i<this.model.getRowCount();i++)
+        {
+            if(radioGrado.isSelected())
+                err += Math.pow(funcion.getValue(Double.parseDouble(model.getValueAt(i, 0).toString()))-Double.parseDouble(model.getValueAt(i, 1).toString()),2);
+            else
+                err += Math.pow(funcExp.getValue(Double.parseDouble(model.getValueAt(i, 0).toString()))-Double.parseDouble(model.getValueAt(i, 1).toString()),2);
         }
         return err;
     }
-
-    private double calcularProm(int index) {
-        double sum = 0;
-        for (int i = 0; i < this.model.getRowCount(); i++) {
+    
+     private double calcularProm(int index)
+    {
+        double sum =0;
+        for(int i = 0;i<this.model.getRowCount();i++)
             sum += Double.parseDouble(model.getValueAt(i, index).toString());
-        }
-        return (sum / this.model.getRowCount());
+        
+        return (sum/this.model.getRowCount());
     }
-
-    private double calcularSumaXY() {
-        double sum = 0;
-        for (int i = 0; i < this.model.getRowCount(); i++) {
-            sum += Double.parseDouble(model.getValueAt(i, 0).toString()) * Double.parseDouble(model.getValueAt(i, 1).toString());
-        }
+    
+    private double calcularSumaXY()
+    {
+        double sum =0;
+        for(int i = 0;i<this.model.getRowCount();i++)
+            sum += Double.parseDouble(model.getValueAt(i, 0).toString())*Double.parseDouble(model.getValueAt(i, 1).toString());
         return sum;
     }
-
-    private double calcularSuma2(int index) {
-        double sum = 0;
-        for (int i = 0; i < this.model.getRowCount(); i++) {
-            sum += Math.pow(Double.parseDouble(model.getValueAt(i, index).toString()), 2);
-        }
-        return sum;
+    
+    private double calcularSuma2(int index)
+    {
+        double sum =0;
+        for(int i = 0;i<this.model.getRowCount();i++)
+            sum += Math.pow(Double.parseDouble(model.getValueAt(i, index).toString()),2);
+         
+         return sum;
     }
-
-    private double calcularCoeficienteRegresion() {
+    
+    private double calcularCoeficienteRegresion()
+    {
         double denominador = 0;
         double erGlo = this.calcularErrorGlobal();
         double promY = this.calcularProm(1);
-        for (int i = 0; i < this.model.getRowCount(); i++) {
-            denominador += Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY, 2);
-        }
-        return (1 - (erGlo / denominador));
+        for(int i = 0;i<this.model.getRowCount();i++)        
+            denominador+= Math.pow(Double.parseDouble(model.getValueAt(i, 1).toString()) - promY,2);
+
+        return (1- (erGlo/denominador));
 //        int n = model.getRowCount();
 //        
 //        double coefReg = 0d;
@@ -766,10 +774,12 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 //        coefReg = numerador/denominador;
 //        return coefReg;
     }
-
-    private void calcularErrores() {
+    
+    private void calcularErrores()
+    {
         double erGlo = this.calcularErrorGlobal();
-        if (chkTruncar.isSelected()) {
+        if(chkTruncar.isSelected())
+        {
             DecimalFormat df = new DecimalFormat();
             df.setMaximumFractionDigits(this.cantDecimales);
             String aux = df.format(erGlo);
@@ -781,7 +791,9 @@ public class MinimosCuadrados extends javax.swing.JApplet {
             aux2 = aux2.replace(',', '.');
             cr = Double.parseDouble(aux2);
             lblCoefRegr.setText(String.valueOf(aux2));
-        } else {
+        }
+        else
+        {
             lblErrorGlobal.setText(String.valueOf(erGlo));
             lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion()));
         }
@@ -831,29 +843,35 @@ public class MinimosCuadrados extends javax.swing.JApplet {
 //            lblCoefRegr.setText(String.valueOf(this.calcularCoeficienteRegresion(erGlo)));
 //        }
 //    }
-private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOKActionPerformed
+private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {                                         
 // TODO add your handling code here:
-            graficar();
-}//GEN-LAST:event_buttonOKActionPerformed
+    graficar();
+}                                        
 
-    private void tableListener(TableModelEvent e) {
-        if (e.getColumn() > -1) {
+    private void tableListener(TableModelEvent e)
+    {
+        if(e.getColumn() > -1)
+        {
             int col = e.getColumn();
             boolean flag = false;
-
-            if (col == 0) {
-                if ((model.getValueAt(e.getLastRow(), col) != null) &&
-                        (model.getValueAt(e.getLastRow(), col + 1)) != null) {
-                    flag = true;
-                }
-            } else {
-                if ((model.getValueAt(e.getLastRow(), col - 1) != null) &&
-                        (model.getValueAt(e.getLastRow(), col)) != null) {
-                    flag = true;
-                }
+           
+            if(col == 0)
+            { 
+                if( (model.getValueAt(e.getLastRow(), col) != null)&&
+                    (model.getValueAt(e.getLastRow(), col+1)) != null 
+                  ) 
+                    flag= true;
             }
-
-            if (flag) {
+            else
+            {
+                if( (model.getValueAt(e.getLastRow(), col-1) != null )&&
+                    (model.getValueAt(e.getLastRow(), col)) != null
+                  ) 
+                    flag= true;
+            }
+            
+            if(flag)
+            {           
                 data1 = createSampleData1();
                 panelGrafico.removeAll();
                 jtabbedpane = new JTabbedPane();
@@ -865,47 +883,50 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 numberaxis.setAutoRangeIncludesZero(false);
                 NumberAxis numberaxis1 = new NumberAxis("Y");
                 numberaxis1.setAutoRangeIncludesZero(false);
-                XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
+                XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true); 
                 XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
                 JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
                 ChartPanel chartpanel = new ChartPanel(jfreechart, false);
                 chartpanel.setVisible(true);
-                jtabbedpane.add("Regresión", chartpanel);
+                jtabbedpane.add("Regresión",chartpanel);
                 jtabbedpane.setVisible(true);
                 jtabbedpane.repaint();
                 panelGrafico.repaint();
                 int aux2 = model.getRowCount();
                 boolean bool = true;
-                if (aux2 > 1) {
-                    for (int i = 0; i < aux2; i++) {
+                if(aux2>1){
+                    for(int i=0 ; i < aux2 ; i++){
                         Object aux3 = model.getValueAt(i, 0);
                         Object aux4 = model.getValueAt(i, 1);
-                        if ((aux3 == null) || (aux4 == null)) {
+                        if(( aux3 == null) || (aux4 == null)){
                             bool = false;
                         }
                     }
-                    if (bool) {
+                    if(bool){
                         graficar();
                     }
                 }
             }
         }
     }
-
-    private XYDataset createSampleData1() {
+    
+    private XYDataset createSampleData1()
+    {
         XYSeries xyseries = new XYSeries("Series 1");
-
+        
         //DefaultTableModel model = (DefaultTableModel)tablePuntos.getModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            if ((model.getValueAt(i, 0) != null) && (model.getValueAt(i, 1) != null)) {
-                xyseries.add(Double.parseDouble(model.getValueAt(i, 0).toString()), Double.parseDouble(model.getValueAt(i, 1).toString()));
+        for(int i = 0 ; i < model.getRowCount() ; i++){
+            if( (model.getValueAt(i, 0)!=null) &&(model.getValueAt(i, 1)!= null))
+            {
+                xyseries.add(Double.parseDouble(model.getValueAt(i, 0).toString()),Double.parseDouble(model.getValueAt(i, 1).toString()));
             }
         }
         XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
         return xyseriescollection;
     }
-
-    private ChartPanel createChartPanel2(double[] result) {
+    
+    private ChartPanel createChartPanel2(double[] result)
+    {
         NumberAxis numberaxis = new NumberAxis("X");
         numberaxis.setAutoRangeIncludesZero(false);
         NumberAxis numberaxis1 = new NumberAxis("Y");
@@ -921,8 +942,8 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 //            ejex.add(0D, i);
 //            ejey.add(i, 0D);
 //        }
-        if (!fondoGrafico.equalsIgnoreCase("")) {
-            //jPanel2.setBackground(new Color(0x fondoForm)); 
+        if(!fondoGrafico.equalsIgnoreCase("")){
+           //jPanel2.setBackground(new Color(0x fondoForm)); 
             int i = Integer.valueOf(fondoGrafico, 16).intValue();
             xyplot.setBackgroundPaint(new Color(i));
         }
@@ -933,407 +954,420 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 //        coordenadas.addSeries(ejex);
 //        coordenadas.addSeries(ejey);
         XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
-        if (!colorTrazo.equalsIgnoreCase("")) {
-            //jPanel2.setBackground(new Color(0x fondoForm)); 
+        if(!colorTrazo.equalsIgnoreCase("")){
+           //jPanel2.setBackground(new Color(0x fondoForm)); 
             int i = Integer.valueOf(colorTrazo, 16).intValue();
             xylineandshaperenderer1.setSeriesPaint(0, new Color(i));
-        } else {
+        }else{
             xylineandshaperenderer1.setSeriesPaint(0, Color.black);
         }
-
+        
         //xyplot.setDataset(1, xydataset);
-        xyplot.setDataset(1, coordenadas);
+        xyplot.setDataset(1,coordenadas);
         xyplot.setRenderer(1, xylineandshaperenderer1);// 
-        if (idioma.equalsIgnoreCase("es")) {
-            JFreeChart jfreechart = new JFreeChart("Regresión " + ((spinnerGrado.isEnabled()) ? "de grado " + spinnerGrado.getValue().toString() : "Exponencial"), JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        if(idioma.equalsIgnoreCase("es")){
+            JFreeChart jfreechart = new JFreeChart("Regresión " + ((spinnerGrado.isEnabled())?"de grado " + spinnerGrado.getValue().toString():"Exponencial"), JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
             ChartPanel chartpanel = new ChartPanel(jfreechart, false);
             chartpanel.setVisible(true);
             return chartpanel;
-        } else {
-            JFreeChart jfreechart = new JFreeChart(((spinnerGrado.isEnabled()) ? spinnerGrado.getValue().toString() + " grade regression" : "Exponencial regression"), JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        }else{
+            JFreeChart jfreechart = new JFreeChart(((spinnerGrado.isEnabled())?spinnerGrado.getValue().toString() + " grade regression":"Exponencial regression"), JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
             ChartPanel chartpanel = new ChartPanel(jfreechart, false);
             chartpanel.setVisible(true);
             return chartpanel;
         }
     }
+    
+    
+private String generarFuncion(double[] result){
+    String func = new String();
 
-    private String generarFuncion(double[] result) {
-        String func = new String();
-
-
-        if (spinnerGrado.isEnabled()) {
-            grado = spinnerGrado.getValue().toString();
-        } else {
-            grado = "Exponencial";
-        }
-        if (grado.equalsIgnoreCase("Exponencial")) {
-            func = "Y = " + result[0] + " e^" + result[1] + "X";
-        } else {
-            /*if(grados == 1){
+    
+    if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
+    else grado = "Exponencial";
+    if(grado.equalsIgnoreCase("Exponencial")){
+        func = "Y = "+result[0]+" e^"+result[1]+"X"; 
+    }else{
+        /*if(grados == 1){
             funcion = "Y = "+result[0]+" + "+result[1]+"X";
-            }else if(grados == 2){
+        }else if(grados == 2){
             funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2";
-            }else{
+        }else{
             funcion = "Y = "+result[0]+" + "+result[1]+"X + "+result[2]+"X^2 + "+result[3]+"X^3";
-            }*/
-            func = this.funcion.getFunctionString();
-        }
-        return func;
+        }*/
+        func = this.funcion.getFunctionString();
     }
+    return func;
+}
 
-    private XYSeriesCollection cordenadasGrafico(double[] result) {
-        XYSeries series = new XYSeries("Curva de Regresión");
-        double step = (Double.parseDouble(txtFieldLimiteSupX.getText()) - Double.parseDouble(txtFieldLimiteInfX.getText())) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
-
-
-
-        if (spinnerGrado.isEnabled()) {
-            grado = spinnerGrado.getValue().toString();
-        } else {
-            grado = "Exponencial";
+private XYSeriesCollection cordenadasGrafico(double[] result){
+    XYSeries series = new XYSeries("Curva de Regresión");
+    double step = (Double.parseDouble(txtFieldLimiteSupX.getText()) - Double.parseDouble(txtFieldLimiteInfX.getText())) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
+    
+    
+    
+    if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
+    else grado = "Exponencial";
+    
+    if(grado.equalsIgnoreCase("Exponencial")){
+        for(int i = 0 ; i < 100 ; i++){
+            this.funcExp = new FuncionExponencial(result[0], result[1]);
+            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
+            series.add(x, funcExp.getValue(x));
         }
-        if (grado.equalsIgnoreCase("Exponencial")) {
-            for (int i = 0; i < 100; i++) {
-                this.funcExp = new FuncionExponencial(result[0], result[1]);
+    }else{
+        /*if(grados == 1){
+            for(int i = 0 ; i < 100 ; i++){
+                FuncionLineal lin = new FuncionLineal(result[0], result[1]);
                 double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
-                series.add(x, funcExp.getValue(x));
+                series.add(x,lin.getValue(x));
             }
-        } else {
-            /*if(grados == 1){
+        }else if(grados ==2){
             for(int i = 0 ; i < 100 ; i++){
-            FuncionLineal lin = new FuncionLineal(result[0], result[1]);
-            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
-            series.add(x,lin.getValue(x));
-            }
-            }else if(grados ==2){
-            for(int i = 0 ; i < 100 ; i++){
-            FuncionSegundoGrado seg = new FuncionSegundoGrado(result[0], result[1], result[2]);
-            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
-            series.add(x,seg.getValue(x));
-            }
-            }else{
-            for(int i = 0 ; i < 100 ; i++){
-            FuncionTercerGrado ter = new FuncionTercerGrado(result[0], result[1], result[2], result[3]);
-            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
-            series.add(x,ter.getValue(x));
-            }
-            }*/
-
-            ArrayList<Double> coeficientes = new ArrayList();
-
-            for (int i = 0; i < result.length; i++) {
-                coeficientes.add(result[i]);
-            }
-            this.funcion = new FuncionEnesima(coeficientes, grados);
-
-            for (int i = 0; i < 100; i++) {
+                FuncionSegundoGrado seg = new FuncionSegundoGrado(result[0], result[1], result[2]);
                 double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
-                series.add(x, funcion.getValue(x));
+                series.add(x,seg.getValue(x));
             }
-        }
-        XYSeriesCollection collection = new XYSeriesCollection(series);
-        return collection;
-    }
+        }else{
+            for(int i = 0 ; i < 100 ; i++){
+                FuncionTercerGrado ter = new FuncionTercerGrado(result[0], result[1], result[2], result[3]);
+                double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
+                series.add(x,ter.getValue(x));
+            }
+        }*/
+        
+        ArrayList<Double> coeficientes = new ArrayList();
+        
+        for(int i = 0;i < result.length;i++)
+            coeficientes.add(result[i]);
+        
 
-    private double[] cambiarVariables(double[] a) {
-        a[0] = Math.pow(Math.E, a[0]);
-        return a;
+        this.funcion = new FuncionEnesima(coeficientes, grados);
+        
+        for(int i = 0; i<100;i++)
+        {
+            double x = Double.parseDouble(txtFieldLimiteInfX.getText()) + (step * i);
+            series.add(x,funcion.getValue(x));
+        }    
     }
+    XYSeriesCollection collection = new XYSeriesCollection(series);
+    return collection;
+}
 
-    /*private double[][] armarSistema(double[][] atxa, double[][] atxb){
+
+private double[] cambiarVariables(double[] a){
+    a[0] = Math.pow(Math.E, a[0]);
+    return a;
+}
+
+/*private double[][] armarSistema(double[][] atxa, double[][] atxb){
     double[][] coef = new double[grados+1][grados+2];
     
     for(int i = 0 ; i < grados+1 ; i++ ){
-    for(int j = 0 ; j < grados+1 ; j++){
-    coef[i][j] = atxa[i][j];
-    }
+        for(int j = 0 ; j < grados+1 ; j++){
+            coef[i][j] = atxa[i][j];
+        }
     }
     for(int k = 0 ; k < grados+1 ; k++){
-    coef[k][grados+1] = atxb[k][0];
+        coef[k][grados+1] = atxb[k][0];
     }
     
     return coef;
-    }*/
-    private double[] multiplicarMatrices2(double[][] at, double[][] b) {
-        double[] atxb = new double[grados + 1];
+}*/
 
-        int filas = model.getRowCount();
-        //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+private double[] multiplicarMatrices2(double[][] at, double[][] b){
+    double[] atxb = new double[grados+1];
+
+    int filas = model.getRowCount();
+    //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
 
 
-        for (int i = 0; i < grados + 1; i++) {
-            /*for (int j=0; j < 1; j++)
-            {*/
-            for (int p = 0; p < filas; p++) {
-                atxb[i] += at[i][p] * b[p][0];
-            //}
-            }
-        }
-        return atxb;
+    for (int i=0; i < grados+1; i++)
+    {
+        /*for (int j=0; j < 1; j++)
+        {*/
+            for (int p=0; p < filas; p++)
+            atxb[i] += at[i][p]*b[p][0];
+        //}
     }
+    return atxb;
+}
 
-    private double[][] multiplicarMatrices(double[][] at, double[][] a) {
-        double[][] atxa = new double[grados + 1][grados + 1];
+private double[][] multiplicarMatrices(double[][] at, double[][] a){
+    double[][] atxa = new double[grados+1][grados+1];
 
-        int filas = model.getRowCount();
-        //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+    int filas = model.getRowCount();
+    //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
 
 
-        for (int i = 0; i < grados + 1; i++) {
-            for (int j = 0; j < grados + 1; j++) {
-                for (int p = 0; p < filas; p++) {
-                    atxa[i][j] += at[i][p] * a[p][j];
-                }
-            }
+    for (int i=0; i < grados+1; i++)
+    {
+        for (int j=0; j < grados+1; j++)
+        {
+            for (int p=0; p < filas; p++)
+            atxa[i][j] += at[i][p]*a[p][j];
         }
-        return atxa;
     }
+    return atxa;
+}
 
-    private double[][] cargarB() {
-        int filas = model.getRowCount();
+private double[][] cargarB(){
+    int filas = model.getRowCount();
 //    int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
-        double[][] b = new double[filas][1];
-        model = (DefaultTableModel) tablePuntos.getModel();
-
-        if (spinnerGrado.isEnabled()) {
-            grado = spinnerGrado.getValue().toString();
-        } else {
-            grado = "Exponencial";
+    double[][] b = new double[filas][1];
+    model = (DefaultTableModel)tablePuntos.getModel();
+    
+    if(spinnerGrado.isEnabled()) grado = spinnerGrado.getValue().toString();
+    else grado = "Exponencial";
+    
+    if(grado.equalsIgnoreCase("Exponencial")){
+        for(int i = 0 ; i < filas ; i++){
+            b[i][0] = Math.log(Double.parseDouble(model.getValueAt(i, 1).toString()));
         }
-        if (grado.equalsIgnoreCase("Exponencial")) {
-            for (int i = 0; i < filas; i++) {
-                b[i][0] = Math.log(Double.parseDouble(model.getValueAt(i, 1).toString()));
-            }
-        } else {
-            for (int i = 0; i < filas; i++) {
-                b[i][0] = Double.parseDouble(model.getValueAt(i, 1).toString());
-            }
+    }else{
+        for(int i = 0 ; i < filas ; i++){
+            b[i][0] = Double.parseDouble(model.getValueAt(i, 1).toString());
         }
-        return b;
     }
+    return b;
+}
 
-    private double[][] cargarValores() {
-        int filas = model.getRowCount();
-        //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
-        double[][] a = new double[filas][grados + 1];
-
-        for (int j = 0; j < model.getRowCount(); j++) {
-            a[j][0] = 1;
-            for (int i = 1; i < grados + 1; i++) {
-                a[j][i] = Math.pow(Double.parseDouble(model.getValueAt(j, 0).toString()), i);
-            }
+private double[][] cargarValores(){
+    int filas = model.getRowCount();
+    //int filas = Integer.parseInt(spinnerCantPuntos.getValue().toString());
+    double[][] a = new double[filas][grados+1];
+   
+    for(int j = 0 ; j < model.getRowCount() ; j++  ){
+        a[j][0] = 1;
+        for(int i = 1 ; i < grados +1 ; i++){
+            a[j][i] = Math.pow(Double.parseDouble(model.getValueAt(j, 0).toString()), i);
         }
-        return a;
     }
-
-    private double[][] trasponerMatriz(double[][] a, int filas) {
-        double[][] at = new double[grados + 1][filas];
-        for (int i = 0; i < grados + 1; i++) {
-            for (int j = 0; j < filas; j++) {
-                at[i][j] = a[j][i];
-            }
+    return a;
+}
+private double[][] trasponerMatriz(double[][] a,int filas){
+    double[][] at = new double[grados+1][filas];
+    for(int i = 0 ; i < grados+1 ; i++){
+        for(int j = 0 ; j < filas ; j++){
+            at[i][j] = a[j][i];
         }
-        return at;
     }
-private void spinnerCantPuntosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerCantPuntosStateChanged
+    return at;
+}
+private void spinnerCantPuntosStateChanged(javax.swing.event.ChangeEvent evt) {                                               
     // TODO add your handling code here:
-    if (Integer.parseInt(spinnerCantPuntos.getValue().toString()) < cantPuntos) {
+    if(Integer.parseInt(spinnerCantPuntos.getValue().toString()) < cantPuntos){
         int aux = cantPuntos - Integer.parseInt(spinnerCantPuntos.getValue().toString());
-        for (int i = 0; i < aux; i++) {
-            ((DefaultTableModel) tablePuntos.getModel()).removeRow(tablePuntos.getRowCount() - 1);
+        for(int i = 0 ; i < aux ; i++){
+            ((DefaultTableModel)tablePuntos.getModel()).removeRow(tablePuntos.getRowCount() -1);
         }
         cantPuntos = Integer.parseInt(spinnerCantPuntos.getValue().toString());
         int aux2 = model.getRowCount();
         boolean bool = true;
-        if (aux2 > 1) {
-            for (int i = 0; i < aux2; i++) {
+        if(aux2>1){
+            for(int i=0 ; i < aux2 ; i++){
                 Object aux3 = model.getValueAt(i, 0);
                 Object aux4 = model.getValueAt(i, 1);
-                if ((aux3 == null) || (aux4 == null)) {
+                if(( aux3 == null) || (aux4 == null)){
                     bool = false;
                 }
             }
-            if (bool) {
+            if(bool){
                 graficar();
             }
         }
-    } else {
+    }else{
         int aux = Integer.parseInt(spinnerCantPuntos.getValue().toString()) - cantPuntos;
-        for (int i = 0; i < aux; i++) {
-            ((DefaultTableModel) tablePuntos.getModel()).addRow(new Double[]{});
+        for(int i = 0 ; i < aux ; i++){
+            ((DefaultTableModel)tablePuntos.getModel()).addRow(new Double[]{});
         }
         cantPuntos = Integer.parseInt(spinnerCantPuntos.getValue().toString());
     }
-}//GEN-LAST:event_spinnerCantPuntosStateChanged
+}                                              
 
-private void radioGradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioGradoActionPerformed
-    if (radioGrado.isSelected()) {
-        spinnerGrado.setEnabled(true);
-    } else {
-        spinnerGrado.setEnabled(false);
-    }
-}//GEN-LAST:event_radioGradoActionPerformed
+private void radioGradoActionPerformed(java.awt.event.ActionEvent evt) {                                           
+    if(radioGrado.isSelected()) spinnerGrado.setEnabled(true);
+    else spinnerGrado.setEnabled(false);
+}                                          
 
-private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioExponencialActionPerformed
-    if (radioExponencial.isSelected()) {
-        spinnerGrado.setEnabled(false);
-    } else {
-        spinnerGrado.setEnabled(true);
-    }
-}//GEN-LAST:event_radioExponencialActionPerformed
+private void radioExponencialActionPerformed(java.awt.event.ActionEvent evt) {                                                 
+    if(radioExponencial.isSelected()) spinnerGrado.setEnabled(false);
+    else spinnerGrado.setEnabled(true);
+}                                                
 
-    /*public void vaciarTabla() 
-    {
+/*public void vaciarTabla() 
+{
     ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
-    }*/
-    private void generarEjemploRecta() {
+}*/
 
-        this.spinnerCantPuntos.setValue(4);
-        this.spinnerGrado.setEnabled(true);
-        this.radioGrado.setSelected(true);
-        this.spinnerGrado.setValue(1);
-        ((DefaultTableModel) tablePuntos.getModel()).getDataVector().removeAllElements();
-        for (int i = 0; i < Constantes.DEFAULT_NUMEBER_POINTS; i++) {
-            model.addRow(new Double[]{(double) i, (double) i});
+
+private void generarEjemploRecta()
+{
+    
+    this.spinnerCantPuntos.setValue(4);
+    this.spinnerGrado.setEnabled(true);
+    this.radioGrado.setSelected(true);
+    this.spinnerGrado.setValue(1);
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
+    for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
+    {
+        model.addRow(new Double[]{(double)i,(double)i});
         /*model.setValueAt(i, i  , 0);
         model.setValueAt(i, i  , 1);*/
-        }
-        graficar();
     }
+    graficar();
+}
 
-    private void generarEjemploParabola2() {
-
-        this.spinnerGrado.setEnabled(true);
-        this.radioGrado.setSelected(true);
-        this.spinnerGrado.setValue(2);
-        this.spinnerCantPuntos.setValue(4);
-        ((DefaultTableModel) tablePuntos.getModel()).getDataVector().removeAllElements();
-        for (int i = 0; i < Constantes.DEFAULT_NUMEBER_POINTS; i++) {
-            model.addRow(new Double[]{(double) i, Math.pow(i, 2)});
+private void generarEjemploParabola2()
+{
+    
+    this.spinnerGrado.setEnabled(true);
+    this.radioGrado.setSelected(true);
+    this.spinnerGrado.setValue(2);
+    this.spinnerCantPuntos.setValue(4);
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
+    for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
+    {
+        model.addRow(new Double[]{(double)i,Math.pow(i, 2)});
         /*model.setValueAt(i, i  , 0);
         model.setValueAt(Math.pow(i, 2), i  , 1);*/
-        }
-        graficar();
     }
+    graficar();
+}
 
-    private void generarEjemploParabola3() {
-
-        this.spinnerCantPuntos.setValue(4);
-        this.spinnerGrado.setEnabled(true);
-        this.radioGrado.setSelected(true);
-        this.spinnerGrado.setValue(3);
-        ((DefaultTableModel) tablePuntos.getModel()).getDataVector().removeAllElements();
-        for (int i = 0; i < Constantes.DEFAULT_NUMEBER_POINTS; i++) {
-            model.addRow(new Double[]{(double) i, Math.pow(i, 3)});
+private void generarEjemploParabola3()
+{
+    
+    this.spinnerCantPuntos.setValue(4);
+    this.spinnerGrado.setEnabled(true);
+    this.radioGrado.setSelected(true);
+    this.spinnerGrado.setValue(3);
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
+    for(int i =0; i < Constantes.DEFAULT_NUMEBER_POINTS;i++)
+    {
+        model.addRow(new Double[]{(double)i,Math.pow(i, 3)});
         /*model.setValueAt(i, i  , 0);
         model.setValueAt(Math.pow(i, 3), i  , 1);*/
-        }
-        graficar();
     }
+    graficar();
+}
 
-    private void generarEjemploExponencial() {
 
-        this.spinnerCantPuntos.setValue(4);
-        this.radioExponencial.setSelected(true);
-        this.spinnerGrado.setEnabled(false);
-        ((DefaultTableModel) tablePuntos.getModel()).getDataVector().removeAllElements();
-        for (int i = 0; i < Constantes.DEFAULT_NUMEBER_POINTS; i++) {
-            model.addRow(new Double[]{(double) i, Math.pow(3, i)});
+private void generarEjemploExponencial()
+{
+    
+    this.spinnerCantPuntos.setValue(4);
+    this.radioExponencial.setSelected(true);
+    this.spinnerGrado.setEnabled(false);
+    ((DefaultTableModel)tablePuntos.getModel()).getDataVector().removeAllElements();
+    for(int i =0; i<Constantes.DEFAULT_NUMEBER_POINTS;i++)
+    {
+        model.addRow(new Double[]{(double)i,Math.pow(3, i)});
         /*model.setValueAt(i, i  ,0);
         model.setValueAt(Math.pow(3, i), i  ,1);*/
-        }
-        graficar();
     }
+    graficar();
+}
 
-private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEjemplosActionPerformed
-
+private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    
     /*if(model.getRowCount() > 1)
     {
-    for(int i = 0; i<model.getRowCount()-1;i++)
-    model.removeRow(i);
-    model.setValueAt(0, 0, 0);
-    model.setValueAt(0, 0, 1);
+         for(int i = 0; i<model.getRowCount()-1;i++)
+            model.removeRow(i);
+        model.setValueAt(0, 0, 0);
+        model.setValueAt(0, 0, 1);
     }*/
-
-    if (cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Recta")) {
+   
+    if(cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Recta"))
+    {
         this.grado = "1";
         generarEjemploRecta();
-    } else {
-        if (cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Parabola 2º Grado")) {
+    }
+    else
+    {
+        if(cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Parabola 2º Grado"))
+        {
             this.grado = "2";
             generarEjemploParabola2();
-        } else {
-            if (cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Parabola 3º Grado")) {
+        }
+        else
+        {
+            if(cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Parabola 3º Grado"))
+            {
                 this.grado = "3";
                 generarEjemploParabola3();
-            } else {
-                if (cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Exponencial")) {
+            }
+            else
+            {
+                if(cmbEjemplos.getSelectedItem().toString().equals("Ejemplo Exponencial"))
+                {
                     this.grado = "Exponencial";
                     generarEjemploExponencial();
-                } else {
+                }
+                else {
                     setPoints();
                 }
             }
         }
     }
-}//GEN-LAST:event_cmbEjemplosActionPerformed
+}                                           
 
-    private void cleanComponentes() {
-        this.spinnerGrado.setEnabled(true);
-        this.radioExponencial.setSelected(false);
-        this.radioGrado.setSelected(true);
-        this.spinnerCantPuntos.setValue(1);
-        this.spinnerGrado.setValue(1);
-        this.lblCoefRegr.setText("");
-        this.lblErrorGlobal.setText("");
-        this.labelFuncion.setText("");
+private void cleanComponentes() 
+{
+    this.spinnerGrado.setEnabled(true);
+    this.radioExponencial.setSelected(false);
+    this.radioGrado.setSelected(true);
+    this.spinnerCantPuntos.setValue(1);
+    this.spinnerGrado.setValue(1);
+    this.lblCoefRegr.setText("");
+    this.lblErrorGlobal.setText("");
+    this.labelFuncion.setText("");
+    
+    for(int i = 0; i<model.getRowCount()-1;i++)
+        model.removeRow(i);
+    model.setValueAt(null, 0, 0);
+    model.setValueAt(null, 0, 1);
+}
 
-        for (int i = 0; i < model.getRowCount() - 1; i++) {
-            model.removeRow(i);
-        }
-        model.setValueAt(null, 0, 0);
-        model.setValueAt(null, 0, 1);
-    }
+private void limpiar()
+{
+    cleanComponentes();
+    data1=null;
+    panelGrafico.removeAll();
+    jtabbedpane = new JTabbedPane();
+    panelGrafico.add(jtabbedpane);
+    jtabbedpane.setVisible(true);
+    jtabbedpane.repaint();
+    panelGrafico.repaint();
+     NumberAxis numberaxis = new NumberAxis("X");
+    numberaxis.setAutoRangeIncludesZero(false);
+    NumberAxis numberaxis1 = new NumberAxis("Y");
+    numberaxis1.setAutoRangeIncludesZero(false);
+    XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
+    XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+    JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+    ChartPanel chartpanel = new ChartPanel(jfreechart, false);
+    chartpanel.setVisible(true);
+    jtabbedpane.add("Regresión",chartpanel);
+    jtabbedpane.setVisible(true);
+    jtabbedpane.repaint();
+    panelGrafico.repaint();
+}
 
-    private void limpiar() {
-        cleanComponentes();
-        data1 = null;
-        panelGrafico.removeAll();
-        jtabbedpane = new JTabbedPane();
-        panelGrafico.add(jtabbedpane);
-        jtabbedpane.setVisible(true);
-        jtabbedpane.repaint();
-        panelGrafico.repaint();
-        NumberAxis numberaxis = new NumberAxis("X");
-        numberaxis.setAutoRangeIncludesZero(false);
-        NumberAxis numberaxis1 = new NumberAxis("Y");
-        numberaxis1.setAutoRangeIncludesZero(false);
-        XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
-        XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-        JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
-        ChartPanel chartpanel = new ChartPanel(jfreechart, false);
-        chartpanel.setVisible(true);
-        jtabbedpane.add("Regresión", chartpanel);
-        jtabbedpane.setVisible(true);
-        jtabbedpane.repaint();
-        panelGrafico.repaint();
-    }
-
-private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanActionPerformed
+private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {                                         
     limpiar();
-}//GEN-LAST:event_btnCleanActionPerformed
+}                                        
 
-private void txtFieldLimiteSupXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldLimiteSupXKeyPressed
-    if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+private void txtFieldLimiteSupXKeyPressed(java.awt.event.KeyEvent evt) {                                              
+    if(evt.getKeyCode()==KeyEvent.VK_ENTER)
         graficar();
-    }
-}//GEN-LAST:event_txtFieldLimiteSupXKeyPressed
+}                                             
 
-private void txtFieldLimiteInfXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldLimiteInfXKeyPressed
-    if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+private void txtFieldLimiteInfXKeyPressed(java.awt.event.KeyEvent evt) {                                              
+    if(evt.getKeyCode()==KeyEvent.VK_ENTER)
         graficar();
-    }
-}//GEN-LAST:event_txtFieldLimiteInfXKeyPressed
+}                                             
 
 private void setLookAndFeel() throws HeadlessException {
         try {
@@ -1349,7 +1383,7 @@ private void setLookAndFeel() throws HeadlessException {
         }
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton btnClean;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonOK;
@@ -1376,6 +1410,6 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JTable tablePuntos;
     private javax.swing.JTextField txtFieldLimiteInfX;
     private javax.swing.JTextField txtFieldLimiteSupX;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
 }
