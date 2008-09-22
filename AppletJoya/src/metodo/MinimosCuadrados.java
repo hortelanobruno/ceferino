@@ -805,7 +805,6 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private XYDataset createSampleData1() {
         XYSeries xyseries = new XYSeries("Series 1");
 
-        //DefaultTableModel model = (DefaultTableModel)tablePuntos.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
             if ((model.getValueAt(i, 0) != null) && (model.getValueAt(i, 1) != null)) {
                 xyseries.add(Double.parseDouble(model.getValueAt(i, 0).toString()), Double.parseDouble(model.getValueAt(i, 1).toString()));
@@ -840,7 +839,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         }
 
         xyplot.setDataset(1, coordenadas);
-        xyplot.setRenderer(1, xylineandshaperenderer1);// 
+        xyplot.setRenderer(1, xylineandshaperenderer1);
         if (idioma.equalsIgnoreCase("es")) {
             JFreeChart jfreechart = new JFreeChart("Regresión " + ((spinnerGrado.isEnabled()) ? "de grado " + spinnerGrado.getValue().toString() : "Exponencial"), JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
             ChartPanel chartpanel = new ChartPanel(jfreechart, false);
@@ -876,7 +875,7 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         if(this.idioma.equalsIgnoreCase("ES")) series = new XYSeries("Curva de Regresión");
         else series = new XYSeries("Regression Curve");
         
-        double step = (Double.parseDouble(txtFieldLimiteSupX.getText()) - Double.parseDouble(txtFieldLimiteInfX.getText())) / (100 - 1);//aca hay que ver los valores de 11F 2D y 100
+        double step = (Double.parseDouble(txtFieldLimiteSupX.getText()) - Double.parseDouble(txtFieldLimiteInfX.getText())) / (100 - 1);
 
         if (spinnerGrado.isEnabled()) {
             grado = spinnerGrado.getValue().toString();
