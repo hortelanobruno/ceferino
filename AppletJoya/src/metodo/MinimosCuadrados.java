@@ -39,8 +39,8 @@ import org.jfree.data.xy.XYSeriesCollection;
  *
  * @author  Ignacio Cicero, Nerina Gaggero y Bruno Hortelano - Universidad Argentina de la Empresa (UADE)
  */
-public class MinimosCuadrados extends javax.swing.JApplet {
-
+public class MinimosCuadrados extends javax.swing.JApplet
+{
     private static final long serialVersionUID = -4246192305944890157L;
 
     /* PARAMETROS */
