@@ -777,26 +777,32 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 numberaxis1.setAutoRangeIncludesZero(false);
                 XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
                 XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-                JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+                JFreeChart jfreechart = null;
+                
+                if(this.idioma.equalsIgnoreCase("ES")) jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+                else jfreechart = new JFreeChart("Regression ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+                
                 ChartPanel chartpanel = new ChartPanel(jfreechart, false);
                 chartpanel.setVisible(true);
-                jtabbedpane.add("Regresión", chartpanel);
+                
+                if(this.idioma.equalsIgnoreCase("ES")) jtabbedpane.add("Regresión", chartpanel);
+                else jtabbedpane.add("Regression", chartpanel);
+                
                 jtabbedpane.setVisible(true);
                 jtabbedpane.repaint();
                 panelGrafico.repaint();
                 int aux2 = model.getRowCount();
                 boolean bool = true;
-                if (aux2 > 1) {
-                    for (int i = 0; i < aux2; i++) {
+                if (aux2 > 1) 
+                {
+                    for (int i = 0; i < aux2; i++) 
+                    {
                         Object aux3 = model.getValueAt(i, 0);
                         Object aux4 = model.getValueAt(i, 1);
-                        if ((aux3 == null) || (aux4 == null)) {
-                            bool = false;
-                        }
+                        
+                        if ((aux3 == null) || (aux4 == null)) bool = false;
                     }
-                    if (bool) {
-                        graficar();
-                    }
+                    if (bool)  graficar();
                 }
             }
         }
@@ -1143,7 +1149,9 @@ private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         numberaxis1.setAutoRangeIncludesZero(false);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
         XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+        
         JFreeChart jfreechart = null;
+        
         if(this.idioma.equalsIgnoreCase("ES")){
             jfreechart = new JFreeChart("Regresión", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
         }else{
@@ -1151,8 +1159,10 @@ private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
+        
         if(this.idioma.equalsIgnoreCase("ES")) jtabbedpane.add("Regresión", chartpanel);
         else jtabbedpane.add("Regression", chartpanel);
+        
         jtabbedpane.setVisible(true);
         jtabbedpane.repaint();
         panelGrafico.repaint();
