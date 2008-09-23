@@ -1143,7 +1143,12 @@ private void cmbEjemplosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         numberaxis1.setAutoRangeIncludesZero(false);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
         XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-        JFreeChart jfreechart = new JFreeChart("Regresión ", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        JFreeChart jfreechart = null;
+        if(this.idioma.equalsIgnoreCase("ES")){
+            jfreechart = new JFreeChart("Regresión", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        }else{
+            jfreechart = new JFreeChart("Regression", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        }
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
         if(this.idioma.equalsIgnoreCase("ES")) jtabbedpane.add("Regresión", chartpanel);
