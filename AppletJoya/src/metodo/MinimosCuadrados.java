@@ -455,7 +455,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
         else
         {
             if(this.idioma.equalsIgnoreCase("ES")) JOptionPane.showMessageDialog(this, "No hay suficientes puntos.\nDebe completar toda la tabla.","Mínimos Cuadrados",JOptionPane.ERROR_MESSAGE);
-            else JOptionPane.showMessageDialog(this, "No enough points.\nYou must fill all the table.","Minimal Squares",JOptionPane.ERROR_MESSAGE);
+            else JOptionPane.showMessageDialog(this, "No enough points.\nYou must fill the whole table.","Minimal Squares",JOptionPane.ERROR_MESSAGE);
         }
     }
 
