@@ -79,6 +79,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
         {
             java.awt.EventQueue.invokeAndWait(new Runnable() 
             {
+                @Override
                 public void run() 
                 {
                     setLookAndFeel();
@@ -91,6 +92,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
                     xMax = Constantes.DEFAULT_XMax;
                     xMin = Constantes.DEFAULT_XMin;
                     idioma = Constantes.DEFAULT_LANGUAGE;
+                    truncar = Constantes.DEFAULT_TRUNCATE;
                     model = (DefaultTableModel) tablePuntos.getModel();
                     ejemplos = new HashMap<String, double[][]>();
                     boolean ok = loadParams();
@@ -122,11 +124,11 @@ public class MinimosCuadrados extends javax.swing.JApplet
     private void traducir() 
     {
         this.lblEjemplos.setText("Examples");
-        this.lblFuncReg.setText("Regression function");
+        this.lblFuncReg.setText("Regression function: ");
         this.lblLimInf.setText("X axis inferior limit");
         this.lblLimSup.setText("X axis superior limit");
-        this.lblTituloCoefReg.setText("Regression coeficient");
-        this.lblTituloErrorGlobal.setText("Global error");
+        this.lblTituloCoefReg.setText("Regression coeficient (R2): ");
+        this.lblTituloErrorGlobal.setText("Global error: ");
         this.btnClean.setText("Clear");
         this.buttonOK.setText("Plot");
         this.radioGrado.setText("Grade");
@@ -135,6 +137,12 @@ public class MinimosCuadrados extends javax.swing.JApplet
     }
 
     private void loadPoints() {
+        
+        if (this.truncar) {
+            this.chkTruncar.setSelected(true);
+        } else {
+            this.chkTruncar.setSelected(false);
+        }
         /* value = "(1.3,5);(3,4);(3,5.4)..... "  */
         int size = Integer.parseInt(this.getParameter("cantEjemplos"));
         String[] nombreEjemplos = new String[size];
@@ -180,6 +188,7 @@ public class MinimosCuadrados extends javax.swing.JApplet
     }
 
     private void setParams() {
+        
         if (xMax == 0) {
             txtFieldLimiteSupX.setText(String.valueOf(Constantes.DEFAULT_XMax));
         } else {
@@ -247,19 +256,20 @@ public class MinimosCuadrados extends javax.swing.JApplet
         DefaultComboBoxModel modelo = (DefaultComboBoxModel) cmbEjemplos.getModel();
         for (int i = 0; i < nomEjemplos.length; i++) {
             modelo.addElement(nomEjemplos[i].toString());
-        }
-
-        if (this.truncar) {
-            this.chkTruncar.setSelected(true);
-        } else {
-            this.chkTruncar.setSelected(false);
-        }
+        }        
     }
 
     private boolean loadParams() 
     {
         try 
-        {       
+        {     
+            if(this.getParameter("truncar") != null){
+                this.truncar = Boolean.parseBoolean(this.getParameter("truncar"));
+            }
+            else{
+                this.truncar = false;
+            }
+            
             if(this.getParameter("colorTrazo") != null){
                 this.colorTrazo = this.getParameter("colorTrazo");
             }else{
@@ -341,85 +351,111 @@ public class MinimosCuadrados extends javax.swing.JApplet
             return false;
         }
     }
+    
+    private boolean okGraficar()
+    {
+        int aux2 = model.getRowCount();
+        boolean bool = true;
+        if (aux2 > 1) 
+        {
+            for (int i = 0; i < aux2; i++) 
+            {
+                Object aux3 = model.getValueAt(i, 0);
+                Object aux4 = model.getValueAt(i, 1);
+
+                if ((aux3 == null) || (aux4 == null)) bool = false;
+            }
+            if (bool)  return true;
+            else return false;
+        }
+        return false;
+    }
 
     private void graficar() 
     {
-        int filas = model.getRowCount();
-    
-        if (spinnerGrado.isEnabled()) {
-            grados = (Integer) spinnerGrado.getValue();
-            if (grados >= filas) {
-                grados = filas - 1;
-            }
-        } else {
-            grados = 1;
-        }
-
-        if (spinnerGrado.isEnabled()) {
-            this.grado = spinnerGrado.getValue().toString();
-        } else {
-            this.grado = "Exponencial";
-        }
-        
-        double[][] a = new double[filas][grados + 1];
-        double[][] b = new double[filas][1];
-        double[][] at = new double[grados + 1][filas];
-        double[] atxb = new double[grados + 1];
-        double[][] atxa = new double[grados + 1][grados + 1];
-        
-        a = cargarValores();
-        b = cargarB();
-        at = trasponerMatriz(a, filas);
-        atxa = multiplicarMatrices(at, a);
-        atxb = multiplicarMatrices2(at, b);      
-
-        Matriz alfas = new Matriz(atxa);
-        Vector res = new Vector(atxb);
-        Vector resultSist = Matriz.producto(Matriz.inversa(alfas), res);
-
-        double[] result = resultSist.x;
-
-        if (chkTruncar.isSelected()) {
-            DecimalFormat df = new DecimalFormat();
-            df.setMaximumFractionDigits(this.cantDecimales);
-
-            for (int i = 0; i < result.length; i++) 
-            {
-                String aux = df.format(result[i]);
-                aux = aux.replace(',', '.');
-                result[i] = Double.parseDouble(aux);
-            }
-        }
-        
-        if (this.grado.equalsIgnoreCase("Exponencial")) {
-            result = cambiarVariables(result);
-        }
-
-        data1 = createSampleData1();
-        panelGrafico.removeAll();
-        jtabbedpane = new JTabbedPane();
-
-        if(this.idioma.equalsIgnoreCase("ES")) jtabbedpane.add("Regresión", createChartPanel2(result));
-        else jtabbedpane.add("Regression", createChartPanel2(result));
-        
-        panelGrafico.add(jtabbedpane);
-        labelFuncion.setText(generarFuncion(result));
-        jtabbedpane.setVisible(true);
-        jtabbedpane.repaint();
-        panelGrafico.repaint();
-        this.repaint();
-
-        if (hayMuchasSoluciones(result)) 
+        if(okGraficar())
         {
-            //lblSol.setText("Matriz singular.");
-            if(this.idioma.equalsIgnoreCase("ES")) JOptionPane.showMessageDialog(this, "Matriz Singular","Minimos Cuadrados",JOptionPane.ERROR_MESSAGE);
-            else JOptionPane.showMessageDialog(this, "Singular Matrix","Minimos Cuadrados",JOptionPane.ERROR_MESSAGE);
-            labelFuncion.setText("");
-        } else {
-            lblErrorGlobal.setText("");
-            lblCoefRegr.setText("");
-            calcularErrores();
-            lblSol.setText("");
+            int filas = model.getRowCount();
+
+            if (spinnerGrado.isEnabled()) {
+                grados = (Integer) spinnerGrado.getValue();
+                if (grados >= filas) {
+                    grados = filas - 1;
+                }
+            } else {
+                grados = 1;
+            }
+
+            if (spinnerGrado.isEnabled()) {
+                this.grado = spinnerGrado.getValue().toString();
+            } else {
+                this.grado = "Exponencial";
+            }
+
+            double[][] a = new double[filas][grados + 1];
+            double[][] b = new double[filas][1];
+            double[][] at = new double[grados + 1][filas];
+            double[] atxb = new double[grados + 1];
+            double[][] atxa = new double[grados + 1][grados + 1];
+
+            a = cargarValores();
+            b = cargarB();
+            at = trasponerMatriz(a, filas);
+            atxa = multiplicarMatrices(at, a);
+            atxb = multiplicarMatrices2(at, b);      
+
+            Matriz alfas = new Matriz(atxa);
+            Vector res = new Vector(atxb);
+            Vector resultSist = Matriz.producto(Matriz.inversa(alfas), res);
+
+            double[] result = resultSist.x;
+
+            if (chkTruncar.isSelected()) {
+                DecimalFormat df = new DecimalFormat();
+                df.setMaximumFractionDigits(this.cantDecimales);
+
+                for (int i = 0; i < result.length; i++) 
+                {
+                    String aux = df.format(result[i]);
+                    aux = aux.replace(',', '.');
+                    result[i] = Double.parseDouble(aux);
+                }
+            }
+
+            if (this.grado.equalsIgnoreCase("Exponencial")) {
+                result = cambiarVariables(result);
+            }
+
+            data1 = createSampleData1();
+            panelGrafico.removeAll();
+            jtabbedpane = new JTabbedPane();
+
+            if(this.idioma.equalsIgnoreCase("ES")) jtabbedpane.add("Regresión", createChartPanel2(result));
+            else jtabbedpane.add("Regression", createChartPanel2(result));
+
+            panelGrafico.add(jtabbedpane);
+            labelFuncion.setText(generarFuncion(result));
+            jtabbedpane.setVisible(true);
+            jtabbedpane.repaint();
+            panelGrafico.repaint();
+            this.repaint();
+
+            if (hayMuchasSoluciones(result)) 
+            {
+                if(this.idioma.equalsIgnoreCase("ES")) JOptionPane.showMessageDialog(this, "Matriz Singular","Mínimos Cuadrados",JOptionPane.ERROR_MESSAGE);
+                else JOptionPane.showMessageDialog(this, "Singular Matrix","Minimal Squares",JOptionPane.ERROR_MESSAGE);
+                labelFuncion.setText("");
+            } else {
+                lblErrorGlobal.setText("");
+                lblCoefRegr.setText("");
+                calcularErrores();
+                lblSol.setText("");
+            }
+        }
+        else
+        {
+            if(this.idioma.equalsIgnoreCase("ES")) JOptionPane.showMessageDialog(this, "No hay suficientes puntos.\nDebe completar toda la tabla.","Mínimos Cuadrados",JOptionPane.ERROR_MESSAGE);
+            else JOptionPane.showMessageDialog(this, "No enough points.\nYou must fill all the table.","Minimal Squares",JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -791,19 +827,8 @@ private void buttonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 jtabbedpane.setVisible(true);
                 jtabbedpane.repaint();
                 panelGrafico.repaint();
-                int aux2 = model.getRowCount();
-                boolean bool = true;
-                if (aux2 > 1) 
-                {
-                    for (int i = 0; i < aux2; i++) 
-                    {
-                        Object aux3 = model.getValueAt(i, 0);
-                        Object aux4 = model.getValueAt(i, 1);
-                        
-                        if ((aux3 == null) || (aux4 == null)) bool = false;
-                    }
-                    if (bool)  graficar();
-                }
+               
+                if(okGraficar()) graficar();
             }
         }
     }
