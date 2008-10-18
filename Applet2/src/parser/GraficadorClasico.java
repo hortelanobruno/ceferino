@@ -1,5 +1,7 @@
 package parser;
 
+import com.singularsys.jep.FunctionTable;
+import com.singularsys.jep.parser.Node;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -135,7 +137,7 @@ public class GraficadorClasico extends JApplet
 		//Valores por defecto
 		colorIzquierda = new Color(255,0,0);
 		colorDerecha = new Color(0,0,0);
-		funcion = "e^x-2";
+		funcion = "sin(x)";
 		tolerancia = 0.1;
 		iteraciones = 20;
 		puntoXcero = -2.0;
@@ -427,7 +429,68 @@ public class GraficadorClasico extends JApplet
 		miEvaluador.setImplicitMul(true); // permite 2x en vez de 2*x
 		escalaX = 50;
 		escalaY = 50;
-		
+                
+                try
+                {
+                  miEvaluador.parseExpression("x^3-5x^2+x+1");
+                  miEvaluador.addVariable("x", 5);
+                  double a = miEvaluador.getValue();
+                  JOptionPane.showMessageDialog(null,a);
+                    
+                  double tol=0.0001;
+                  double x1,x2;
+                  double c = 0;
+                   double yc = 0;
+                  x1 = -10;
+                  x2 = 10;
+                   
+                  miEvaluador.addVariable("x", x1);
+                  double ya= miEvaluador.getValue();
+                  miEvaluador.addVariable("x", x2);
+                  double yb= miEvaluador.getValue();
+                   
+                  double max = 1 + Math.round( (Math.log(x2-x1) - Math.log(tol))/Math.log(2)  );
+                  
+                  double i = 0.1;
+                  
+                  while(i<max)
+                  {
+                      c = (x1+x2)/2;
+                      miEvaluador.addVariable("x", c);
+                     yc = miEvaluador.getValue();
+                      
+                      if(yc ==0)
+                      {
+                          x1 = c;
+                          x2 = c;
+                      }
+                      else
+                      {
+                          if(yb*yc > 0)
+                          {
+                              x2 = c;
+                              yb = yc;
+                          }
+                          else
+                          {
+                              x1 = c;
+                              ya = yc;
+                          }
+                      }
+                      i+=0.1;
+                  }
+                  
+                  c = (x1+x2)/2;
+                   miEvaluador.addVariable("x", c);
+                    yc = miEvaluador.getValue(); 
+                  
+                  JOptionPane.showMessageDialog(null, "x1: " + x1 + "   " + "x2: " + x2 + "    " + yc + "   " + yb +"     " + ya + "      ");
+
+                }
+                catch(Exception e)
+                {
+                    JOptionPane.showMessageDialog(null,"Exx");
+                }
 		x0 = Gancho / 2;
 		y0 = (Galto / 2)-300;
 		
@@ -831,7 +894,7 @@ public class GraficadorClasico extends JApplet
 
 			miEvaluador.parseExpression(Tffun.getText());
 			errorEnExpresion = miEvaluador.hasError();
-
+                        
 			if (!errorEnExpresion && !errorEnParametros) {
 				Mensaje.setText("Arrastre el mouse para mover ejes");
 				Tffun.setForeground(Color.black);
