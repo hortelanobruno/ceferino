@@ -2,6 +2,7 @@ package parser;
 
 import com.singularsys.jep.FunctionTable;
 import com.singularsys.jep.parser.Node;
+import com.singularsys.jep.standard.Complex;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,7 +42,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.nfunk.jep.JEP;
-import org.nfunk.jep.type.Complex;
+//import org.nfunk.jep.type.Complex;
 
 public class GraficadorClasico extends JApplet 
 {
@@ -424,7 +425,7 @@ public class GraficadorClasico extends JApplet
 		miEvaluador.addStandardFunctions(); // agrega las funciones matematicas comunes.
 		miEvaluador.addStandardConstants(); // agrega las constantes estandar.
 		miEvaluador.addComplex(); // agrega numeros complejos.
-		miEvaluador.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
+		//miEvaluador.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
 		miEvaluador.addVariable("x", 0);
 		miEvaluador.setImplicitMul(true); // permite 2x en vez de 2*x
 		escalaX = 50;
