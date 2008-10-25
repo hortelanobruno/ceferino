@@ -8,29 +8,31 @@ import parser.Parser;
  */
 
 /**
- * xk+1 = xk + h + f(kh,xk)
+ * xk+1 = xk + h.f(kh,xk)
  * 
  */
 
 public class Euler 
 {
     private double h;
-    private double seed;
+    private double seedx;
+    private double seedy;
     private Parser parser;
-    private double xInicial;
-    private double xFinal;
+    private double time;
     private double[] internalGraphicPoints;
     private double[] internalError;
+    private String funcion;
     
     
-    public Euler(double h, double seed, String funcion, double xInicial, double xFinal) 
+    public Euler(double h, double seedx, double seedy, String funcion, double time) 
     {
         this.parser = new Parser();
         parser.agregarFuncion(funcion);
-        this.setXFinal(xFinal);
-        this.setXInicial(xInicial);
+        this.setFuncion(funcion);
+        this.setTime(time);
         this.setH(h);
-        this.setSeed(seed);
+        this.setSeedX(seedx);
+        this.setSeedY(seedy);
     }
 
     public double getH() {
@@ -41,12 +43,20 @@ public class Euler
         this.h = h;
     }
 
-    public double getSeed() {
-        return seed;
+    public double getSeedX() {
+        return seedx;
     }
 
-    public void setSeed(double seed) {
-        this.seed = seed;
+    public void setSeedX(double seed) {
+        this.seedx= seed;
+    }
+    
+    public double getSeedY() {
+        return seedy;
+    }
+
+    public void setSeedY(double seed) {
+        this.seedy= seed;
     }
     
     public double[] getError()
@@ -54,24 +64,27 @@ public class Euler
         return(this.internalError!=null)?this.internalError:null;
     }
     
-    public double[] getGraphicPoints()
+    public double[] getPoints()
     {
         if(this.internalGraphicPoints == null)
         {
-            double index = this.getXInicial();
-            double top = this.getXFinal();
-            int size =((int) Math.ceil((this.getXFinal()-this.getXInicial())/h))+1;
-            this.internalGraphicPoints = new double[size];
-            this.internalError = new double[size];
-            int i = 0;
-            double x = this.parser.getValor(this.getSeed());
-            this.internalGraphicPoints[i] = x;
-            this.internalError[i++] = 0;
+            double index =0D;
+            double top = this.getTime();
+            int size =((int) Math.ceil(this.getTime()/h));
+            this.internalGraphicPoints = new double[size+1];
+            this.internalError = new double[size+1];
+            int i = 0; 
+
+            double funcVal =this.parser.getValor(this.getSeedX());
+            double xant = this.getSeedY();
+            double x;
             
-            while(index <= top)
+            while(index<=top)
             {
+                x = xant + (this.getH()*funcVal);
+                xant = x;
                 index+=this.getH();
-                x = x + (this.getH()*x);
+                funcVal =this.parser.getValor(xant);
                 this.internalGraphicPoints[i] = x;
                 double error = this.parser.getValor(index) - x;
                 this.internalError[i++] = error;
@@ -81,19 +94,19 @@ public class Euler
         return this.internalGraphicPoints; 
     }
 
-    public double getXInicial() {
-        return xInicial;
+    public double getTime() {
+        return time;
     }
 
-    public void setXInicial(double xInicial) {
-        this.xInicial = xInicial;
+    public void setTime(double time) {
+        this.time = time;
     }
 
-    public double getXFinal() {
-        return xFinal;
+    public String getFuncion() {
+        return funcion;
     }
 
-    public void setXFinal(double xFinal) {
-        this.xFinal = xFinal;
+    public void setFuncion(String funcion) {
+        this.funcion = funcion;
     }
 }
