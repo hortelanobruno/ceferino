@@ -418,6 +418,13 @@ public class GraficadorClasico extends JApplet
 		DisplayPanel2.add(pnlControlPanelSP);
 		DisplayPanel2.add(ZGVeloc);
 	}
+        
+        public double getValor(double x)
+        {
+        miEvaluador.addVariable("x", x);
+        return miEvaluador.getValue();
+       // System.out.println(jep.getValue());//Devuelve el valor de F(3)
+    }
 	
 	private void crearParserFuncion()
 	{
@@ -433,15 +440,29 @@ public class GraficadorClasico extends JApplet
                 
                 try
                 {
-                  miEvaluador.parseExpression("exp(x)");
+                  miEvaluador.parseExpression("x^2-2");
                   miEvaluador.addVariable("x", 0);
-                  double a = miEvaluador.getValue();
-                  JOptionPane.showMessageDialog(null,a);
+                  double x1,x2,epsilon;
+                  x1 = 0;
+                  x2 = 2;
+                  epsilon = 0.001;
+                  //double a = miEvaluador.getValue();
+                  //JOptionPane.showMessageDialog(null,a);
                     
-                  double tol=0.0001;
+                  double m;
+                    for (m= (x1+x2)/2.0; Math.abs(x1-x2)> epsilon; m= (x1+x2)/2.0)
+                    {
+                        if ((this.getValor(x1)*this.getValor(m)) <= 0.0)
+                            x2= m; // Utiliza el subintervalo izquierdo
+                        else
+                            x1= m; // Utiliza el subintervalo derecho
+                    }
+                        JOptionPane.showMessageDialog(null, "raiz: " + m);
+                  
+                  /*double tol=0.0001;
                   double x1,x2;
                   double c = 0;
-                   double yc = 0;
+                  double yc = 0;
                   x1 = -10;
                   x2 = 10;
                    
@@ -460,7 +481,7 @@ public class GraficadorClasico extends JApplet
                       miEvaluador.addVariable("x", c);
                      yc = miEvaluador.getValue();
                       
-                      if(yc ==0)
+                      if(yc ==0)    //raiz doble
                       {
                           x1 = c;
                           x2 = c;
@@ -485,8 +506,8 @@ public class GraficadorClasico extends JApplet
                    miEvaluador.addVariable("x", c);
                     yc = miEvaluador.getValue(); 
                   
-                  JOptionPane.showMessageDialog(null, "x1: " + x1 + "   " + "x2: " + x2 + "    " + yc + "   " + yb +"     " + ya + "      ");
-
+                  JOptionPane.showMessageDialog(null, "raiz: " + x1);
+*/
                 }
                 catch(Exception e)
                 {

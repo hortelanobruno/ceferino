@@ -2,6 +2,7 @@ package applet;
 
 import java.text.DecimalFormat;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import parser.Parser;
 
 /**
@@ -43,9 +44,85 @@ public class RootsFinder
                 df.setMaximumFractionDigits(this.cantDecimales);
      * */
     
-    public double[] getRaices()
+    private double redondear(double val)
     {
-        if(this.raices == null)
+         DecimalFormat df = new DecimalFormat();
+         df.setMaximumFractionDigits(this.cantDec);
+         
+         String aux = df.format(val);
+         aux = aux.replace(',', '.');
+         val = Double.parseDouble(aux);
+         return val;
+    }
+    
+    private Double raizPorBiseccion(double x1, double x2)
+    {
+        
+         double epsilon = 0.001;
+         
+         double m;
+         for (m= (x1+x2)/2.0; Math.abs(x1-x2)> epsilon; m= (x1+x2)/2.0)
+         {
+                if ((this.parser.getValor(x1)*this.parser.getValor(m)) <= 0.0)
+                    x2= m; // Utiliza el subintervalo izquierdo
+                else
+                    x1= m; // Utiliza el subintervalo derecho
+         }
+         
+        m= this.redondear(m);
+       // System.out.println(m);
+        double rI = m-0.005;
+        double rS = m+0.005;
+        double funVal = this.parser.getValor(m);
+        funVal = Math.round(funVal);
+        if( (funVal>rI)&&(funVal<rS)) return m;
+        return null;
+    }
+    
+    private Vector<Double> eliminarRepetidos(Vector<Double> vec)
+    {
+        Vector<Double> ret = new Vector<Double>();
+        
+        for(int i = 0; i < vec.size();i++)
+        {
+            if( !(ret.contains(vec.elementAt(i)))  )
+                ret.add(vec.elementAt(i));
+        }
+        
+        return ret;
+    }
+    
+    public double[] getRaices()
+    {    
+        Vector<Double> vecAux = new Vector<Double>();
+        double index = this.getXInicial();
+        double next = index + this.getH();
+        
+        while(index<=this.getXFinal())
+        {
+            Double auxRoot = this.raizPorBiseccion(index, next);
+            
+            if (auxRoot!=null)
+            {
+                double a = auxRoot;
+                a = Math.round(a);
+                vecAux.add(auxRoot);
+            }
+            
+            index = next;
+            next += this.getH();
+        }
+        
+        vecAux = this.eliminarRepetidos(vecAux);
+        
+        this.raices = new double[vecAux.size()];
+           
+        for(int i = 0; i<vecAux.size();i++)
+            this.raices[i] = vecAux.elementAt(i);
+        
+       // System.out.println("cant:" + vecAux.size());
+        return this.raices;
+     /*   if(this.raices == null)
         {
            DecimalFormat df = new DecimalFormat();
            df.setMaximumFractionDigits(this.cantDec);
@@ -55,14 +132,16 @@ public class RootsFinder
                     aux = aux.replace(',', '.');
                     result[i] = Double.parseDouble(aux);*/
            
-           Vector<Double> vecAux = new Vector<Double>();
+       /*    Vector<Double> vecAux = new Vector<Double>();
            
            while(index<=this.getXFinal())
            {
+               
                double val = this.parser.getValor(index);
                String aux = df.format(val);
                aux = aux.replace(',', '.');
                val = Double.parseDouble(aux);
+              // System.out.println("x: " + index + "  y: " + val);
                
                if(val == 0d)
                {
@@ -75,11 +154,12 @@ public class RootsFinder
            this.raices = new double[vecAux.size()];
            
            for(int i = 0; i<vecAux.size();i++)
-                this.raices[i] = vecAux.elementAt(i);
+            
+        this.raices[i] = vecAux.elementAt(i);
            
            return this.raices;
         }
-        else return this.raices;
+        else return this.raices;*/
     }
 
     public double getXInicial() {
