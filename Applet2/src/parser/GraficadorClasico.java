@@ -433,8 +433,8 @@ public class GraficadorClasico extends JApplet
                 
                 try
                 {
-                  miEvaluador.parseExpression("x^3-5x^2+x+1");
-                  miEvaluador.addVariable("x", 5);
+                  miEvaluador.parseExpression("exp(x)");
+                  miEvaluador.addVariable("x", 0);
                   double a = miEvaluador.getValue();
                   JOptionPane.showMessageDialog(null,a);
                     
