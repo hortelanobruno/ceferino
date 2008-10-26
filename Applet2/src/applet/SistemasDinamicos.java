@@ -6,7 +6,21 @@
 
 package applet;
 
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import parser.Parser;
 
 /**
@@ -18,12 +32,21 @@ public class SistemasDinamicos extends javax.swing.JApplet
     
     private static final long serialVersionUID = 327575554503844280L;
     private Parser parser;
+    private XYDataset data1;
+    private JTabbedPane jtabbedpane;
+    
     /** Initializes the applet SistemasDinamicos */
+    @Override
     public void init() {
         try {
             java.awt.EventQueue.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     initComponents();
+                    //setLookAndFeel();
+                    txtXfinal.setText("5");
+                    txtXinicial.setText("-5");
+                    txtFuncion.setText("x^2");
                 }
             });
         } catch (Exception ex) {
@@ -41,7 +64,6 @@ public class SistemasDinamicos extends javax.swing.JApplet
     private void initComponents() {
 
         panelCentral = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -65,20 +87,12 @@ public class SistemasDinamicos extends javax.swing.JApplet
         jButton1 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         txtCantDec = new javax.swing.JTextField();
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 1"));
-        jPanel1.setPreferredSize(new java.awt.Dimension(150, 150));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 181, Short.MAX_VALUE)
-        );
+        jLabel9 = new javax.swing.JLabel();
+        txtXinicial = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        txtXfinal = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        panelGrafico1 = new javax.swing.JPanel();
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 2"));
         jPanel2.setPreferredSize(new java.awt.Dimension(150, 150));
@@ -87,7 +101,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
+            .addGap(0, 260, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,6 +168,17 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
         jLabel8.setText("Decimales= ");
 
+        jLabel9.setText("x-inicial");
+
+        jLabel10.setText("x-final");
+
+        jButton2.setText("Graficar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -175,19 +200,26 @@ public class SistemasDinamicos extends javax.swing.JApplet
                             .addComponent(jLabel6)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtCantDec, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                            .addComponent(txtTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                            .addComponent(txtY0, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                            .addComponent(txtX0, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                            .addComponent(txtH, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel10))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtXfinal, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                    .addComponent(txtXinicial, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                    .addComponent(txtCantDec, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                    .addComponent(txtTiempo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                    .addComponent(txtY0, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                    .addComponent(txtX0, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                    .addComponent(txtH, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)))
+                            .addComponent(jButton2))
                         .addGap(45, 45, 45))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel7)
@@ -199,7 +231,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -231,7 +263,17 @@ public class SistemasDinamicos extends javax.swing.JApplet
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(txtCantDec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtCantDec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(txtXinicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(txtXfinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
@@ -239,35 +281,40 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 .addContainerGap(74, Short.MAX_VALUE))
         );
 
+        panelGrafico1.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 1"));
+        panelGrafico1.setPreferredSize(new java.awt.Dimension(150, 150));
+        panelGrafico1.setLayout(new java.awt.GridLayout());
+
         javax.swing.GroupLayout panelCentralLayout = new javax.swing.GroupLayout(panelCentral);
         panelCentral.setLayout(panelCentralLayout);
         panelCentralLayout.setHorizontalGroup(
             panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
-                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(107, 107, 107))
+                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 257, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(99, 99, 99))
+                    .addGroup(panelCentralLayout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(panelGrafico1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         panelCentralLayout.setVerticalGroup(
             panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCentralLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelGrafico1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(137, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -300,10 +347,85 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
         this.jTextArea1.append(err[i] + "\n\t");*/
 }//GEN-LAST:event_buttonGraficarActionPerformed
 
+
+    private void graficar()
+    {
+        parser = new Parser();
+        this.parser.agregarFuncion(this.txtFuncion.getText());
+        data1 = createSampleData1();  
+        panelGrafico1.removeAll();
+        jtabbedpane = new JTabbedPane();
+        jtabbedpane.add("Regresión", createChartPanel2());
+       
+        panelGrafico1.add(jtabbedpane);
+        jtabbedpane.setVisible(true);
+        jtabbedpane.repaint();
+        panelGrafico1.repaint();
+        this.repaint();
+    }
+    
+    private XYDataset createSampleData1() 
+    {
+        XYSeries xyseries = new XYSeries("Series 1");
+        double inicio = Double.parseDouble(txtXinicial.getText());
+        double fin = Double.parseDouble(txtXfinal.getText());
+        double index = inicio;
+        
+        while(index <= fin)
+        {
+            double a = this.parser.getValor(index);
+            xyseries.add(index, a);
+            index += 0.01;
+        }
+        XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
+        return xyseriescollection;
+    }
+    
+    private ChartPanel createChartPanel2() 
+    {
+        NumberAxis numberaxis = new NumberAxis("X");
+        numberaxis.setAutoRangeIncludesZero(false);
+        NumberAxis numberaxis1 = new NumberAxis("Y");
+        numberaxis1.setAutoRangeIncludesZero(false);
+        XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
+        XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
+
+        
+        xyplot.setDomainZeroBaselineVisible(true);
+        xyplot.setRangeZeroBaselineVisible(true);
+        XYSeriesCollection coordenadas = cordenadasGrafico();
+        XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
+        
+        xyplot.setDataset(1, coordenadas);
+        xyplot.setRenderer(1, xylineandshaperenderer1);
+        
+        JFreeChart jfreechart = new JFreeChart("f vs x", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        ChartPanel chartpanel = new ChartPanel(jfreechart, false);
+        chartpanel.setVisible(true);
+        return chartpanel;
+       
+    }
+    
+     private XYSeriesCollection cordenadasGrafico() {
+        
+        XYSeries series;
+        series = new XYSeries("f vs x");
+
+        double step = (Double.parseDouble(txtXfinal.getText()) - Double.parseDouble(txtXinicial.getText())) / (100 - 1);
+  
+        for (int i = 0; i < 100; i++) {
+            double x = Double.parseDouble(txtXinicial.getText()) + (step * i);
+            series.add(x, this.parser.getValor(x));
+        }
+        
+        XYSeriesCollection collection = new XYSeriesCollection(series);
+        return collection;
+    }
+
 private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFuncionKeyPressed
      if (evt.getKeyCode() == KeyEvent.VK_ENTER) 
      {
-        //graficar();
+        graficar();
      }
 }//GEN-LAST:event_txtFuncionKeyPressed
 
@@ -318,11 +440,30 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.textAreaRaices.append(raic[i] + "\n\t");
 }//GEN-LAST:event_jButton1ActionPerformed
 
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    graficar();
+}//GEN-LAST:event_jButton2ActionPerformed
+
+private void setLookAndFeel() throws HeadlessException {
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            SwingUtilities.updateComponentTreeUI(this);
+
+            Toolkit t = Toolkit.getDefaultToolkit();
+            this.setLocation((int) (t.getScreenSize().getWidth() - this.getWidth()) / 2, (int) (t.getScreenSize().getHeight() - this.getHeight()) / 2);
+        } catch (ClassNotFoundException ex) {
+        } catch (InstantiationException ex) {
+        } catch (IllegalAccessException ex) {
+        } catch (UnsupportedLookAndFeelException ex) {
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonGraficar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -330,13 +471,14 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel panelCentral;
+    private javax.swing.JPanel panelGrafico1;
     private javax.swing.JTextArea textAreaEuler;
     private javax.swing.JTextArea textAreaRaices;
     private javax.swing.JTextField txtCantDec;
@@ -344,6 +486,8 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private javax.swing.JTextField txtH;
     private javax.swing.JTextField txtTiempo;
     private javax.swing.JTextField txtX0;
+    private javax.swing.JTextField txtXfinal;
+    private javax.swing.JTextField txtXinicial;
     private javax.swing.JTextField txtY0;
     // End of variables declaration//GEN-END:variables
 
