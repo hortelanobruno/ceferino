@@ -355,7 +355,7 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
         data1 = createSampleData1();  
         panelGrafico1.removeAll();
         jtabbedpane = new JTabbedPane();
-        jtabbedpane.add("Regresión", createChartPanel2());
+        jtabbedpane.add("f vs x", createChartPanel2());
        
         panelGrafico1.add(jtabbedpane);
         jtabbedpane.setVisible(true);
