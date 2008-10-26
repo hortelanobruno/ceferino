@@ -38,6 +38,16 @@ public class RootsFinder
         this.funcion = funcion;
     }
     
+    private double[] vectorToDoubleArray(Vector<Double> vecAux)
+    {
+         this.raices = new double[vecAux.size()];
+         
+         for(int i = 0; i<vecAux.size();i++)     
+           this.raices[i] = vecAux.elementAt(i);
+         
+         return this.raices;
+    }
+    
     /*
      * 
      * DecimalFormat df = new DecimalFormat();
@@ -57,7 +67,6 @@ public class RootsFinder
     
     private Double raizPorBiseccion(double x1, double x2)
     {
-        
          double epsilon = 0.001;
          
          double m;
@@ -74,7 +83,7 @@ public class RootsFinder
         double rI = m-0.005;
         double rS = m+0.005;
         double funVal = this.parser.getValor(m);
-        funVal = Math.round(funVal);
+        funVal = this.redondear(funVal);
         if( (funVal>rI)&&(funVal<rS)) return m;
         return null;
     }
@@ -92,9 +101,49 @@ public class RootsFinder
         return ret;
     }
     
+    private double derivada(double seed) //Dereivada centrada: (fi+1 - fi-1)2h
+    {
+        double adelante = this.parser.getValor(seed + this.getH());
+        double atras = this.parser.getValor(seed - this.getH());
+        return (adelante - atras)/(2*this.getH());
+    }
+    
+    private double raizPorNewtonRaphson(double seed)
+    {
+        return seed - (this.parser.getValor(seed)/this.derivada(seed));
+    }
+    
+    private double getRaizPorNewton()
+    {
+        double seed = (Math.random()*this.getXFinal())+this.getXInicial();
+        
+        for(int i = 0; i< 200;i++)
+        {
+            double xold = seed;
+            seed = this.raizPorNewtonRaphson(seed);
+            
+            if(seed == xold)  return seed;
+        }
+        
+        return seed;
+    }
+    
     public double[] getRaices()
     {    
-        Vector<Double> vecAux = new Vector<Double>();
+        
+        Vector<Double> vec = new Vector<Double>();
+        
+        for(int i = 0; i< 100;i++)
+        {
+            double temp = this.getRaizPorNewton();
+            if(!(vec.contains((Double)temp)))
+            {
+                vec.add(temp);
+            }
+        }
+        
+        return this.vectorToDoubleArray(vec);
+     /*   Vector<Double> vecAux = new Vector<Double>();
         double index = this.getXInicial();
         double next = index + this.getH();
         
@@ -122,7 +171,10 @@ public class RootsFinder
         
        // System.out.println("cant:" + vecAux.size());
         return this.raices;
-     /*   if(this.raices == null)
+   
+      
+      
+      /*   if(this.raices == null)
         {
            DecimalFormat df = new DecimalFormat();
            df.setMaximumFractionDigits(this.cantDec);
