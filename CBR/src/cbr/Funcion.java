@@ -19,6 +19,7 @@ public class Funcion {
     private List<Similitud> locacion;
     private List<Similitud> musica;
     private List<Similitud> show;
+    private List<Caso> baseCasos;
 
     public Funcion() {
         //TODO FALTA CARGAR LAS TABLAS EN LOS METODOS
@@ -125,6 +126,13 @@ public class Funcion {
     
     public void cargarTablaBebida(){
         
+        Similitud simBebida = new Similitud();
+        
+        for(int i = 0; i<this.getBaseCasos().size();i++)
+        {
+            
+        }
+        
     }
     public void cargarTablaComida(){
         
@@ -177,6 +185,14 @@ public class Funcion {
 
     public void setShow(List<Similitud> show) {
         this.show = show;
+    }
+
+    public List<Caso> getBaseCasos() {
+        return baseCasos;
+    }
+
+    public void setBaseCasos(List<Caso> baseCasos) {
+        this.baseCasos = baseCasos;
     }
     
 }
