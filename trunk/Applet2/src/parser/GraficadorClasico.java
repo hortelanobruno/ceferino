@@ -1,8 +1,5 @@
 package parser;
 
-import com.singularsys.jep.FunctionTable;
-import com.singularsys.jep.parser.Node;
-import com.singularsys.jep.standard.Complex;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,7 +39,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.nfunk.jep.JEP;
-//import org.nfunk.jep.type.Complex;
+import org.nfunk.jep.type.Complex;
 
 public class GraficadorClasico extends JApplet 
 {
@@ -138,7 +135,7 @@ public class GraficadorClasico extends JApplet
 		//Valores por defecto
 		colorIzquierda = new Color(255,0,0);
 		colorDerecha = new Color(0,0,0);
-		funcion = "sin(x)";
+		funcion = "e^x-2";
 		tolerancia = 0.1;
 		iteraciones = 20;
 		puntoXcero = -2.0;
@@ -160,7 +157,7 @@ public class GraficadorClasico extends JApplet
 		}
 		catch(NumberFormatException ex)
 		{
-			System.out.println("Error en los parámetros RGB para la Zona Grafica Izquierda.");
+			System.out.println("Error en los par�metros RGB para la Zona Grafica Izquierda.");
 		}
 		try
 		{
@@ -177,7 +174,7 @@ public class GraficadorClasico extends JApplet
 		}
 		catch(NumberFormatException ex)
 		{
-			System.out.println("Error en los parámetros RGB para la Zona Grafica Derecha.");
+			System.out.println("Error en los par�metros RGB para la Zona Grafica Derecha.");
 		}
 		if(this.getParameter("funcion")!= null)
 			funcion = this.getParameter("funcion").toString();
@@ -251,7 +248,7 @@ public class GraficadorClasico extends JApplet
 		JLabel lblAlgoritmoIzq = new JLabel("Algoritmo a graficar: ");
 		cmbAlgoritmoIzq = new JComboBox();
 		
-		cmbAlgoritmoIzq.addItem("Bisección");
+		cmbAlgoritmoIzq.addItem("Bisecci�n");
 		cmbAlgoritmoIzq.addItem("Secante");
 		cmbAlgoritmoIzq.addItem("Regula Falsi");
 		cmbAlgoritmoIzq.addItem("Regula Falsi Mejorado");
@@ -267,7 +264,7 @@ public class GraficadorClasico extends JApplet
 		cmbAlgoritmoDer.addItem("Secante");
 		cmbAlgoritmoDer.addItem("Regula Falsi");
 		cmbAlgoritmoDer.addItem("Regula Falsi Mejorado");
-		cmbAlgoritmoDer.addItem("Bisección");
+		cmbAlgoritmoDer.addItem("Bisecci�n");
 
 		pnlSeleccionAlgoritmoDer.add(lblAlgoritmoDer);
 		pnlSeleccionAlgoritmoDer.add(cmbAlgoritmoDer);
@@ -311,7 +308,7 @@ public class GraficadorClasico extends JApplet
 		pnlPuntoXcero.add(txtPuntoXcero);
 
 		// Label Punto X ultimo
-		JLabel lblPuntoXultimo = new JLabel("Punto X último:", JLabel.LEFT);
+		JLabel lblPuntoXultimo = new JLabel("Punto X �ltimo:", JLabel.LEFT);
 
 		// TextBox Punto X ultimo
 		txtPuntoXultimo = new JTextField(String.valueOf(puntoXultimo), 4);
@@ -368,7 +365,7 @@ public class GraficadorClasico extends JApplet
 		c.gridx = 0;
 		ControlPanel.add(esp1, c);
 		
-		JLabel lblIterSlider = new JLabel("Vea el método en cada iteración:");
+		JLabel lblIterSlider = new JLabel("Vea el m�todo en cada iteraci�n:");
 		
 		c.gridy = 8; // fila
 		c.gridx = 0; // columna
@@ -399,7 +396,7 @@ public class GraficadorClasico extends JApplet
 		rotulo.setTitleFont(ft10);
 		rotulo.setTitleColor(new Color(0, 0, 128));
 
-		rotulo = BorderFactory.createTitledBorder(" Función y Parámetros");
+		rotulo = BorderFactory.createTitledBorder(" Funci�n y Par�metros");
 		rotulo.setTitleColor(new Color(0, 0, 128));
 		rotulo.setTitleFont(ft10);
 		ControlPanel.setBorder(rotulo);
@@ -418,13 +415,6 @@ public class GraficadorClasico extends JApplet
 		DisplayPanel2.add(pnlControlPanelSP);
 		DisplayPanel2.add(ZGVeloc);
 	}
-        
-        public double getValor(double x)
-        {
-        miEvaluador.addVariable("x", x);
-        return miEvaluador.getValue();
-       // System.out.println(jep.getValue());//Devuelve el valor de F(3)
-    }
 	
 	private void crearParserFuncion()
 	{
@@ -432,87 +422,12 @@ public class GraficadorClasico extends JApplet
 		miEvaluador.addStandardFunctions(); // agrega las funciones matematicas comunes.
 		miEvaluador.addStandardConstants(); // agrega las constantes estandar.
 		miEvaluador.addComplex(); // agrega numeros complejos.
-		//miEvaluador.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
+		miEvaluador.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
 		miEvaluador.addVariable("x", 0);
 		miEvaluador.setImplicitMul(true); // permite 2x en vez de 2*x
 		escalaX = 50;
 		escalaY = 50;
-                
-                try
-                {
-                  miEvaluador.parseExpression("x^2-2");
-                  miEvaluador.addVariable("x", 0);
-                  double x1,x2,epsilon;
-                  x1 = 0;
-                  x2 = 2;
-                  epsilon = 0.001;
-                  //double a = miEvaluador.getValue();
-                  //JOptionPane.showMessageDialog(null,a);
-                    
-                  double m;
-                    for (m= (x1+x2)/2.0; Math.abs(x1-x2)> epsilon; m= (x1+x2)/2.0)
-                    {
-                        if ((this.getValor(x1)*this.getValor(m)) <= 0.0)
-                            x2= m; // Utiliza el subintervalo izquierdo
-                        else
-                            x1= m; // Utiliza el subintervalo derecho
-                    }
-                        JOptionPane.showMessageDialog(null, "raiz: " + m);
-                  
-                  /*double tol=0.0001;
-                  double x1,x2;
-                  double c = 0;
-                  double yc = 0;
-                  x1 = -10;
-                  x2 = 10;
-                   
-                  miEvaluador.addVariable("x", x1);
-                  double ya= miEvaluador.getValue();
-                  miEvaluador.addVariable("x", x2);
-                  double yb= miEvaluador.getValue();
-                   
-                  double max = 1 + Math.round( (Math.log(x2-x1) - Math.log(tol))/Math.log(2)  );
-                  
-                  double i = 0.1;
-                  
-                  while(i<max)
-                  {
-                      c = (x1+x2)/2;
-                      miEvaluador.addVariable("x", c);
-                     yc = miEvaluador.getValue();
-                      
-                      if(yc ==0)    //raiz doble
-                      {
-                          x1 = c;
-                          x2 = c;
-                      }
-                      else
-                      {
-                          if(yb*yc > 0)
-                          {
-                              x2 = c;
-                              yb = yc;
-                          }
-                          else
-                          {
-                              x1 = c;
-                              ya = yc;
-                          }
-                      }
-                      i+=0.1;
-                  }
-                  
-                  c = (x1+x2)/2;
-                   miEvaluador.addVariable("x", c);
-                    yc = miEvaluador.getValue(); 
-                  
-                  JOptionPane.showMessageDialog(null, "raiz: " + x1);
-*/
-                }
-                catch(Exception e)
-                {
-                    JOptionPane.showMessageDialog(null,"Exx");
-                }
+		
 		x0 = Gancho / 2;
 		y0 = (Galto / 2)-300;
 		
@@ -547,7 +462,7 @@ public class GraficadorClasico extends JApplet
 					{
 						puntoXcero = Double.parseDouble(txtPuntoXcero.getText());
 					} catch (NumberFormatException ex) {
-						Mensaje.setText("X cero debe ser un número de coma flotante.");
+						Mensaje.setText("X cero debe ser un n�mero de coma flotante.");
 						txtPuntoXcero.setForeground(Color.red);
 						errorEnParametros = true;
 					}
@@ -556,7 +471,7 @@ public class GraficadorClasico extends JApplet
 						puntoXultimo = Double
 								.parseDouble(txtPuntoXultimo.getText());
 					} catch (NumberFormatException ex) {
-						Mensaje.setText("X último debe ser un número de coma flotante.");
+						Mensaje.setText("X �ltimo debe ser un n�mero de coma flotante.");
 						txtPuntoXultimo.setForeground(Color.red);
 						errorEnParametros = true;
 					}
@@ -564,7 +479,7 @@ public class GraficadorClasico extends JApplet
 					{
 						iteraciones = Integer.parseInt(txtIteraciones.getText());
 					} catch (NumberFormatException ex) {
-						Mensaje.setText("La cantidad de iteraciones debe ser un número entero.");
+						Mensaje.setText("La cantidad de iteraciones debe ser un n�mero entero.");
 						txtIteraciones.setForeground(Color.red);
 						errorEnParametros = true;
 					}
@@ -572,7 +487,7 @@ public class GraficadorClasico extends JApplet
 					{
 						tolerancia = Double.parseDouble(txtTolerancia.getText());
 					} catch (NumberFormatException ex) {
-						Mensaje.setText("La tolerancia debe ser un número de coma flotante.");
+						Mensaje.setText("La tolerancia debe ser un n�mero de coma flotante.");
 						txtTolerancia.setForeground(Color.red);
 						errorEnParametros = true;
 					}
@@ -602,7 +517,7 @@ public class GraficadorClasico extends JApplet
 					{
 						puntoXcero = Double.parseDouble(txtPuntoXcero.getText());
 					} catch (NumberFormatException ex) {
-						Mensaje.setText("X cero debe ser un número de coma flotante.");
+						Mensaje.setText("X cero debe ser un n�mero de coma flotante.");
 						txtPuntoXcero.setForeground(Color.red);
 						errorEnParametros = true;
 					}
@@ -610,7 +525,7 @@ public class GraficadorClasico extends JApplet
 					{
 						puntoXultimo = Double.parseDouble(txtPuntoXultimo.getText());
 					} catch (NumberFormatException ex) {
-						Mensaje.setText("X último debe ser un número de coma flotante.");
+						Mensaje.setText("X �ltimo debe ser un n�mero de coma flotante.");
 						txtPuntoXultimo.setForeground(Color.red);
 						errorEnParametros = true;
 					}
@@ -618,7 +533,7 @@ public class GraficadorClasico extends JApplet
 					{
 						iteraciones = Integer.parseInt(txtIteraciones.getText());
 					} catch (NumberFormatException ex) {
-						Mensaje.setText("La cantidad de iteraciones debe ser un número entero.");
+						Mensaje.setText("La cantidad de iteraciones debe ser un n�mero entero.");
 						txtIteraciones.setForeground(Color.red);
 						errorEnParametros = true;
 					}
@@ -626,7 +541,7 @@ public class GraficadorClasico extends JApplet
 					{
 						tolerancia = Double.parseDouble(txtTolerancia.getText());
 					} catch (NumberFormatException ex) {
-						Mensaje.setText("La tolerancia debe ser un número de coma flotante.");
+						Mensaje.setText("La tolerancia debe ser un n�mero de coma flotante.");
 						txtTolerancia.setForeground(Color.red);
 						errorEnParametros = true;
 					}
@@ -658,28 +573,28 @@ public class GraficadorClasico extends JApplet
 			try {
 				puntoXcero = Double.parseDouble(txtPuntoXcero.getText());
 			} catch (NumberFormatException ex) {
-				Mensaje.setText("X cero debe ser un número de coma flotante.");
+				Mensaje.setText("X cero debe ser un n�mero de coma flotante.");
 				txtPuntoXcero.setForeground(Color.red);
 				errorEnParametros = true;
 			}
 			try {
 				puntoXultimo = Double.parseDouble(txtPuntoXultimo.getText());
 			} catch (NumberFormatException ex) {
-				Mensaje.setText("X último debe ser un número de coma flotante.");
+				Mensaje.setText("X �ltimo debe ser un n�mero de coma flotante.");
 				txtPuntoXultimo.setForeground(Color.red);
 				errorEnParametros = true;
 			}
 			try {
 				iteraciones = Integer.parseInt(txtIteraciones.getText());
 			} catch (NumberFormatException ex) {
-				Mensaje.setText("La cantidad de iteraciones debe ser un número entero.");
+				Mensaje.setText("La cantidad de iteraciones debe ser un n�mero entero.");
 				txtIteraciones.setForeground(Color.red);
 				errorEnParametros = true;
 			}
 			try {
 				tolerancia = Double.parseDouble(txtTolerancia.getText());
 			} catch (NumberFormatException ex) {
-				Mensaje.setText("La tolerancia debe ser un número de coma flotante.");
+				Mensaje.setText("La tolerancia debe ser un n�mero de coma flotante.");
 				txtTolerancia.setForeground(Color.red);
 				errorEnParametros = true;
 			}
@@ -711,28 +626,28 @@ public class GraficadorClasico extends JApplet
 				try {
 					puntoXcero = Double.parseDouble(txtPuntoXcero.getText());
 				} catch (NumberFormatException ex) {
-					Mensaje.setText("X cero debe ser un número de coma flotante.");
+					Mensaje.setText("X cero debe ser un n�mero de coma flotante.");
 					txtPuntoXcero.setForeground(Color.red);
 					errorEnParametros = true;
 				}
 				try {
 					puntoXultimo = Double.parseDouble(txtPuntoXultimo.getText());
 				} catch (NumberFormatException ex) {
-					Mensaje.setText("X último debe ser un número de coma flotante.");
+					Mensaje.setText("X �ltimo debe ser un n�mero de coma flotante.");
 					txtPuntoXultimo.setForeground(Color.red);
 					errorEnParametros = true;
 				}
 				try {
 					iteraciones = Integer.parseInt(txtIteraciones.getText());
 				} catch (NumberFormatException ex) {
-					Mensaje.setText("La cantidad de iteraciones debe ser un número entero.");
+					Mensaje.setText("La cantidad de iteraciones debe ser un n�mero entero.");
 					txtIteraciones.setForeground(Color.red);
 					errorEnParametros = true;
 				}
 				try {
 					tolerancia = Double.parseDouble(txtTolerancia.getText());
 				} catch (NumberFormatException ex) {
-					Mensaje.setText("La tolerancia debe ser un número de coma flotante.");
+					Mensaje.setText("La tolerancia debe ser un n�mero de coma flotante.");
 					txtTolerancia.setForeground(Color.red);
 					errorEnParametros = true;
 				}
@@ -766,12 +681,12 @@ public class GraficadorClasico extends JApplet
 				
 				this.setLayout(new BorderLayout());
 				
-				this.add(new JLabel("   Xr                                  Comparación de velocidades - Xr(iteración)"), BorderLayout.NORTH);
+				this.add(new JLabel("   Xr                                  Comparaci�n de velocidades - Xr(iteraci�n)"), BorderLayout.NORTH);
 				
 				JPanel ejeX = new JPanel();
 				ejeX.setLayout(new FlowLayout(FlowLayout.RIGHT));
 				ejeX.setBackground(null);
-				ejeX.add(new JLabel("N° iteración "));
+				ejeX.add(new JLabel("N� iteraci�n "));
 				this.add(ejeX, BorderLayout.SOUTH);
 			}
 			else
@@ -855,7 +770,7 @@ public class GraficadorClasico extends JApplet
 				Graficar(g, x0, y0);
 			}
 
-			showStatus("Modelado y simulación - Baretto, Lorden, Palumbo");
+			showStatus("Modelado y simulaci�n - Baretto, Lorden, Palumbo");
 		}
 
 		void Graficar(Graphics ap, int xg, int yg) {
@@ -916,7 +831,7 @@ public class GraficadorClasico extends JApplet
 
 			miEvaluador.parseExpression(Tffun.getText());
 			errorEnExpresion = miEvaluador.hasError();
-                        
+
 			if (!errorEnExpresion && !errorEnParametros) {
 				Mensaje.setText("Arrastre el mouse para mover ejes");
 				Tffun.setForeground(Color.black);
@@ -946,7 +861,7 @@ public class GraficadorClasico extends JApplet
 				// GRAFICOS DE LOS METODOS
 				if (this.posicion.equals("izquierda"))
 				{
-					if(cmbAlgoritmoIzq.getSelectedItem().toString().equals("Bisección"))
+					if(cmbAlgoritmoIzq.getSelectedItem().toString().equals("Bisecci�n"))
 					{
 						biseccion(ap, xg, yg, puntoXcero, puntoXultimo, xrIzquierda, colorIzquierda);
 					}
@@ -965,7 +880,7 @@ public class GraficadorClasico extends JApplet
 				}
 				else if (this.posicion.equals("derecha"))
 				{
-					if(cmbAlgoritmoDer.getSelectedItem().toString().equals("Bisección"))
+					if(cmbAlgoritmoDer.getSelectedItem().toString().equals("Bisecci�n"))
 					{
 						biseccion(ap, xg, yg, puntoXcero, puntoXultimo, xrDerecha, colorDerecha);
 					}
@@ -984,7 +899,7 @@ public class GraficadorClasico extends JApplet
 				}
 			} else {
 				if (!errorEnParametros) {
-					Mensaje.setText("Hay un error en la función.");
+					Mensaje.setText("Hay un error en la funci�n.");
 					Tffun.setForeground(Color.red);
 				}
 			}
@@ -1057,7 +972,7 @@ public class GraficadorClasico extends JApplet
 			{
 				if (!errorEnParametros) 
 				{
-					Mensaje.setText("Hay un error en la función.");
+					Mensaje.setText("Hay un error en la funci�n.");
 					Tffun.setForeground(Color.red);
 				}
 			}
@@ -1158,10 +1073,10 @@ public class GraficadorClasico extends JApplet
 						System.out.println("/////////////////////////////////////////");
 						System.out.println("Raiz encontrada! ");
 						System.out.println("Raiz: "+xr);
-						System.out.println("Iteración: "+i);
-						if (cmbAlgoritmoDer.getSelectedItem().toString().equals("Bisección"))
+						System.out.println("Iteraci�n: "+i);
+						if (cmbAlgoritmoDer.getSelectedItem().toString().equals("Bisecci�n"))
 							iteracionesDer.setText("Raiz: "+xr+" - Iteraciones:"+(i-1));
-						if (cmbAlgoritmoIzq.getSelectedItem().toString().equals("Bisección"))
+						if (cmbAlgoritmoIzq.getSelectedItem().toString().equals("Bisecci�n"))
 							iteracionesIzq.setText("Raiz: "+xr+" - Iteraciones:"+(i-1));
 						return;
 					}
@@ -1264,7 +1179,7 @@ public class GraficadorClasico extends JApplet
 						System.out.println("/////////////////////////////////////////");
 						System.out.println("Raiz encontrada! ");
 						System.out.println("Raiz: "+xr);
-						System.out.println("Iteración: "+i);
+						System.out.println("Iteraci�n: "+i);
 						if (cmbAlgoritmoDer.getSelectedItem().toString().equals("Secante"))
 							iteracionesDer.setText("Raiz: "+xr+" - Iteraciones:"+(i-1));
 						if (cmbAlgoritmoIzq.getSelectedItem().toString().equals("Secante"))
@@ -1348,7 +1263,7 @@ public class GraficadorClasico extends JApplet
 						System.out.println("/////////////////////////////////////////");
 						System.out.println("Raiz encontrada! ");
 						System.out.println("Raiz: "+xr);
-						System.out.println("Iteración: "+i);
+						System.out.println("Iteraci�n: "+i);
 						if (cmbAlgoritmoDer.getSelectedItem().toString().equals("Regula Falsi"))
 							iteracionesDer.setText("Raiz: "+xr+" - Iteraciones:"+(i-1));
 						if (cmbAlgoritmoIzq.getSelectedItem().toString().equals("Regula Falsi"))
@@ -1442,7 +1357,7 @@ public class GraficadorClasico extends JApplet
 						System.out.println("/////////////////////////////////////////");
 						System.out.println("Raiz encontrada! ");
 						System.out.println("Raiz: "+xr);
-						System.out.println("Iteración: "+i);
+						System.out.println("Iteracion: "+i);
 						if (cmbAlgoritmoDer.getSelectedItem().toString().equals("Regula Falsi Mejorado"))
 							iteracionesDer.setText("Raiz: "+xr+" - Iteraciones:"+(i-1));
 						if (cmbAlgoritmoIzq.getSelectedItem().toString().equals("Regula Falsi Mejorado"))
