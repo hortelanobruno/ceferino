@@ -283,7 +283,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
         panelGrafico1.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 1"));
         panelGrafico1.setPreferredSize(new java.awt.Dimension(150, 150));
-        panelGrafico1.setLayout(new java.awt.GridLayout(0, 1));
+        panelGrafico1.setLayout(new java.awt.GridLayout());
 
         javax.swing.GroupLayout panelCentralLayout = new javax.swing.GroupLayout(panelCentral);
         panelCentral.setLayout(panelCentralLayout);
@@ -356,7 +356,6 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
         panelGrafico1.removeAll();
         jtabbedpane = new JTabbedPane();
         jtabbedpane.add("f vs x", createChartPanel2());
-       
         panelGrafico1.add(jtabbedpane);
         jtabbedpane.setVisible(true);
         jtabbedpane.repaint();
