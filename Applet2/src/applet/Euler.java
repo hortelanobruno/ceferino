@@ -75,7 +75,7 @@ public class Euler
             this.internalError = new double[size+1];
             int i = 0; 
 
-            double funcVal =this.parser.getValor(this.getSeedX());
+            double funcVal =(Double)this.parser.getValor(this.getSeedX());
             double xant = this.getSeedY();
             double x;
             
@@ -84,9 +84,9 @@ public class Euler
                 x = xant + (this.getH()*funcVal);
                 xant = x;
                 index+=this.getH();
-                funcVal =this.parser.getValor(xant);
+                funcVal =(Double)this.parser.getValor(xant);
                 this.internalGraphicPoints[i] = x;
-                double error = this.parser.getValor(index) - x;
+                double error = (Double)this.parser.getValor(index) - x;
                 this.internalError[i++] = error;
             }
         }

@@ -40,8 +40,8 @@ public class CambioDeConcavidadFinder
         
         while(start <= top)
         {
-            double ant = this.parser.getValor(start - this.getH());
-            double post = this.parser.getValor(start + this.getH());
+            double ant = (Double)this.parser.getValor(start - this.getH());
+            double post = (Double)this.parser.getValor(start + this.getH());
             
                 /* maximo */                            /* minimo  */
             if(  (start > ant) && (start > post)  || (  (start < ant)&& (start <post) ) )

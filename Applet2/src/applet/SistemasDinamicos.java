@@ -101,11 +101,11 @@ public class SistemasDinamicos extends javax.swing.JApplet
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 260, Short.MAX_VALUE)
+            .addGap(0, 256, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 195, Short.MAX_VALUE)
+            .addGap(0, 192, Short.MAX_VALUE)
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 3"));
@@ -115,11 +115,11 @@ public class SistemasDinamicos extends javax.swing.JApplet
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
+            .addGap(0, 271, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 178, Short.MAX_VALUE)
+            .addGap(0, 175, Short.MAX_VALUE)
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Panel Data"));
@@ -283,7 +283,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
         panelGrafico1.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 1"));
         panelGrafico1.setPreferredSize(new java.awt.Dimension(150, 150));
-        panelGrafico1.setLayout(new java.awt.GridLayout());
+        panelGrafico1.setLayout(new java.awt.GridLayout(0, 1));
 
         javax.swing.GroupLayout panelCentralLayout = new javax.swing.GroupLayout(panelCentral);
         panelCentral.setLayout(panelCentralLayout);
@@ -294,7 +294,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 257, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(99, 99, 99))
                     .addGroup(panelCentralLayout.createSequentialGroup()
@@ -373,7 +373,7 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
         
         while(index <= fin)
         {
-            double a = this.parser.getValor(index);
+            double a = (Double) this.parser.getValor(index);
             xyseries.add(index, a);
             index += 0.01;
         }
@@ -415,7 +415,7 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
   
         for (int i = 0; i < 100; i++) {
             double x = Double.parseDouble(txtXinicial.getText()) + (step * i);
-            series.add(x, this.parser.getValor(x));
+            series.add(x,(Double) this.parser.getValor(x));
         }
         
         XYSeriesCollection collection = new XYSeriesCollection(series);
