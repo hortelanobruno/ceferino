@@ -72,7 +72,7 @@ public class RootsFinder
          double m;
          for (m= (x1+x2)/2.0; Math.abs(x1-x2)> epsilon; m= (x1+x2)/2.0)
          {
-                if ((this.parser.getValor(x1)*this.parser.getValor(m)) <= 0.0)
+                if (((Double)this.parser.getValor(x1)*(Double)this.parser.getValor(m)) <= 0.0)
                     x2= m; // Utiliza el subintervalo izquierdo
                 else
                     x1= m; // Utiliza el subintervalo derecho
@@ -82,7 +82,7 @@ public class RootsFinder
        // System.out.println(m);
         double rI = m-0.005;
         double rS = m+0.005;
-        double funVal = this.parser.getValor(m);
+        double funVal = (Double)this.parser.getValor(m);
         funVal = this.redondear(funVal);
         if( (funVal>rI)&&(funVal<rS)) return m;
         return null;
@@ -103,14 +103,14 @@ public class RootsFinder
     
     private double derivada(double seed) //Dereivada centrada: (fi+1 - fi-1)2h
     {
-        double adelante = this.parser.getValor(seed + this.getH());
-        double atras = this.parser.getValor(seed - this.getH());
+        double adelante = (Double) this.parser.getValor(seed + this.getH());
+        double atras = (Double) this.parser.getValor(seed - this.getH());
         return (adelante - atras)/(2*this.getH());
     }
     
     private double raizPorNewtonRaphson(double seed)
     {
-        return seed - (this.parser.getValor(seed)/this.derivada(seed));
+        return seed - ((Double)this.parser.getValor(seed)/(Double)this.derivada(seed));
     }
     
     private double getRaizPorNewton()
