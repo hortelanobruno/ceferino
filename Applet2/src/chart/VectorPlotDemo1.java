@@ -40,7 +40,8 @@ public class VectorPlotDemo1 extends ApplicationFrame
         numberaxis1.setUpperMargin(0.01D);
         numberaxis1.setAutoRangeIncludesZero(false);
         VectorRenderer vectorrenderer = new VectorRenderer();
-        vectorrenderer.setSeriesPaint(0, Color.blue);
+        //Aca hay que tocar para cambiarle el color de las flechas
+        vectorrenderer.setSeriesPaint(0, Color.red);
         XYPlot xyplot = new XYPlot(vectorxydataset, numberaxis, numberaxis1, vectorrenderer);
         xyplot.setBackgroundPaint(Color.lightGray);
         xyplot.setDomainGridlinePaint(Color.white);
@@ -55,12 +56,14 @@ public class VectorPlotDemo1 extends ApplicationFrame
     private static VectorXYDataset createDataset()
     {
         VectorSeries vectorseries = new VectorSeries("Series 1");
+        //Esto es lo que estaba original
         /*for(double d = 0.0D; d < 20D; d++)
         {
             for(double d1 = 0.0D; d1 < 20D; d1++)
                 vectorseries.add(d + 10D, d1 + 10D, Math.sin(d / 5D) / 2D, Math.cos(d1 / 5D) / 2D);
 
         }*/
+        //Esto hay que agregar para que te haga las flechas, izquierda, derecha
         vectorseries.add(10D, 10D, 1,0);
         vectorseries.add(10D, 11D, -1,0);
         VectorSeriesCollection vectorseriescollection = new VectorSeriesCollection();
