@@ -354,14 +354,15 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
         this.parser.agregarFuncion(this.txtFuncion.getText());
         data1 = createSampleData1();  
         panelGrafico1.removeAll();
+        panelGrafico1.setEnabled(true);
         jtabbedpane = new JTabbedPane();
+        jtabbedpane.setEnabled(true);
         jtabbedpane.add("f vs x", createChartPanel2());
         panelGrafico1.add(jtabbedpane);
         jtabbedpane.setVisible(true);
         jtabbedpane.repaint();
         panelGrafico1.repaint();
-        this.repaint();
-        
+        this.repaint(); 
     }
     
     private XYDataset createSampleData1() 
@@ -426,6 +427,7 @@ private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
      if (evt.getKeyCode() == KeyEvent.VK_ENTER) 
      {
         graficar();
+       
      }
 }//GEN-LAST:event_txtFuncionKeyPressed
 
