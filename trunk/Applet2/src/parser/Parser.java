@@ -35,7 +35,7 @@ public class Parser {
     public Parser() 
     {
         iniciarParser();
-      //  agregarFuncion("(x^2)-2");
+        //agregarFuncion("2(x^2)+x-10");
         agregarFuncion("x^2");
         biseccion();
         for(int i=0 ; i < raices.size() ; i++){
@@ -45,11 +45,11 @@ public class Parser {
     
     public void biseccion(){
         double aux,a,b;
-        for(double i = xmin ; i < xmax ; i=Double.parseDouble(money.format(i + h))){
-            aux = Double.parseDouble(money.format(i + h));
+        for(double i = xmin ; i < xmax ; i=Double.parseDouble(money.format(i + h).replace(',', '.'))){
+            aux = Double.parseDouble(money.format(i + h).replace(',', '.'));
             try{
-                a = Double.parseDouble(money.format(getValor(i)));
-                b = Double.parseDouble(money.format((getValor(aux))));
+                a = Double.parseDouble(money.format(getValor(i)).replace(',', '.'));
+                b = Double.parseDouble(money.format((getValor(aux))).replace(',', '.'));
                 if((a==0) || (b==0)){
                     if(a==0){
                          raices.add(i);
@@ -68,16 +68,16 @@ public class Parser {
     }
     
     public void biseccion2(double a, double b){
-        double valorA = Double.parseDouble(money.format(getValor(a)));
-        double c = Double.parseDouble(money.format((a+b)/2));
-        double valorC =Double.parseDouble(money.format(getValor(c)));
+        double valorA = Double.parseDouble(money.format(getValor(a)).replace(',', '.'));
+        double c = Double.parseDouble(money.format((a+b)/2).replace(',', '.'));
+        double valorC =Double.parseDouble(money.format(getValor(c)).replace(',', '.'));
         if(Double.parseDouble(money.format(valorA*valorC))<0){
             //La raiz esta en el intervalo "a" y "c"
             biseccion2(a,c);
-        }else if(Double.parseDouble(money.format(valorA*valorC))>0){
+        }else if(Double.parseDouble(money.format(valorA*valorC).replace(',', '.'))>0){
             //La raiz esta en el intervalo "c" y "b"
             biseccion2(c,b);
-        }else if(Double.parseDouble(money.format(valorA*valorC))==0){
+        }else if(Double.parseDouble(money.format(valorA*valorC).replace(',', '.'))==0){
             //La raiz es "c"
             raices.add(c);
         }
