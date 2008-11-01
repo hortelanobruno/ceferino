@@ -35,12 +35,12 @@ public class Parser {
     public Parser() 
     {
         iniciarParser();
-        //agregarFuncion("2(x^2)+x-10");
-        //agregarFuncion("x^2");
-        //biseccion();
-        //for(int i=0 ; i < raices.size() ; i++){
-        //   System.out.println(raices.get(i));
-        //}
+      //  agregarFuncion("(x^2)-2");
+        agregarFuncion("x^2");
+        biseccion();
+        for(int i=0 ; i < raices.size() ; i++){
+           System.out.println(raices.get(i));
+        }
     }
     
     public void biseccion(){
