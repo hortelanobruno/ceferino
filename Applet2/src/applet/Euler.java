@@ -24,9 +24,9 @@ public class Euler
     private String funcion;
     
     
-    public Euler(double h, double seedx, double seedy, String funcion, double time) 
+    public Euler(double h, double seedx, double seedy, String funcion, double time, Parser jep) 
     {
-        this.parser = new Parser();
+        this.parser = jep;
         parser.agregarFuncion(funcion);
         this.setFuncion(funcion);
         this.setTime(time);
