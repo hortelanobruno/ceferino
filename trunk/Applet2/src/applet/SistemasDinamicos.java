@@ -6,10 +6,13 @@
 
 package applet;
 
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import javax.swing.JTabbedPane;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -17,11 +20,17 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.VectorRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.VectorSeries;
+import org.jfree.data.xy.VectorSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.RectangleInsets;
 import parser.Parser;
+import utils.Flecha;
+import utils.Punto;
 
 /**
  *
@@ -32,8 +41,9 @@ public class SistemasDinamicos extends javax.swing.JApplet
     
     private static final long serialVersionUID = 327575554503844280L;
     private Parser parser;
-    private XYDataset data1;
-    private JTabbedPane jtabbedpane;
+    private XYDataset dataGraficoFuncion;
+    private XYDataset dataGraficoFases;
+    private List<Double> raices;
     
     /** Initializes the applet SistemasDinamicos */
     @Override
@@ -43,7 +53,9 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 @Override
                 public void run() {
                     initComponents();
-                    //setLookAndFeel();
+                    setLookAndFeel();
+                    spinnerDecimales.setValue(3);
+                    txtH.setText("0.01");
                     txtXfinal.setText("5");
                     txtXinicial.setText("-5");
                     txtFuncion.setText("x^2");
@@ -64,14 +76,12 @@ public class SistemasDinamicos extends javax.swing.JApplet
     private void initComponents() {
 
         panelCentral = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        panelGraficoFases = new javax.swing.JPanel();
+        jTabbedFases = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtFuncion = new javax.swing.JTextField();
-        buttonGraficar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        textAreaEuler = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         txtH = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -80,33 +90,20 @@ public class SistemasDinamicos extends javax.swing.JApplet
         txtY0 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtTiempo = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        textAreaRaices = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        txtCantDec = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtXinicial = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtXfinal = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        spinnerDecimales = new javax.swing.JSpinner();
         panelGrafico1 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 2"));
-        jPanel2.setPreferredSize(new java.awt.Dimension(150, 150));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 260, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 195, Short.MAX_VALUE)
-        );
+        panelGraficoFases.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 2"));
+        panelGraficoFases.setPreferredSize(new java.awt.Dimension(150, 150));
+        panelGraficoFases.setLayout(new java.awt.GridLayout(0, 1));
+        panelGraficoFases.add(jTabbedFases);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 3"));
         jPanel3.setPreferredSize(new java.awt.Dimension(150, 150));
@@ -132,17 +129,6 @@ public class SistemasDinamicos extends javax.swing.JApplet
             }
         });
 
-        buttonGraficar.setText("Ver Euler");
-        buttonGraficar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonGraficarActionPerformed(evt);
-            }
-        });
-
-        textAreaEuler.setColumns(20);
-        textAreaEuler.setRows(5);
-        jScrollPane1.setViewportView(textAreaEuler);
-
         jLabel2.setText("h= ");
 
         jLabel3.setText("X0= ");
@@ -150,21 +136,6 @@ public class SistemasDinamicos extends javax.swing.JApplet
         jLabel4.setText("Y0= ");
 
         jLabel5.setText("Tiempo= ");
-
-        jLabel6.setText("Dump Euler");
-
-        jLabel7.setText("Raices:");
-
-        textAreaRaices.setColumns(20);
-        textAreaRaices.setRows(5);
-        jScrollPane2.setViewportView(textAreaRaices);
-
-        jButton1.setText("Ver Raices");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jLabel8.setText("Decimales= ");
 
@@ -179,71 +150,50 @@ public class SistemasDinamicos extends javax.swing.JApplet
             }
         });
 
+        spinnerDecimales.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(buttonGraficar)
-                                        .addGap(7, 7, 7)
-                                        .addComponent(jButton1))))
-                            .addComponent(jLabel6)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel10))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtXfinal, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                    .addComponent(txtXinicial, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                    .addComponent(txtCantDec, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                    .addComponent(txtTiempo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                    .addComponent(txtY0, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                    .addComponent(txtX0, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                    .addComponent(txtH, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)))
-                            .addComponent(jButton2))
-                        .addGap(45, 45, 45))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(8, 8, 8)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                    .addComponent(txtFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spinnerDecimales, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                    .addComponent(txtXfinal, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                    .addComponent(txtXinicial, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                    .addComponent(txtTiempo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                    .addComponent(txtY0, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                    .addComponent(txtX0, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                    .addComponent(txtH, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
+                .addGap(45, 45, 45))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(buttonGraficar)
-                            .addComponent(jButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton2))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -263,7 +213,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(txtCantDec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(spinnerDecimales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
@@ -271,19 +221,14 @@ public class SistemasDinamicos extends javax.swing.JApplet
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
-                            .addComponent(txtXfinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(74, Short.MAX_VALUE))
+                            .addComponent(txtXfinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panelGrafico1.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 1"));
         panelGrafico1.setPreferredSize(new java.awt.Dimension(150, 150));
         panelGrafico1.setLayout(new java.awt.GridLayout(0, 1));
+        panelGrafico1.add(jTabbedPane1);
 
         javax.swing.GroupLayout panelCentralLayout = new javax.swing.GroupLayout(panelCentral);
         panelCentral.setLayout(panelCentralLayout);
@@ -292,16 +237,16 @@ public class SistemasDinamicos extends javax.swing.JApplet
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99))
                     .addGroup(panelCentralLayout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(panelGrafico1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelGrafico1, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(panelCentralLayout.createSequentialGroup()
+                        .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(461, 461, 461))))
         );
         panelCentralLayout.setVerticalGroup(
             panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,11 +255,15 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelGrafico1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(137, Short.MAX_VALUE))
+                    .addGroup(panelCentralLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(323, 323, 323))
+                    .addGroup(panelCentralLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -329,74 +278,74 @@ public class SistemasDinamicos extends javax.swing.JApplet
         );
     }// </editor-fold>//GEN-END:initComponents
 
-private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGraficarActionPerformed
 
-    Punto p = new Punto(0, 1);
-   // Punto p = new Punto(Double.parseDouble(this.txtX0.getText()), Double.parseDouble(this.txtY0.getText()));
-    Euler e = new Euler(0.2, p.getX(),p.getY(), txtFuncion.getText(), 1);
-    double[] res = e.getPoints();
-   // double[] err = e.getError();
-    this.textAreaEuler.append("Valores:\n\t");
-    
-    for(int i = 0; i<res.length;i++)
-        this.textAreaEuler.append(res[i] + "\n\t");
-    
-    /*this.jTextArea1.append("\nErrores:\n\t");
-    
-    for(int i = 0; i<res.length;i++)
-        this.jTextArea1.append(err[i] + "\n\t");*/
-}//GEN-LAST:event_buttonGraficarActionPerformed
-
-
-    private void graficar()
+    public String getDecimales()
     {
-        parser = new Parser();
+        String ret = "0.";
+        int spin = (Integer)this.spinnerDecimales.getValue();
+        
+        for(int i = 0; i< spin;i++)
+            ret +="0";
+
+        return ret;
+    }
+    
+    private void graficarFuncion()
+    { 
         this.parser.agregarFuncion(this.txtFuncion.getText());
-        data1 = createSampleData1();  
+        dataGraficoFuncion = cargarPuntosFuncion();  
         panelGrafico1.removeAll();
         panelGrafico1.setEnabled(true);
-        jtabbedpane = new JTabbedPane();
-        jtabbedpane.setEnabled(true);
-        jtabbedpane.add("f vs x", createChartPanel2());
-        panelGrafico1.add(jtabbedpane);
-        jtabbedpane.setVisible(true);
-        jtabbedpane.repaint();
+        jTabbedPane1.removeAll();
+        jTabbedPane1.add("f vs x", crearPanelGraficoFuncion());
+        panelGrafico1.add(jTabbedPane1);
+        jTabbedPane1.setVisible(true);
+        jTabbedPane1.repaint();
         panelGrafico1.repaint();
         this.repaint(); 
     }
     
-    private XYDataset createSampleData1() 
+    private XYDataset cargarPuntosFuncion() 
     {
         XYSeries xyseries = new XYSeries("Series 1");
         double inicio = Double.parseDouble(txtXinicial.getText());
         double fin = Double.parseDouble(txtXfinal.getText());
         double index = inicio;
         
+        double a;
+        
         while(index <= fin)
         {
-            double a = (Double) this.parser.getValor(index);
-            xyseries.add(index, a);
-            index += 0.01;
+            try
+            {
+                a = (Double) this.parser.getValor(index);
+                xyseries.add(index, a);
+                index += 0.01;
+            }
+            catch(Exception e)
+            {
+                
+            }
         }
         XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
         return xyseriescollection;
     }
     
-    private ChartPanel createChartPanel2() 
+    private ChartPanel crearPanelGraficoFuncion() 
     {
         NumberAxis numberaxis = new NumberAxis("X");
         numberaxis.setAutoRangeIncludesZero(false);
         NumberAxis numberaxis1 = new NumberAxis("Y");
         numberaxis1.setAutoRangeIncludesZero(false);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
-        XYPlot xyplot = new XYPlot(data1, numberaxis, numberaxis1, xylineandshaperenderer);
-
+        XYPlot xyplot = new XYPlot(dataGraficoFuncion, numberaxis, numberaxis1, xylineandshaperenderer);
         
         xyplot.setDomainZeroBaselineVisible(true);
         xyplot.setRangeZeroBaselineVisible(true);
-        XYSeriesCollection coordenadas = cordenadasGrafico();
+        XYSeriesCollection coordenadas = getCordenadasGraficoFuncion();
         XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
-        
+        xylineandshaperenderer1.setSeriesPaint(0, Color.BLUE);
+
         xyplot.setDataset(1, coordenadas);
         xyplot.setRenderer(1, xylineandshaperenderer1);
         
@@ -404,46 +353,245 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
         return chartpanel;
-       
     }
     
-     private XYSeriesCollection cordenadasGrafico() {
-        
+     private XYSeriesCollection getCordenadasGraficoFuncion() 
+     {
         XYSeries series;
         series = new XYSeries("f vs x");
 
         double step = (Double.parseDouble(txtXfinal.getText()) - Double.parseDouble(txtXinicial.getText())) / (100 - 1);
   
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++)
+        {
             double x = Double.parseDouble(txtXinicial.getText()) + (step * i);
-            series.add(x,(Double) this.parser.getValor(x));
+            try
+            {
+                series.add(x,(Double) this.parser.getValor(x));
+            }
+            catch(Exception e)
+            {
+                
+            }
         }
         
         XYSeriesCollection collection = new XYSeriesCollection(series);
         return collection;
     }
 
+     private void doGraficarFuncion()
+     {
+          parser = new Parser(Double.parseDouble(this.txtH.getText()), 
+                            Double.parseDouble(this.txtXinicial.getText()), 
+                            Double.parseDouble(this.txtXfinal.getText()),
+                            this.getDecimales(), this.txtFuncion.getText());
+         
+          graficarFuncion(); 
+     }
+
+     private XYDataset crearPuntosRaices()
+     {
+         XYSeries xyseries = new XYSeries("Fases");
+         
+         for(int i = 0; i< this.raices.size();i++)
+         {
+             xyseries.add((Double)raices.get(i),(Double)0d);
+             System.out.println(raices.get(i) + "\n");
+         }
+ 
+         XYSeriesCollection collection = new XYSeriesCollection(xyseries);
+         
+         return collection;
+     }
+     
+     private VectorSeries getVectorFlechasRojas(List<Flecha> flechas)
+     {
+         VectorSeries vSeries = new VectorSeries("Flechas Rojas");
+         
+         for(int i = 0; i < flechas.size();i++)
+         {
+             Flecha flecha = flechas.get(i);
+             
+             if(flecha.getColor() == 'r')
+             {
+                 if(flecha.getDireccion() == 'i')
+                 {
+                     vSeries.add(flecha.getPunto().getX(), flecha.getPunto().getY(), -1, 0);
+                 }
+                 else
+                 {
+                      vSeries.add(flecha.getPunto().getX(), flecha.getPunto().getY(), 1, 0);
+                 }
+             }
+         }
+         
+         return vSeries;
+     }
+     
+     private VectorSeries getVectorFlechasVerdes(List<Flecha> flechas)
+     {
+         VectorSeries vSeries = new VectorSeries("Flechas Verdes");
+         
+         for(int i = 0; i < flechas.size();i++)
+         {
+             Flecha flecha = flechas.get(i);
+             
+             if(flecha.getColor() == 'v')
+             {
+                 if(flecha.getDireccion() == 'i')
+                 {
+                     vSeries.add(flecha.getPunto().getX(), flecha.getPunto().getY(), -1, 0);
+                 }
+                 else
+                 {
+                      vSeries.add(flecha.getPunto().getX(), flecha.getPunto().getY(), 1, 0);
+                 }
+             }
+         }
+         
+         return vSeries;
+     }
+     
+     
+     private void graficarBase(List<Flecha> flechas)
+     {
+         dataGraficoFases = crearPuntosRaices();
+         jTabbedFases.removeAll();
+         
+         NumberAxis numberaxisx = new NumberAxis("x");
+         numberaxisx.setAutoRangeIncludesZero(false);
+         
+         //numberaxisx.setRange(-5d, 5d);
+         
+         NumberAxis numberaxisy = new NumberAxis("y");
+         numberaxisy.setAutoRangeIncludesZero(false); 
+         
+         numberaxisy.setRange(raices.get(0)-1d, raices.get(raices.size()-1)+1d);
+ 
+         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
+         renderer.setSeriesPaint(0, Color.BLACK);
+         XYPlot plot = new XYPlot(dataGraficoFases, numberaxisy, numberaxisy, renderer);
+         plot.setRangeZeroBaselineVisible(true);
+         
+         VectorSeries vSeries = getVectorFlechasRojas(flechas);
+         
+         VectorSeriesCollection vsCol = new VectorSeriesCollection();
+         vsCol.addSeries(vSeries);
+         plot.setDataset(1, vsCol);
+         
+         VectorRenderer vRenderer = new VectorRenderer();
+         vRenderer.setSeriesPaint(0, Color.RED);
+         plot.setRenderer(1,vRenderer);
+
+         VectorSeries vSeries1 = getVectorFlechasVerdes(flechas);
+         
+         VectorSeriesCollection vsCol1 = new VectorSeriesCollection();
+         vsCol1.addSeries(vSeries1);
+         plot.setDataset(2, vsCol1);
+         
+         VectorRenderer vRenderer1 = new VectorRenderer();
+         vRenderer1.setSeriesPaint(0, Color.GREEN);
+         plot.setRenderer(2,vRenderer1);
+         
+         JFreeChart jfreeChart = new JFreeChart("Fases", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+         
+         ChartPanel chartPanel = new ChartPanel(jfreeChart, false);
+         chartPanel.setVisible(true);
+
+         jTabbedFases.add("Fases",chartPanel);
+         
+         jTabbedFases.setVisible(true);
+         
+         jTabbedFases.repaint();
+         panelGraficoFases.repaint();
+         this.repaint();
+     }
+     
+     private void doGraficarFase()
+     {
+        List<Flecha> flechas = this.getFlechasFase();
+        this.graficarBase(flechas);
+     }
+     
+     private List<Flecha> getFlechasFase()
+     {
+         List<Flecha> ret = new ArrayList<Flecha>();
+         double h = Double.parseDouble(this.txtH.getText());
+         
+         for(int i = 0; i<raices.size();i++)
+         {
+             double raiz = raices.get(i);
+             Flecha fDer = null;
+             Flecha fIzq = null;
+             
+             try
+             {
+                  double izq = (Double)this.parser.getValor(raiz-h);
+                  fIzq = new Flecha();
+                  fIzq.setPunto(new Punto(raiz,0));
+                
+                  
+                  if(izq < 0) fIzq.setDireccion('i');
+                  else fIzq.setDireccion('d');  
+             }
+             catch(Exception e)
+             {
+                 
+             }
+             
+             try
+             {
+                double der = (Double)this.parser.getValor(raiz+h);
+                fDer = new Flecha();
+                fDer.setPunto(new Punto(raiz,0));
+                
+                if(der < 0) fDer.setDireccion('i');
+                else fDer.setDireccion('d');
+             }
+             catch(Exception e)
+             {
+             
+             }
+             
+             if((fDer != null) && (fIzq !=null))
+             {
+                 if( (fDer.getDireccion() == 'i') &&  (fIzq.getDireccion() == 'd')   )
+                 {
+                     fDer.setColor('v');
+                     fIzq.setColor('v');
+                 }
+                 else if( (fDer.getDireccion() == 'd') &&  (fIzq.getDireccion() == 'i')   )
+                 {
+                      fDer.setColor('r');
+                      fIzq.setColor('r');
+                 }
+                 else
+                 {
+                      fDer.setColor('r');
+                      fIzq.setColor('r');
+                 }
+                 ret.add(fIzq);
+                 ret.add(fDer);
+             }
+             else System.out.println("No se puede hacer una flecha aca.");
+         }
+         return ret;
+     }
+     
 private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFuncionKeyPressed
      if (evt.getKeyCode() == KeyEvent.VK_ENTER) 
      {
-        graficar();
-       
+        doGraficarFuncion();
+        
+        doGraficarFase();
      }
 }//GEN-LAST:event_txtFuncionKeyPressed
 
-private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    
-    RootsFinder rf = new RootsFinder(txtFuncion.getText(), -1.5 , 1.5, 0.001, 4);
-    double[] raic = rf.getRaices();
-    
-     this.textAreaRaices.append("Valores:\n\t");
-    
-    for(int i = 0; i<raic.length;i++)
-        this.textAreaRaices.append(raic[i] + "\n\t");
-}//GEN-LAST:event_jButton1ActionPerformed
-
 private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    graficar();
+       
+        doGraficarFuncion(); 
+        raices = parser.getRaices();
+        doGraficarFase();
 }//GEN-LAST:event_jButton2ActionPerformed
 
 private void setLookAndFeel() throws HeadlessException {
@@ -461,8 +609,6 @@ private void setLookAndFeel() throws HeadlessException {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonGraficar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -470,20 +616,16 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedFases;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel panelCentral;
     private javax.swing.JPanel panelGrafico1;
-    private javax.swing.JTextArea textAreaEuler;
-    private javax.swing.JTextArea textAreaRaices;
-    private javax.swing.JTextField txtCantDec;
+    private javax.swing.JPanel panelGraficoFases;
+    private javax.swing.JSpinner spinnerDecimales;
     private javax.swing.JTextField txtFuncion;
     private javax.swing.JTextField txtH;
     private javax.swing.JTextField txtTiempo;

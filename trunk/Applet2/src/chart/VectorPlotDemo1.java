@@ -34,6 +34,7 @@ public class VectorPlotDemo1 extends ApplicationFrame
         numberaxis.setLowerMargin(0.01D);
         numberaxis.setUpperMargin(0.01D);
         numberaxis.setAutoRangeIncludesZero(false);
+        numberaxis.setRange(10d, 15d);
         NumberAxis numberaxis1 = new NumberAxis("Y");
         numberaxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         numberaxis1.setLowerMargin(0.01D);

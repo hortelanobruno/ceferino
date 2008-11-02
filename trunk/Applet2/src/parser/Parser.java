@@ -22,28 +22,39 @@ import org.nfunk.jep.ParseException;
 public class Parser {
     
     private Jep jep;
-    private double h = 0.1;
-    private double xmin = -3;
-    private double xmax = 3;
-    private List<Double> raices = new ArrayList<Double>();
-    private DecimalFormat money = new DecimalFormat("0.000");
-
-    public static void main(String args[]){
-        new Parser();
-    }
+    private double h;
+    private double xmin;
+    private double xmax;
+    private List<Double> raices;
+    private DecimalFormat money;
     
-    public Parser() 
+    public Parser(double h, double xmin, double xmax, String cantDec, String funcion) 
     {
+        this.raices = new ArrayList<Double>();
         iniciarParser();
+        this.h = h;
+        this.xmax = xmax;
+        this.xmin = xmin;
+        this.money = new DecimalFormat(cantDec);
+        this.agregarFuncion(funcion);
+        
+       
         //agregarFuncion("2(x^2)+x-10");
-        agregarFuncion("x^2");
-        biseccion();
-        for(int i=0 ; i < raices.size() ; i++){
+       // agregarFuncion("x^2");
+      //  biseccion();
+       /* for(int i=0 ; i < raices.size() ; i++){
            System.out.println(raices.get(i));
-        }
+        }*/
     }
     
-    public void biseccion(){
+    public List<Double> getRaices()
+    {
+        this.raices = new ArrayList<Double>();
+        biseccion();
+        return this.raices;
+    }
+    
+    private void biseccion(){
         double aux,a,b;
         for(double i = xmin ; i < xmax ; i=Double.parseDouble(money.format(i + h).replace(',', '.'))){
             aux = Double.parseDouble(money.format(i + h).replace(',', '.'));
@@ -52,8 +63,10 @@ public class Parser {
                 b = Double.parseDouble(money.format((getValor(aux))).replace(',', '.'));
                 if((a==0) || (b==0)){
                     if(a==0){
+                        if(!(raices.contains(i)))
                          raices.add(i);
                     }else{
+                         if(!(raices.contains(aux)))
                          raices.add(aux);
                     }
                 }else{
@@ -67,7 +80,7 @@ public class Parser {
         }
     }
     
-    public void biseccion2(double a, double b){
+    private void biseccion2(double a, double b){
         double valorA = Double.parseDouble(money.format(getValor(a)).replace(',', '.'));
         double c = Double.parseDouble(money.format((a+b)/2).replace(',', '.'));
         double valorC =Double.parseDouble(money.format(getValor(c)).replace(',', '.'));
@@ -79,7 +92,8 @@ public class Parser {
             biseccion2(c,b);
         }else if(Double.parseDouble(money.format(valorA*valorC).replace(',', '.'))==0){
             //La raiz es "c"
-            raices.add(c);
+            if(!(raices.contains(c)))
+                raices.add(c);
         }
     }
     
@@ -93,7 +107,7 @@ public class Parser {
         }
     }
     
-    public void iniciarParser()
+    private void iniciarParser()
     {
             jep = new Jep();
              // Allow implicit multiplication

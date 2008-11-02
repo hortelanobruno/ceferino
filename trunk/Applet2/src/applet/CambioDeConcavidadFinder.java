@@ -12,9 +12,9 @@ public class CambioDeConcavidadFinder
     private double h;
     double[] cambios;
     
-    public CambioDeConcavidadFinder(String funcion, double xInicial, double xFinal, double h)
+    public CambioDeConcavidadFinder(String funcion, double xInicial, double xFinal, double h, Parser jep)
     {
-        this.parser = new Parser();
+        this.parser = jep;
         parser.agregarFuncion(funcion);
         this.setFuncion(funcion);
         this.setXInicial(xInicial);
