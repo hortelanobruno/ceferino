@@ -118,7 +118,7 @@ public class Logica {
         bebida.add("Champagne");
         
         comida.add("Empanada");
-        comida.add("Pizaa");
+        comida.add("Pizza");
         comida.add("Sandwiches");
         
         musica.add("Reggaeton");
