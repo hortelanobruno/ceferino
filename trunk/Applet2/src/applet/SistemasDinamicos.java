@@ -12,7 +12,6 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -27,7 +26,6 @@ import org.jfree.data.xy.VectorSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleInsets;
 import parser.Parser;
 import utils.Flecha;
 import utils.Punto;
@@ -43,6 +41,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
     private Parser parser;
     private XYDataset dataGraficoFuncion;
     private XYDataset dataGraficoFases;
+    private XYDataset dataGraficoFvsT;
     private List<Double> raices;
     
     /** Initializes the applet SistemasDinamicos */
@@ -78,7 +77,8 @@ public class SistemasDinamicos extends javax.swing.JApplet
         panelCentral = new javax.swing.JPanel();
         panelGraficoFases = new javax.swing.JPanel();
         jTabbedFases = new javax.swing.JTabbedPane();
-        jPanel3 = new javax.swing.JPanel();
+        panelFvsT = new javax.swing.JPanel();
+        jTabbedFvsT = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtFuncion = new javax.swing.JTextField();
@@ -105,19 +105,10 @@ public class SistemasDinamicos extends javax.swing.JApplet
         panelGraficoFases.setLayout(new java.awt.GridLayout(0, 1));
         panelGraficoFases.add(jTabbedFases);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 3"));
-        jPanel3.setPreferredSize(new java.awt.Dimension(150, 150));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 178, Short.MAX_VALUE)
-        );
+        panelFvsT.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 3"));
+        panelFvsT.setPreferredSize(new java.awt.Dimension(150, 150));
+        panelFvsT.setLayout(new java.awt.GridLayout(0, 1));
+        panelFvsT.add(jTabbedFvsT);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Panel Data"));
 
@@ -245,7 +236,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
                     .addGroup(panelCentralLayout.createSequentialGroup()
                         .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(461, 461, 461))))
         );
         panelCentralLayout.setVerticalGroup(
@@ -262,7 +253,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
                         .addGap(323, 323, 323))
                     .addGroup(panelCentralLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
 
@@ -461,7 +452,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
          NumberAxis numberaxisx = new NumberAxis("x");
          numberaxisx.setAutoRangeIncludesZero(false);
          
-         //numberaxisx.setRange(-5d, 5d);
+         numberaxisx.setRange(-5d, 5d);
          
          NumberAxis numberaxisy = new NumberAxis("y");
          numberaxisy.setAutoRangeIncludesZero(false); 
@@ -528,9 +519,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
              {
                   double izq = (Double)this.parser.getValor(raiz-h);
                   fIzq = new Flecha();
-                  fIzq.setPunto(new Punto(raiz,0));
-                
-                  
+                              
                   if(izq < 0) fIzq.setDireccion('i');
                   else fIzq.setDireccion('d');  
              }
@@ -543,7 +532,6 @@ public class SistemasDinamicos extends javax.swing.JApplet
              {
                 double der = (Double)this.parser.getValor(raiz+h);
                 fDer = new Flecha();
-                fDer.setPunto(new Punto(raiz,0));
                 
                 if(der < 0) fDer.setDireccion('i');
                 else fDer.setDireccion('d');
@@ -559,16 +547,31 @@ public class SistemasDinamicos extends javax.swing.JApplet
                  {
                      fDer.setColor('v');
                      fIzq.setColor('v');
+                     fDer.setPunto(new Punto(raiz+1,0));
+                     fIzq.setPunto(new Punto(raiz-1,0));
                  }
                  else if( (fDer.getDireccion() == 'd') &&  (fIzq.getDireccion() == 'i')   )
                  {
                       fDer.setColor('r');
                       fIzq.setColor('r');
+                      fDer.setPunto(new Punto(raiz,0));
+                      fIzq.setPunto(new Punto(raiz,0));
                  }
                  else
                  {
                       fDer.setColor('r');
                       fIzq.setColor('r');
+                      
+                     if( (fDer.getDireccion() == 'd') &&  (fIzq.getDireccion() == 'd')   )
+                     {
+                        fDer.setPunto(new Punto(raiz,0));
+                        fIzq.setPunto(new Punto(raiz-1,0));
+                     }
+                     else
+                     {
+                        fDer.setPunto(new Punto(raiz+1,0));
+                        fIzq.setPunto(new Punto(raiz,0));
+                     }
                  }
                  ret.add(fIzq);
                  ret.add(fDer);
@@ -578,20 +581,96 @@ public class SistemasDinamicos extends javax.swing.JApplet
          return ret;
      }
      
+    
+     private XYDataset cargarPuntosFvsT() 
+    {
+        XYSeries xyseries = new XYSeries("Series 1");
+        double inicio = Double.parseDouble(txtXinicial.getText());
+        double fin = Double.parseDouble(txtXfinal.getText());
+        
+        double a;
+        
+        for(int i = 0; i< raices.size(); i++)
+        {
+            for(double j = inicio; j < fin; j+=0.01)
+            {
+                xyseries.add(j,raices.get(i));
+            }
+        }
+        
+        XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
+        return xyseriescollection;
+    }
+     
+     
+     private void doGraficarFvsT()
+     {
+         dataGraficoFvsT = this.cargarPuntosFvsT();
+         jTabbedFvsT.removeAll();
+         
+         NumberAxis numberaxisx = new NumberAxis("t");
+         numberaxisx.setAutoRangeIncludesZero(false);
+         
+         //numberaxisx.setRange(-5d, 5d);
+         
+         NumberAxis numberaxisy = new NumberAxis("x");
+         numberaxisy.setAutoRangeIncludesZero(false); 
+         
+        //   numberaxisy.setRange(raices.get(0)-1d, raices.get(raices.size()-1)+1d);
+ 
+         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
+         renderer.setSeriesPaint(0, Color.BLACK);
+         XYPlot plot = new XYPlot(dataGraficoFvsT, numberaxisy, numberaxisy, renderer);
+         plot.setRangeZeroBaselineVisible(true);
+         
+         JFreeChart jfreeChart = new JFreeChart("F vs T", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+         
+         ChartPanel chartPanel = new ChartPanel(jfreeChart, false);
+         chartPanel.setVisible(true);
+
+         jTabbedFvsT.add("Fases",chartPanel);
+         
+         jTabbedFvsT.setVisible(true);
+         
+         jTabbedFvsT.repaint();
+         panelFvsT.repaint();
+         this.repaint();
+     }
+     
+      private void vaciarTabbeds()
+     {
+         jTabbedFases.removeAll();
+         jTabbedFvsT.removeAll();
+         jTabbedPane1.removeAll();
+     }
+     
 private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFuncionKeyPressed
+     
      if (evt.getKeyCode() == KeyEvent.VK_ENTER) 
      {
+        vaciarTabbeds();
         doGraficarFuncion();
+        raices = parser.getRaices();
         
-        doGraficarFase();
+        if(!(raices.isEmpty()))
+        {
+            doGraficarFase();
+            doGraficarFvsT();
+        }
      }
 }//GEN-LAST:event_txtFuncionKeyPressed
 
 private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        
+        vaciarTabbeds();
         doGraficarFuncion(); 
         raices = parser.getRaices();
-        doGraficarFase();
+        
+        if(!(raices.isEmpty()))
+        {
+            doGraficarFase();
+            doGraficarFvsT();
+        }
 }//GEN-LAST:event_jButton2ActionPerformed
 
 private void setLookAndFeel() throws HeadlessException {
@@ -618,11 +697,12 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedFases;
+    private javax.swing.JTabbedPane jTabbedFvsT;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel panelCentral;
+    private javax.swing.JPanel panelFvsT;
     private javax.swing.JPanel panelGrafico1;
     private javax.swing.JPanel panelGraficoFases;
     private javax.swing.JSpinner spinnerDecimales;

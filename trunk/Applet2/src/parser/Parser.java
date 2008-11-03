@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.nfunk.jep.JEP;
 import java.text.DecimalFormat;
-import org.nfunk.jep.ParseException;
 /**
  *
  * @author Administrador
@@ -54,7 +52,8 @@ public class Parser {
         return this.raices;
     }
     
-    private void biseccion(){
+    private void biseccion()
+    {
         double aux,a,b;
         for(double i = xmin ; i < xmax ; i=Double.parseDouble(money.format(i + h).replace(',', '.'))){
             aux = Double.parseDouble(money.format(i + h).replace(',', '.'));
@@ -80,7 +79,8 @@ public class Parser {
         }
     }
     
-    private void biseccion2(double a, double b){
+    private void biseccion2(double a, double b)
+    {
         double valorA = Double.parseDouble(money.format(getValor(a)).replace(',', '.'));
         double c = Double.parseDouble(money.format((a+b)/2).replace(',', '.'));
         double valorC =Double.parseDouble(money.format(getValor(c)).replace(',', '.'));
