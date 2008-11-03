@@ -5,6 +5,7 @@
 
 package cbr;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,8 +14,8 @@ import java.util.List;
  */
 public class Similitud {
 
-    private List<String> input;
-    private List<String> caso;
+    private List<String> input = new ArrayList<String>();
+    private List<String> caso = new ArrayList<String>();
     private float valor;
 
     public Similitud() {

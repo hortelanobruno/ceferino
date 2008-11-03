@@ -31,7 +31,9 @@ public class Logica {
         cargarData5();
     }
     
-    
+    public List<CasoEvaluado> calcularSimilitud(List<List<String>> input, List<Float> importancias){
+        return funcion.calcularSimilitud(input, baseCasos, importancias);
+    }
     
     
     
