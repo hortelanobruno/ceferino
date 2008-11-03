@@ -7,6 +7,7 @@
 package applet;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -26,11 +27,14 @@ import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.VectorRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.VectorSeries;
 import org.jfree.data.xy.VectorSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.HorizontalAlignment;
+import org.jfree.ui.RectangleEdge;
 import org.jfree.util.ShapeUtilities;
 import parser.Parser;
 import utils.Flecha;
@@ -349,6 +353,14 @@ public class SistemasDinamicos extends javax.swing.JApplet
         xyplot.setDomainZeroBaselineVisible(true);
         xyplot.setRangeZeroBaselineVisible(true);     
         JFreeChart jfreechart = new JFreeChart("f vs x", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
+        
+        TextTitle source = new TextTitle(
+        "TP ALGORITMOS GENETICOS por Damian Sandler y Paola Grajeda ");
+        source.setFont(new Font("SansSerif", Font.PLAIN, 10));
+        source.setPosition(RectangleEdge.BOTTOM);
+        source.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+        jfreechart.addSubtitle(source);
+        
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
         return chartpanel;
