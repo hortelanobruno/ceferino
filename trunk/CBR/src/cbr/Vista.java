@@ -6,6 +6,12 @@
 
 package cbr;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+
 /**
  *
  * @author  Administrador
@@ -14,10 +20,10 @@ public class Vista extends javax.swing.JFrame {
 
     private Logica logica;
     
-    
     /** Creates new form Vista */
     public Vista() {
         initComponents();
+        initComponents2();
         logica = new Logica();
     }
 
@@ -44,15 +50,15 @@ public class Vista extends javax.swing.JFrame {
         comboMusica = new javax.swing.JComboBox();
         comboShow = new javax.swing.JComboBox();
         jLabel8 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
-        jSpinner3 = new javax.swing.JSpinner();
-        jSpinner4 = new javax.swing.JSpinner();
-        jSpinner5 = new javax.swing.JSpinner();
+        spinnerBebida = new javax.swing.JSpinner();
+        spinnerComida = new javax.swing.JSpinner();
+        spinnerLocacion = new javax.swing.JSpinner();
+        spinnerMusica = new javax.swing.JSpinner();
+        spinnerShow = new javax.swing.JSpinner();
         buttonSearch = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabberOutput = new javax.swing.JTabbedPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,7 +67,7 @@ public class Vista extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 204, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 0, 255)));
 
-        jLabel1.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Calibri", 1, 18));
         jLabel1.setText("Input");
 
         jLabel2.setText("Bebida");
@@ -76,15 +82,15 @@ public class Vista extends javax.swing.JFrame {
 
         jLabel8.setText("Importancia");
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        spinnerBebida.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        spinnerComida.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
 
-        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        spinnerLocacion.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
 
-        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        spinnerMusica.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
 
-        jSpinner5.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        spinnerShow.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.5f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -110,12 +116,12 @@ public class Vista extends javax.swing.JFrame {
                             .addComponent(comboBebida, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSpinner1)
+                            .addComponent(spinnerBebida)
                             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSpinner2)
-                            .addComponent(jSpinner3)
-                            .addComponent(jSpinner4)
-                            .addComponent(jSpinner5)))
+                            .addComponent(spinnerComida)
+                            .addComponent(spinnerLocacion)
+                            .addComponent(spinnerMusica)
+                            .addComponent(spinnerShow)))
                     .addComponent(jLabel1))
                 .addContainerGap())
         );
@@ -130,41 +136,46 @@ public class Vista extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(comboBebida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spinnerBebida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(comboComida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spinnerComida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(comboLocacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spinnerLocacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(comboMusica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spinnerMusica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(comboShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spinnerShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        buttonSearch.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        buttonSearch.setFont(new java.awt.Font("Calibri", 0, 24));
         buttonSearch.setText("Search");
+        buttonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSearchActionPerformed(evt);
+            }
+        });
 
         jPanel3.setBackground(new java.awt.Color(245, 203, 244));
         jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 0, 255)));
 
-        jLabel7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Calibri", 1, 18));
         jLabel7.setText("Output");
 
-        jTabbedPane1.setBackground(new java.awt.Color(255, 204, 255));
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        tabberOutput.setBackground(new java.awt.Color(255, 204, 255));
+        tabberOutput.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -174,7 +185,7 @@ public class Vista extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel7)
                 .addGap(31, 31, 31)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tabberOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -183,7 +194,7 @@ public class Vista extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tabberOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -227,7 +238,125 @@ public class Vista extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void initComponents2(){
+        cargarCombos();
+    }
+    
+private void buttonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSearchActionPerformed
+    //Buscar casos
+    List<List<String>> input = obtenerInput();
+    List<Float> importancias = obtenerImportancias();
+    List<CasoEvaluado> casos = logica.calcularSimilitud(input, importancias);
+    mostrarCasos(casos);
+}//GEN-LAST:event_buttonSearchActionPerformed
 
+public List<List<String>> obtenerInput(){
+    List<List<String>> importancias = new ArrayList<List<String>>();
+    String[] i1 = ((String)comboBebida.getSelectedItem()).split(",");
+    String[] i2 = ((String)comboComida.getSelectedItem()).split(",");
+    String[] i3 = ((String)comboLocacion.getSelectedItem()).split(",");
+    String[] i4 = ((String)comboMusica.getSelectedItem()).split(",");
+    String[] i5 = ((String)comboShow.getSelectedItem()).split(",");
+    List<String> a1 = new ArrayList<String>();
+    for(int i = 0 ; i < i1.length ; i++){
+        a1.add(i1[i]);
+    }
+    List<String> a2 = new ArrayList<String>();
+    for(int i = 0 ; i < i2.length ; i++){
+        a2.add(i2[i]);
+    }
+    List<String> a3 = new ArrayList<String>();
+    for(int i = 0 ; i < i3.length ; i++){
+        a3.add(i3[i]);
+    }
+    List<String> a4 = new ArrayList<String>();
+    for(int i = 0 ; i < i4.length ; i++){
+        a4.add(i4[i]);
+    }
+    List<String> a5 = new ArrayList<String>();
+    for(int i = 0 ; i < i5.length ; i++){
+        a5.add(i5[i]);
+    }
+    importancias.add(a1);
+    importancias.add(a2);
+    importancias.add(a3);
+    importancias.add(a4);
+    importancias.add(a5);
+    return importancias;
+}
+
+public List<Float> obtenerImportancias(){
+    List<Float> importancias = new ArrayList<Float>();
+    importancias.add((Float)spinnerBebida.getValue());
+    importancias.add((Float)spinnerComida.getValue());
+    importancias.add((Float)spinnerLocacion.getValue());
+    importancias.add((Float)spinnerMusica.getValue());
+    importancias.add((Float)spinnerShow.getValue());
+    return importancias;
+}
+
+public void mostrarCasos(List<CasoEvaluado> casos){
+    tabberOutput.removeAll();
+    for(int i = 0 ; i < casos.size() ; i++){
+        CasoEvaluado caso = casos.get(i);
+        OutputPanel panel = new OutputPanel();
+        panel.getTextArea().append("Valor del caso : "+caso.getValor());
+        panel.getTextArea().append("\nInformacion del caso : ");
+        panel.getTextArea().append("\nBebida : ");
+        for(int j=0 ; j < caso.getCaso().getBebida().size() ; j++){
+            panel.getTextArea().append("\n\t"+caso.getCaso().getBebida().get(j));
+        }
+        panel.getTextArea().append("\nComida : ");
+        for(int j=0 ; j < caso.getCaso().getComida().size() ; j++){
+            panel.getTextArea().append("\n\t"+caso.getCaso().getComida().get(j));
+        }
+        panel.getTextArea().append("\nLocacion : ");
+        panel.getTextArea().append("\n\tId: "+caso.getCaso().getLocacion().getId());
+        panel.getTextArea().append("\n\tCategoria: "+caso.getCaso().getLocacion().getCategoria());
+        panel.getTextArea().append("\n\tCantidad de personas: "+caso.getCaso().getLocacion().getCantidadPersonas());
+        panel.getTextArea().append("\nMusica : ");
+        for(int j=0 ; j < caso.getCaso().getMusica().size() ; j++){
+            panel.getTextArea().append("\n\t"+caso.getCaso().getMusica().get(j));
+        }
+        panel.getTextArea().append("\nShow : ");
+        for(int j=0 ; j < caso.getCaso().getShow().size() ; j++){
+            panel.getTextArea().append("\n\t"+caso.getCaso().getShow().get(j));
+        }
+        panel.setName("Caso "+(i+1));
+        tabberOutput.add(panel);
+    }
+}
+
+public void cargarCombos(){
+    comboBebida.addItem("Gaseosa,Vino,Cerveza");
+    comboBebida.addItem("Champagne,Vino,Whisky");
+    comboBebida.addItem("Gaseosa,Cerveza,Champagne");
+    comboBebida.addItem("Agua,Gaseosa,Champagne");
+    comboBebida.addItem("Agua,Gaseosa,Jugo");
+    
+    comboComida.addItem("Asado,Ensalada,Pizza");
+    comboComida.addItem("Sushi,Ensalada,Caviar");
+    comboComida.addItem("Asado,Canapes,Sandwiches");
+    comboComida.addItem("Empanada,Pizza,Sandwiches");
+    comboComida.addItem("Empanada,Paty,Pancho");
+    
+    comboLocacion.addItem("Country");
+    comboLocacion.addItem("Salon de hotel 5 estrellas");
+    comboLocacion.addItem("Local bailable");
+    comboLocacion.addItem("Salon de hotel 3 estrellas");
+    comboLocacion.addItem("Club de barrio");
+    
+    comboMusica.addItem("Salsa,Reggaeton,Pop");
+    comboMusica.addItem("Clasica,Jazz,Pop");
+    comboMusica.addItem("Reggaeton,Rock,Pop");
+    comboMusica.addItem("Reggaeton,Cumbia,Pop");
+    comboMusica.addItem("Punk,Hard Rock,Metal");
+    
+    comboShow.addItem("Mago,Cantante");
+    comboShow.addItem("Baile");
+    comboShow.addItem("Malabarista");
+    comboShow.addItem("Banda en vivo");
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonSearch;
@@ -247,12 +376,12 @@ public class Vista extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JSpinner jSpinner4;
-    private javax.swing.JSpinner jSpinner5;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JSpinner spinnerBebida;
+    private javax.swing.JSpinner spinnerComida;
+    private javax.swing.JSpinner spinnerLocacion;
+    private javax.swing.JSpinner spinnerMusica;
+    private javax.swing.JSpinner spinnerShow;
+    private javax.swing.JTabbedPane tabberOutput;
     // End of variables declaration//GEN-END:variables
 
 }
