@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 /**
  *
  * @author Administrador
@@ -34,6 +36,7 @@ public class Parser {
         this.xmax = xmax;
         this.xmin = xmin;
         this.money = new DecimalFormat(cantDec);
+        money.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.ENGLISH));
         this.agregarFuncion(funcion);
         
        
