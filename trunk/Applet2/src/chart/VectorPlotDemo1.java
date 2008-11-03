@@ -49,6 +49,7 @@ public class VectorPlotDemo1 extends ApplicationFrame
         xyplot.setRangeGridlinePaint(Color.white);
         xyplot.setAxisOffset(new RectangleInsets(5D, 5D, 5D, 5D));
         xyplot.setOutlinePaint(Color.black);
+        
         JFreeChart jfreechart = new JFreeChart("Vector Plot Demo 1", xyplot);
         jfreechart.setBackgroundPaint(Color.white);
         return jfreechart;
@@ -74,7 +75,8 @@ public class VectorPlotDemo1 extends ApplicationFrame
 
     public static JPanel createDemoPanel()
     {
-        return new ChartPanel(createChart(createDataset()));
+        ChartPanel panel = new ChartPanel(createChart(createDataset()));
+        return panel;
     }
 
     public static void main(String args[])
