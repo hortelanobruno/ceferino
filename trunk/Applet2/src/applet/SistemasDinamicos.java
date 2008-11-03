@@ -368,8 +368,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
         xyplot.setRangeZeroBaselineVisible(true);     
         JFreeChart jfreechart = new JFreeChart("f vs x", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
         
-        TextTitle source = new TextTitle(
-        "TP ALGORITMOS GENETICOS por Damian Sandler y Paola Grajeda ");
+        TextTitle source = new TextTitle("f vs x");
         source.setFont(new Font("SansSerif", Font.PLAIN, 10));
         source.setPosition(RectangleEdge.BOTTOM);
         source.setHorizontalAlignment(HorizontalAlignment.RIGHT);
