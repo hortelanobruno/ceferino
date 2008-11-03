@@ -18,14 +18,20 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
+import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.VectorRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.VectorSeries;
 import org.jfree.data.xy.VectorSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.util.ShapeUtilities;
 import parser.Parser;
 import utils.Flecha;
 import utils.Punto;
@@ -233,11 +239,11 @@ public class SistemasDinamicos extends javax.swing.JApplet
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelGrafico1, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
+                        .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                         .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(461, 461, 461))))
+                        .addGap(218, 218, 218))))
         );
         panelCentralLayout.setVerticalGroup(
             panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,15 +252,14 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelGrafico1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                        .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(323, 323, 323))
                     .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(135, 135, 135))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -326,49 +331,29 @@ public class SistemasDinamicos extends javax.swing.JApplet
     {
         NumberAxis numberaxis = new NumberAxis("X");
         numberaxis.setAutoRangeIncludesZero(false);
+        numberaxis.setUpperMargin(0.12D);
+        numberaxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         NumberAxis numberaxis1 = new NumberAxis("Y");
         numberaxis1.setAutoRangeIncludesZero(false);
+        numberaxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        numberaxis1.setUpperMargin(0.12D);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
+        xylineandshaperenderer.setSeriesPaint(0, Color.black);
+        xylineandshaperenderer.setBaseShapesVisible(true);
+        xylineandshaperenderer.setBaseItemLabelsVisible(true);
+        xylineandshaperenderer.setSeriesLinesVisible(0, true);
+        xylineandshaperenderer.setSeriesShapesVisible(0, false);
+        xylineandshaperenderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
+        xylineandshaperenderer.setDefaultEntityRadius(6);
         XYPlot xyplot = new XYPlot(dataGraficoFuncion, numberaxis, numberaxis1, xylineandshaperenderer);
-        
         xyplot.setDomainZeroBaselineVisible(true);
-        xyplot.setRangeZeroBaselineVisible(true);
-        XYSeriesCollection coordenadas = getCordenadasGraficoFuncion();
-        XYLineAndShapeRenderer xylineandshaperenderer1 = new XYLineAndShapeRenderer(true, false);
-        xylineandshaperenderer1.setSeriesPaint(0, Color.BLUE);
-
-        xyplot.setDataset(1, coordenadas);
-        xyplot.setRenderer(1, xylineandshaperenderer1);
-        
+        xyplot.setRangeZeroBaselineVisible(true);     
         JFreeChart jfreechart = new JFreeChart("f vs x", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
         return chartpanel;
     }
     
-     private XYSeriesCollection getCordenadasGraficoFuncion() 
-     {
-        XYSeries series;
-        series = new XYSeries("f vs x");
-
-        double step = (Double.parseDouble(txtXfinal.getText()) - Double.parseDouble(txtXinicial.getText())) / (100 - 1);
-  
-        for (int i = 0; i < 100; i++)
-        {
-            double x = Double.parseDouble(txtXinicial.getText()) + (step * i);
-            try
-            {
-                series.add(x,(Double) this.parser.getValor(x));
-            }
-            catch(Exception e)
-            {
-                
-            }
-        }
-        
-        XYSeriesCollection collection = new XYSeriesCollection(series);
-        return collection;
-    }
 
      private void doGraficarFuncion()
      {
@@ -587,8 +572,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
         XYSeries xyseries = new XYSeries("Series 1");
         double inicio = Double.parseDouble(txtXinicial.getText());
         double fin = Double.parseDouble(txtXfinal.getText());
-        
-        double a;
+
         
         for(int i = 0; i< raices.size(); i++)
         {
@@ -610,19 +594,21 @@ public class SistemasDinamicos extends javax.swing.JApplet
          
          NumberAxis numberaxisx = new NumberAxis("t");
          numberaxisx.setAutoRangeIncludesZero(false);
-         
+         numberaxisx.setUpperMargin(0.12D);
+         numberaxisx.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
          //numberaxisx.setRange(-5d, 5d);
          
          NumberAxis numberaxisy = new NumberAxis("x");
          numberaxisy.setAutoRangeIncludesZero(false); 
+         numberaxisy.setUpperMargin(0.12D);
+         numberaxisy.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
          
         //   numberaxisy.setRange(raices.get(0)-1d, raices.get(raices.size()-1)+1d);
  
          XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
-         renderer.setSeriesPaint(0, Color.BLACK);
-         XYPlot plot = new XYPlot(dataGraficoFvsT, numberaxisy, numberaxisy, renderer);
+         renderer.setSeriesPaint(0, Color.black);
+         XYPlot plot = new XYPlot(dataGraficoFvsT, numberaxisx, numberaxisy, renderer);
          plot.setRangeZeroBaselineVisible(true);
-         
          JFreeChart jfreeChart = new JFreeChart("F vs T", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
          
          ChartPanel chartPanel = new ChartPanel(jfreeChart, false);
