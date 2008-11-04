@@ -392,7 +392,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
      private XYDataset crearPuntosRaices()
      {
-         XYSeries xyseries = new XYSeries("Fases");
+         XYSeries xyseries = new XYSeries("Raices");
          
          for(int i = 0; i< this.raices.size();i++)
          {
@@ -407,7 +407,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
      
      private VectorSeries getVectorFlechasRojas(List<Flecha> flechas)
      {
-         VectorSeries vSeries = new VectorSeries("Flechas Rojas");
+         VectorSeries vSeries = new VectorSeries("Atractoras");
          
          for(int i = 0; i < flechas.size();i++)
          {
@@ -431,7 +431,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
      
      private VectorSeries getVectorFlechasVerdes(List<Flecha> flechas)
      {
-         VectorSeries vSeries = new VectorSeries("Flechas Verdes");
+         VectorSeries vSeries = new VectorSeries("Repulsoras");
          
          for(int i = 0; i < flechas.size();i++)
          {
@@ -591,7 +591,21 @@ public class SistemasDinamicos extends javax.swing.JApplet
          return ret;
      }
      
-    
+    private XYDataset cargarEuler(){
+        Euler e = new Euler(0.01,0,1,this.txtFuncion.getText(),1,this.parser);
+        XYSeries xyseries = new XYSeries("Euler");
+        double[] eu = e.getPoints();
+        for(int i = 0 ; i < eu.length ; i++){
+            
+            xyseries.add(i,eu[i]);
+        }
+        
+        
+        XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
+        return xyseriescollection;
+    }
+     
+     
      private XYDataset cargarPuntosFvsT() 
     {
         XYSeries xyseries = new XYSeries("Series 1");
@@ -612,9 +626,13 @@ public class SistemasDinamicos extends javax.swing.JApplet
     }
      
      
+     
      private void doGraficarFvsT()
      {
          dataGraficoFvsT = this.cargarPuntosFvsT();
+         XYDataset euler1 = this.cargarEuler();
+         
+         
          jTabbedFvsT.removeAll();
          
          NumberAxis numberaxisx = new NumberAxis("t");
@@ -634,6 +652,10 @@ public class SistemasDinamicos extends javax.swing.JApplet
          renderer.setSeriesPaint(0, Color.black);
          XYPlot plot = new XYPlot(dataGraficoFvsT, numberaxisx, numberaxisy, renderer);
          plot.setRangeZeroBaselineVisible(true);
+         
+         plot.setDataset(1,euler1);
+         
+         
          JFreeChart jfreeChart = new JFreeChart("F vs T", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
          
          ChartPanel chartPanel = new ChartPanel(jfreeChart, false);
@@ -682,6 +704,8 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             doGraficarFase();
             doGraficarFvsT();
         }
+        
+        
 }//GEN-LAST:event_jButton2ActionPerformed
 
 private void setLookAndFeel() throws HeadlessException {
