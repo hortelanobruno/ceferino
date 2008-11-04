@@ -611,14 +611,21 @@ public class SistemasDinamicos extends javax.swing.JApplet
      }
      
     private XYDataset cargarEuler(){
-        Euler e = new Euler(0.01,0,1,this.getTxtFuncion().getText(),1,this.parser);
+        
+        Euler e = new Euler(Double.parseDouble(this.txtH.getText()),
+                            Double.parseDouble(this.txtX0.getText()),
+                            Double.parseDouble(this.txtY0.getText()),
+                            this.getTxtFuncion().getText(),
+                            Double.parseDouble(this.txtTiempo.getText()),
+                            this.parser);
+        
         XYSeries xyseries = new XYSeries("Euler");
         double[] eu = e.getPoints();
         for(int i = 0 ; i < eu.length ; i++){
             
-            xyseries.add(i,eu[i]);
+            xyseries.add(i,eu[i]);//Esto nose si es asi o al reves
         }
-        
+       
         
         XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
         return xyseriescollection;
@@ -641,14 +648,15 @@ public class SistemasDinamicos extends javax.swing.JApplet
             }
             xyseriescollection.addSeries(xyseries);
         }
-        
+        //ACA FIJATE Q T CARGA UNA SERIE POR CADA RAIZ
+        //ENTONCES T PONE UNA DE CADA COLOR
         
         return xyseriescollection;
     }
      
      private void doGraficarFvsT2(){
-         dataGraficoFvsT = this.cargarPuntosFvsT();
-         XYDataset euler1 = this.cargarEuler();
+         dataGraficoFvsT = this.cargarPuntosFvsT(); //Cargo XYSeries para las raices
+         XYDataset euler1 = this.cargarEuler(); //Cargo a euler en otra serie
          jTabbedFvsT.removeAll();
          
          
@@ -657,6 +665,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
         xyplot.setDataset(1,euler1);
         xyplot.getDomainAxis().setLowerMargin(0.0D);
         xyplot.getDomainAxis().setUpperMargin(0.0D);
+
         XYLineAndShapeRenderer xylineandshaperenderer = (XYLineAndShapeRenderer)xyplot.getRenderer();
         //xylineandshaperenderer.setLegendLine(new java.awt.geom.Rectangle2D.Double(-4D, -3D, 8D, 6D));
         
