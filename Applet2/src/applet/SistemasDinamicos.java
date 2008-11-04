@@ -16,10 +16,12 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardXYToolTipGenerator;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.VectorRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -57,12 +59,13 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 @Override
                 public void run() {
                     initComponents();
+                    initComponents2();
                     setLookAndFeel();
                     spinnerDecimales.setValue(3);
                     txtH.setText("0.01");
                     txtXfinal.setText("5");
                     txtXinicial.setText("-5");
-                    txtFuncion.setText("x^2");
+                    getTxtFuncion().setText("x^2");
                 }
             });
         } catch (Exception ex) {
@@ -100,7 +103,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
         txtXinicial = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtXfinal = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        buttonGraficar = new javax.swing.JButton();
         spinnerDecimales = new javax.swing.JSpinner();
         panelGrafico1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -119,9 +122,17 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
         jLabel1.setText("dx/dt=");
 
+        txtFuncion.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txtFuncionCaretUpdate(evt);
+            }
+        });
         txtFuncion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtFuncionKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtFuncionKeyTyped(evt);
             }
         });
 
@@ -139,10 +150,10 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
         jLabel10.setText("x-final");
 
-        jButton2.setText("Graficar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGraficar.setText("Graficar");
+        buttonGraficar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                buttonGraficarActionPerformed(evt);
             }
         });
 
@@ -160,7 +171,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(buttonGraficar)
                                 .addGap(35, 35, 35)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -206,7 +217,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2)
+                        .addComponent(buttonGraficar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -293,6 +304,14 @@ public class SistemasDinamicos extends javax.swing.JApplet
     }// </editor-fold>//GEN-END:initComponents
 
 
+    public void initComponents2(){
+        getTxtFuncion().setBackground(java.awt.Color.white);
+        getTxtFuncion().setFont(new java.awt.Font ("Dialog", 0, 11));
+        getTxtFuncion().setForeground(java.awt.Color.black);
+        
+        parser = new Parser(this);
+    }
+    
     public String getDecimales()
     {
         String ret = "0.";
@@ -306,7 +325,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
     
     private void graficarFuncion()
     { 
-        this.parser.agregarFuncion(this.txtFuncion.getText());
+        this.parser.agregarFuncion(this.getTxtFuncion().getText());
         dataGraficoFuncion = cargarPuntosFuncion();  
         panelGrafico1.removeAll();
         panelGrafico1.setEnabled(true);
@@ -382,10 +401,10 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
      private void doGraficarFuncion()
      {
-          parser = new Parser(Double.parseDouble(this.txtH.getText()), 
+          parser = new Parser(this,Double.parseDouble(this.txtH.getText()), 
                             Double.parseDouble(this.txtXinicial.getText()), 
                             Double.parseDouble(this.txtXfinal.getText()),
-                            this.getDecimales(), this.txtFuncion.getText());
+                            this.getDecimales(), this.getTxtFuncion().getText());
          
           graficarFuncion(); 
      }
@@ -592,7 +611,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
      }
      
     private XYDataset cargarEuler(){
-        Euler e = new Euler(0.01,0,1,this.txtFuncion.getText(),1,this.parser);
+        Euler e = new Euler(0.01,0,1,this.getTxtFuncion().getText(),1,this.parser);
         XYSeries xyseries = new XYSeries("Euler");
         double[] eu = e.getPoints();
         for(int i = 0 ; i < eu.length ; i++){
@@ -612,20 +631,46 @@ public class SistemasDinamicos extends javax.swing.JApplet
         double inicio = Double.parseDouble(txtXinicial.getText());
         double fin = Double.parseDouble(txtXfinal.getText());
 
-        
+        XYSeriesCollection xyseriescollection = new XYSeriesCollection();
         for(int i = 0; i< raices.size(); i++)
         {
-            for(double j = inicio; j < fin; j+=0.01)
+            xyseries = new XYSeries("Series "+(i+1));
+            for(double j = -10; j < 10; j+=0.1)
             {
                 xyseries.add(j,raices.get(i));
             }
+            xyseriescollection.addSeries(xyseries);
         }
         
-        XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
+        
         return xyseriescollection;
     }
      
-     
+     private void doGraficarFvsT2(){
+         dataGraficoFvsT = this.cargarPuntosFvsT();
+         XYDataset euler1 = this.cargarEuler();
+         jTabbedFvsT.removeAll();
+         
+         
+        JFreeChart jfreechart = ChartFactory.createXYLineChart("Line Chart Demo 4", "X", "Y", dataGraficoFvsT, PlotOrientation.VERTICAL, true, true, false);
+        XYPlot xyplot = (XYPlot)jfreechart.getPlot();
+        xyplot.setDataset(1,euler1);
+        xyplot.getDomainAxis().setLowerMargin(0.0D);
+        xyplot.getDomainAxis().setUpperMargin(0.0D);
+        XYLineAndShapeRenderer xylineandshaperenderer = (XYLineAndShapeRenderer)xyplot.getRenderer();
+        //xylineandshaperenderer.setLegendLine(new java.awt.geom.Rectangle2D.Double(-4D, -3D, 8D, 6D));
+        
+        ChartPanel chartPanel = new ChartPanel(jfreechart, false);
+        chartPanel.setVisible(true);
+        jTabbedFvsT.add("Fases",chartPanel);
+         
+         jTabbedFvsT.setVisible(true);
+         
+         jTabbedFvsT.repaint();
+         panelFvsT.repaint();
+         this.repaint();
+
+     }
      
      private void doGraficarFvsT()
      {
@@ -693,7 +738,7 @@ private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
      }
 }//GEN-LAST:event_txtFuncionKeyPressed
 
-private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGraficarActionPerformed
        
         vaciarTabbeds();
         doGraficarFuncion(); 
@@ -702,11 +747,20 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         if(!(raices.isEmpty()))
         {
             doGraficarFase();
-            doGraficarFvsT();
+            doGraficarFvsT2();
         }
         
         
-}//GEN-LAST:event_jButton2ActionPerformed
+}//GEN-LAST:event_buttonGraficarActionPerformed
+
+private void txtFuncionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFuncionKeyTyped
+    
+}//GEN-LAST:event_txtFuncionKeyTyped
+
+private void txtFuncionCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtFuncionCaretUpdate
+    String newExpressionString = getTxtFuncion().getText();
+    parser.agregarFuncion(newExpressionString);
+}//GEN-LAST:event_txtFuncionCaretUpdate
 
 private void setLookAndFeel() throws HeadlessException {
         try {
@@ -723,7 +777,7 @@ private void setLookAndFeel() throws HeadlessException {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton buttonGraficar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -749,5 +803,21 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JTextField txtXinicial;
     private javax.swing.JTextField txtY0;
     // End of variables declaration//GEN-END:variables
+
+    public javax.swing.JTextField getTxtFuncion() {
+        return txtFuncion;
+    }
+
+    public void setTxtFuncion(javax.swing.JTextField txtFuncion) {
+        this.txtFuncion = txtFuncion;
+    }
+
+    public javax.swing.JButton getButtonGraficar() {
+        return buttonGraficar;
+    }
+
+    public void setButtonGraficar(javax.swing.JButton buttonGraficar) {
+        this.buttonGraficar = buttonGraficar;
+    }
 
 }
