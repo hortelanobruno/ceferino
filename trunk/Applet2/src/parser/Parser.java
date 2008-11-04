@@ -6,12 +6,12 @@
 package parser;
 
 
+import applet.SistemasDinamicos;
 import com.singularsys.jep.EvaluationException;
 import com.singularsys.jep.Jep;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -27,9 +27,16 @@ public class Parser {
     private double xmax;
     private List<Double> raices;
     private DecimalFormat money;
+    private SistemasDinamicos vista;
     
-    public Parser(double h, double xmin, double xmax, String cantDec, String funcion) 
+    public Parser(SistemasDinamicos sis){
+        this.vista = sis;
+        iniciarParser();
+    }
+    
+    public Parser(SistemasDinamicos sis,double h, double xmin, double xmax, String cantDec, String funcion) 
     {
+        this.vista = sis;
         this.raices = new ArrayList<Double>();
         iniciarParser();
         this.h = h;
@@ -105,8 +112,11 @@ public class Parser {
     {
         try {
             this.jep.parse(funcion);
+            vista.getTxtFuncion().setForeground(Color.black);
+            vista.getButtonGraficar().setEnabled(true);
         } catch (com.singularsys.jep.ParseException ex) {
-            Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
+            vista.getTxtFuncion().setForeground(Color.red);
+            vista.getButtonGraficar().setEnabled(false);
         }
     }
     
