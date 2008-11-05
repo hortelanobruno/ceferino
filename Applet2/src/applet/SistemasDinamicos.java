@@ -11,15 +11,22 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.event.ChartChangeEvent;
+import org.jfree.chart.event.ChartChangeListener;
 import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -436,8 +443,28 @@ public class SistemasDinamicos extends javax.swing.JApplet
         source.setHorizontalAlignment(HorizontalAlignment.RIGHT);
         jfreechart.addSubtitle(source);
         
+        jfreechart.addChangeListener(new ChartChangeListener() {
+
+            @Override
+            public void chartChanged(ChartChangeEvent event) {
+               
+            }
+        });
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
+        chartpanel.addChartMouseListener(new ChartMouseListener() {
+
+            @Override
+            public void chartMouseClicked(ChartMouseEvent event) {
+                
+                System.out.println("Shape Type: "+event.getEntity().getShapeType());
+            }
+
+            @Override
+            public void chartMouseMoved(ChartMouseEvent event) {
+                
+            }
+        });
         return chartpanel;
     }
     
