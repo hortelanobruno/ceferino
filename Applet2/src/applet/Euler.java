@@ -21,7 +21,6 @@ public class Euler
     private double timeMax;
     private double timeMin;
     private double[] internalGraphicPoints;
-    private double[] internalError;
     private String funcion;
     
     
@@ -61,11 +60,6 @@ public class Euler
         this.seedy= seed;
     }
     
-    public double[] getError()
-    {
-        return(this.internalError!=null)?this.internalError:null;
-    }
-    
     public double[] getPoints()
     {
         if(this.internalGraphicPoints == null)
@@ -73,8 +67,7 @@ public class Euler
             double index = this.getTimeMin();
             double top = this.getTimeMax();
             int size =((int) Math.ceil( (this.getTimeMax() - this.getTimeMin())/h));
-            this.internalGraphicPoints = new double[size+1];
-            this.internalError = new double[size+1];
+            this.internalGraphicPoints = new double[size];
             int i = 0; 
 
             double funcVal =(Double)this.parser.getValor(this.getSeedX());
@@ -87,12 +80,9 @@ public class Euler
                 xant = x;
                 index+=this.getH();
                 funcVal =(Double)this.parser.getValor(xant);
-                this.internalGraphicPoints[i] = x;
-                double error = (Double)this.parser.getValor(index) - x;
-                this.internalError[i++] = error;
+                this.internalGraphicPoints[i++] = x;
             }
         }
-        
         return this.internalGraphicPoints; 
     }
 
