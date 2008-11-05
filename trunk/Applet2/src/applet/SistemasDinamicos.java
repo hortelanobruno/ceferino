@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -680,6 +681,51 @@ public class SistemasDinamicos extends javax.swing.JApplet
          return ret;
      }
      
+     private double maxDifRaiz(double a)
+     {
+         double max = 0;
+         double newDif = 0;
+         for(int i = 0; i<this.raices.size();i++)
+         {
+             if(i == i)
+             {
+                 max = Math.abs(raices.get(i) - a);
+             }
+             
+             newDif=Math.abs(raices.get(i) - a);
+             
+             if(newDif > max)
+             {
+                 max = newDif;
+             }
+         }
+         
+         return max;
+     }
+     
+     private double[] fixEuler(double[] vec)
+     {
+         Vector<Double> aux = new Vector<Double>();
+         
+         for(int i =0; i< vec.length;i++)
+         {
+             if(!(Double.isInfinite(vec[i])))
+             {
+                 if(this.maxDifRaiz(vec[i]) < 5d)
+                 {
+                    aux.add(vec[i]);
+                 }
+             }
+         }
+         
+         double [] ret = new double[aux.size()];
+         
+         for(int i = 0; i<aux.size();i++)
+             ret [i] = aux.get(i);
+         
+         return ret;
+     }
+     
     private XYDataset cargarEuler(){
         
         Euler e = new Euler(Double.parseDouble(this.txtHTiempo.getText()),
@@ -691,9 +737,13 @@ public class SistemasDinamicos extends javax.swing.JApplet
         
         XYSeries xyseries = new XYSeries("Euler");
         double[] eu = e.getPoints();
+        
+        eu = this.fixEuler(eu);
+        
         for(int i = 0 ; i < eu.length ; i++){
             
             xyseries.add(i,eu[i]);//Esto nose si es asi o al reves
+            System.out.println(eu[i] + "\n");
         }
        
         
@@ -712,7 +762,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
         for(int i = 0; i< raices.size(); i++)
         {
             xyseries = new XYSeries("Series "+(i+1));
-            for(double j = -10; j < 10; j+=0.1)
+            for(double j = -5; j < 5; j+=0.1)
             {
                 xyseries.add(j,raices.get(i));
             }
