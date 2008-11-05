@@ -18,18 +18,20 @@ public class Euler
     private double seedx;
     private double seedy;
     private Parser parser;
-    private double time;
+    private double timeMax;
+    private double timeMin;
     private double[] internalGraphicPoints;
     private double[] internalError;
     private String funcion;
     
     
-    public Euler(double h, double seedx, double seedy, String funcion, double time, Parser jep) 
+    public Euler(double h, double seedx, double seedy, String funcion, double timemin, double timemax, Parser jep) 
     {
         this.parser = jep;
         parser.agregarFuncion(funcion);
         this.setFuncion(funcion);
-        this.setTime(time);
+        this.setTimeMax(timemax);
+        this.setTimeMin(timemin);
         this.setH(h);
         this.setSeedX(seedx);
         this.setSeedY(seedy);
@@ -68,9 +70,9 @@ public class Euler
     {
         if(this.internalGraphicPoints == null)
         {
-            double index =0D;
-            double top = this.getTime();
-            int size =((int) Math.ceil(this.getTime()/h));
+            double index = this.getTimeMin();
+            double top = this.getTimeMax();
+            int size =((int) Math.ceil( (this.getTimeMax() - this.getTimeMin())/h));
             this.internalGraphicPoints = new double[size+1];
             this.internalError = new double[size+1];
             int i = 0; 
@@ -94,12 +96,12 @@ public class Euler
         return this.internalGraphicPoints; 
     }
 
-    public double getTime() {
-        return time;
+    public double getTimeMax() {
+        return timeMax;
     }
 
-    public void setTime(double time) {
-        this.time = time;
+    public void setTimeMax(double time) {
+        this.timeMax = time;
     }
 
     public String getFuncion() {
@@ -108,5 +110,13 @@ public class Euler
 
     public void setFuncion(String funcion) {
         this.funcion = funcion;
+    }
+
+    public double getTimeMin() {
+        return timeMin;
+    }
+
+    public void setTimeMin(double timeMin) {
+        this.timeMin = timeMin;
     }
 }

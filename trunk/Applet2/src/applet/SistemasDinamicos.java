@@ -61,10 +61,16 @@ public class SistemasDinamicos extends javax.swing.JApplet
                     initComponents();
                     initComponents2();
                     setLookAndFeel();
-                    spinnerDecimales.setValue(3);
+                    spinnerDecimales.setValue(10);
                     txtH.setText("0.01");
                     txtXfinal.setText("5");
                     txtXinicial.setText("-5");
+                    txtCorte.setText("0.1");
+                    txtX0.setText("0");
+                    txtY0.setText("1");
+                    txtHTiempo.setText("0.2");
+                    txtTiempoMin.setText("0");
+                    txtTiempoMax.setText("0.6");
                     getTxtFuncion().setText("x^2");
                 }
             });
@@ -72,6 +78,8 @@ public class SistemasDinamicos extends javax.swing.JApplet
             ex.printStackTrace();
         }
     }
+
+    
 
     /** This method is called from within the init() method to
      * initialize the form.
@@ -97,7 +105,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
         jLabel4 = new javax.swing.JLabel();
         txtY0 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtTiempo = new javax.swing.JTextField();
+        txtTiempoMax = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtXinicial = new javax.swing.JTextField();
@@ -105,6 +113,12 @@ public class SistemasDinamicos extends javax.swing.JApplet
         txtXfinal = new javax.swing.JTextField();
         buttonGraficar = new javax.swing.JButton();
         spinnerDecimales = new javax.swing.JSpinner();
+        jLabel6 = new javax.swing.JLabel();
+        txtCorte = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtHTiempo = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtTiempoMin = new javax.swing.JTextField();
         panelGrafico1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
 
@@ -142,7 +156,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
         jLabel4.setText("Y0= ");
 
-        jLabel5.setText("Tiempo= ");
+        jLabel5.setText("t max");
 
         jLabel8.setText("Decimales= ");
 
@@ -159,6 +173,12 @@ public class SistemasDinamicos extends javax.swing.JApplet
 
         spinnerDecimales.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
 
+        jLabel6.setText("Corte");
+
+        jLabel7.setText("h tiempo");
+
+        jLabel11.setText("t min");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -167,12 +187,25 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(buttonGraficar)
-                                .addGap(35, 35, 35)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel8)
+                                            .addComponent(jLabel2))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtH)
+                                            .addComponent(spinnerDecimales)
+                                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(txtCorte, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                                                    .addComponent(txtTiempoMax, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)))))
+                                    .addComponent(jLabel6))
+                                .addGap(37, 37, 37)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,31 +214,32 @@ public class SistemasDinamicos extends javax.swing.JApplet
                                         .addGap(39, 39, 39)
                                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(txtY0)
-                                            .addComponent(txtX0, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))
+                                            .addComponent(txtX0, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel9)
                                             .addComponent(jLabel10))
                                         .addGap(27, 27, 27)
-                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtXinicial, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
-                                            .addComponent(txtXfinal, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(65, 65, 65))
-                            .addComponent(txtFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
-                    .addComponent(jLabel5)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtH)
-                            .addComponent(spinnerDecimales)
+                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtXinicial)
+                                            .addComponent(txtXfinal, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, Short.MAX_VALUE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)))
-                        .addContainerGap(206, Short.MAX_VALUE))))
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel11))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtTiempoMin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                            .addComponent(txtHTiempo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
+                        .addGap(55, 55, 55)
+                        .addComponent(buttonGraficar)
+                        .addGap(39, 39, 39))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,23 +248,8 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(buttonGraficar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(spinnerDecimales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(txtTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -247,8 +266,32 @@ public class SistemasDinamicos extends javax.swing.JApplet
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
-                            .addComponent(txtXfinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                            .addComponent(txtXfinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(txtCorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(spinnerDecimales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtTiempoMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonGraficar)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(txtHTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtTiempoMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16))
         );
 
         panelGrafico1.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 1"));
@@ -262,10 +305,10 @@ public class SistemasDinamicos extends javax.swing.JApplet
             panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelGraficoFases, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelGraficoFases, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(panelFvsT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelGrafico1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE))
@@ -281,8 +324,8 @@ public class SistemasDinamicos extends javax.swing.JApplet
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
                         .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
@@ -293,7 +336,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, 897, Short.MAX_VALUE))
+                .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -399,13 +442,14 @@ public class SistemasDinamicos extends javax.swing.JApplet
     }
     
 
+    
      private void doGraficarFuncion()
      {
           parser = new Parser(this,Double.parseDouble(this.txtH.getText()), 
                             Double.parseDouble(this.txtXinicial.getText()), 
                             Double.parseDouble(this.txtXfinal.getText()),
                             this.getDecimales(), this.getTxtFuncion().getText());
-         
+          parser.setCorte(Double.parseDouble(txtCorte.getText()));
           graficarFuncion(); 
      }
 
@@ -416,7 +460,6 @@ public class SistemasDinamicos extends javax.swing.JApplet
          for(int i = 0; i< this.raices.size();i++)
          {
              xyseries.add((Double)raices.get(i),(Double)0d);
-             System.out.println(raices.get(i) + "\n");
          }
  
          XYSeriesCollection collection = new XYSeriesCollection(xyseries);
@@ -612,11 +655,11 @@ public class SistemasDinamicos extends javax.swing.JApplet
      
     private XYDataset cargarEuler(){
         
-        Euler e = new Euler(Double.parseDouble(this.txtH.getText()),
+        Euler e = new Euler(Double.parseDouble(this.txtHTiempo.getText()),
                             Double.parseDouble(this.txtX0.getText()),
                             Double.parseDouble(this.txtY0.getText()),
-                            this.getTxtFuncion().getText(),
-                            Double.parseDouble(this.txtTiempo.getText()),
+                            this.getTxtFuncion().getText(),Double.parseDouble(this.txtTiempoMin.getText()),
+                            Double.parseDouble(this.txtTiempoMax.getText()),
                             this.parser);
         
         XYSeries xyseries = new XYSeries("Euler");
@@ -742,7 +785,7 @@ private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
         if(!(raices.isEmpty()))
         {
             doGraficarFase();
-            doGraficarFvsT();
+            doGraficarFvsT2();
         }
      }
 }//GEN-LAST:event_txtFuncionKeyPressed
@@ -789,10 +832,13 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JButton buttonGraficar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel4;
@@ -804,9 +850,12 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JPanel panelGrafico1;
     private javax.swing.JPanel panelGraficoFases;
     private javax.swing.JSpinner spinnerDecimales;
+    private javax.swing.JTextField txtCorte;
     private javax.swing.JTextField txtFuncion;
     private javax.swing.JTextField txtH;
-    private javax.swing.JTextField txtTiempo;
+    private javax.swing.JTextField txtHTiempo;
+    private javax.swing.JTextField txtTiempoMax;
+    private javax.swing.JTextField txtTiempoMin;
     private javax.swing.JTextField txtX0;
     private javax.swing.JTextField txtXfinal;
     private javax.swing.JTextField txtXinicial;
