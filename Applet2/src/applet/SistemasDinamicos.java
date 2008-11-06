@@ -3,82 +3,51 @@
  *
  * Created on 17 de octubre de 2008, 20:36
  */
-
 package applet;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.event.ChartChangeEvent;
-import org.jfree.chart.event.ChartChangeListener;
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.VectorRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.chart.title.TextTitle;
-import org.jfree.data.xy.VectorSeries;
-import org.jfree.data.xy.VectorSeriesCollection;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.RectangleEdge;
 import parser.Parser;
-import utils.Flecha;
-import utils.Punto;
 
 /**
  *
  * @author  Administrador
  */
-public class SistemasDinamicos extends javax.swing.JApplet 
-{
-    
+public class SistemasDinamicos extends javax.swing.JApplet {
+
     private static final long serialVersionUID = 327575554503844280L;
     private Parser parser;
-    private XYDataset dataGraficoFuncion;
-    private XYDataset dataGraficoFases;
-    private XYDataset dataGraficoFvsT;
-    private List<Double> raices;
-    
+    private double[] raices;
+    private RootFinder rootFinder;
+    private GraficadorFuncion graficadorFuncion;
+    private GraficadorFases graficadorFases;
+    private GraficadorTvsX graficadorTvsX;
+
     /** Initializes the applet SistemasDinamicos */
     @Override
     public void init() {
         try {
             java.awt.EventQueue.invokeAndWait(new Runnable() {
+
                 @Override
                 public void run() {
                     initComponents();
                     initComponents2();
                     setLookAndFeel();
                     spinnerDecimales.setValue(10);
-                    txtH.setText("0.01");
-                    txtXfinal.setText("5");
-                    txtXinicial.setText("-5");
-                    txtCorte.setText("0.1");
-                    txtX0.setText("0");
-                    txtY0.setText("1");
-                    txtHTiempo.setText("0.2");
-                    txtTiempoMin.setText("0");
-                    txtTiempoMax.setText("0.6");
+                    getTxtH().setText("0.01");
+                    getTxtXfinal().setText("5");
+                    getTxtXinicial().setText("-5");
+                    getTxtCorte().setText("0.0001");
+                    getTxtX0().setText("0");
+                    getTxtY0().setText("1");
+                    getTxtHTiempo().setText("0.2");
+                    getTxtTiempoMin().setText("0");
+                    getTxtTiempoMax().setText("0.6");
                     getTxtFuncion().setText("x^2");
                 }
             });
@@ -86,8 +55,6 @@ public class SistemasDinamicos extends javax.swing.JApplet
             ex.printStackTrace();
         }
     }
-
-    
 
     /** This method is called from within the init() method to
      * initialize the form.
@@ -153,16 +120,13 @@ public class SistemasDinamicos extends javax.swing.JApplet
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtFuncionKeyPressed(evt);
             }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtFuncionKeyTyped(evt);
-            }
         });
 
         jLabel2.setText("h= ");
 
         jLabel3.setText("X0= ");
 
-        jLabel4.setText("Y0= ");
+        jLabel4.setText("t0= ");
 
         jLabel5.setText("t max");
 
@@ -230,8 +194,7 @@ public class SistemasDinamicos extends javax.swing.JApplet
                                         .addGap(27, 27, 27)
                                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(txtXinicial)
-                                            .addComponent(txtXfinal, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, Short.MAX_VALUE))
+                                            .addComponent(txtXfinal, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)))))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
@@ -314,11 +277,11 @@ public class SistemasDinamicos extends javax.swing.JApplet
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelGraficoFases, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelFvsT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelFvsT, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                     .addComponent(panelGrafico1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -328,567 +291,89 @@ public class SistemasDinamicos extends javax.swing.JApplet
                 .addContainerGap()
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCentralLayout.createSequentialGroup()
+                        .addGap(17, 17, 17)
                         .addComponent(panelGrafico1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panelCentral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-
-    public void initComponents2(){
+    public void initComponents2() {
         getTxtFuncion().setBackground(java.awt.Color.white);
-        getTxtFuncion().setFont(new java.awt.Font ("Dialog", 0, 11));
+        getTxtFuncion().setFont(new java.awt.Font("Dialog", 0, 11));
         getTxtFuncion().setForeground(java.awt.Color.black);
-        
-        parser = new Parser(this);
-    }
-    
-    public String getDecimales()
-    {
-        String ret = "0.";
-        int spin = (Integer)this.spinnerDecimales.getValue();
-        
-        for(int i = 0; i< spin;i++)
-            ret +="0";
 
+        setParser(new Parser(this));
+
+        rootFinder = new RootFinder(this);
+        graficadorFuncion = new GraficadorFuncion(this);
+        graficadorFases = new GraficadorFases(this);
+        graficadorTvsX = new GraficadorTvsX(this);
+    }
+
+    public String getDecimales() {
+        String ret = "0.";
+        int spin = (Integer) this.spinnerDecimales.getValue();
+
+        for (int i = 0; i < spin; i++) {
+            ret += "0";
+        }
         return ret;
     }
-    
-    private void graficarFuncion()
-    { 
-        this.parser.agregarFuncion(this.getTxtFuncion().getText());
-        dataGraficoFuncion = cargarPuntosFuncion();  
-        panelGrafico1.removeAll();
-        panelGrafico1.setEnabled(true);
-        jTabbedPane1.removeAll();
-        jTabbedPane1.add("f vs x", crearPanelGraficoFuncion());
-        panelGrafico1.add(jTabbedPane1);
-        jTabbedPane1.setVisible(true);
-        jTabbedPane1.repaint();
-        panelGrafico1.repaint();
-        this.repaint(); 
+
+    private void vaciarTabbeds() {
+        getJTabbedFases().removeAll();
+        getJTabbedFvsT().removeAll();
+        getJTabbedPane1().removeAll();
     }
-    
-    private XYDataset cargarPuntosFuncion() 
-    {
-        XYSeries xyseries = new XYSeries("Series 1");
-        double inicio = Double.parseDouble(txtXinicial.getText());
-        double fin = Double.parseDouble(txtXfinal.getText());
-        double index = inicio;
-        
-        double a;
-        
-        while(index <= fin)
-        {
-            try
-            {
-                a = (Double) this.parser.getValor(index);
-                xyseries.add(index, a);
-                index += 0.01;
-            }
-            catch(Exception e)
-            {
-                
-            }
-        }
-        XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
-        return xyseriescollection;
-    }
-    
-    private ChartPanel crearPanelGraficoFuncion() 
-    {
-        NumberAxis numberaxis = new NumberAxis("X");
-        numberaxis.setAutoRangeIncludesZero(false);
-        numberaxis.setUpperMargin(0.12D);
-        numberaxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        NumberAxis numberaxis1 = new NumberAxis("Y");
-        numberaxis1.setAutoRangeIncludesZero(false);
-        numberaxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        numberaxis1.setUpperMargin(0.12D);
-        XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
-        xylineandshaperenderer.setSeriesPaint(0, Color.black);
-        xylineandshaperenderer.setBaseShapesVisible(true);
-        xylineandshaperenderer.setBaseItemLabelsVisible(true);
-        xylineandshaperenderer.setSeriesLinesVisible(0, true);
-        xylineandshaperenderer.setSeriesShapesVisible(0, false);
-        xylineandshaperenderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
-        xylineandshaperenderer.setDefaultEntityRadius(6);
-        XYPlot xyplot = new XYPlot(dataGraficoFuncion, numberaxis, numberaxis1, xylineandshaperenderer);
-        xyplot.setDomainZeroBaselineVisible(true);
-        xyplot.setRangeZeroBaselineVisible(true);     
-        JFreeChart jfreechart = new JFreeChart("f vs x", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
-        
-        TextTitle source = new TextTitle("f vs x");
-        source.setFont(new Font("SansSerif", Font.PLAIN, 10));
-        source.setPosition(RectangleEdge.BOTTOM);
-        source.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-        jfreechart.addSubtitle(source);
-        
-        jfreechart.addChangeListener(new ChartChangeListener() {
 
-            @Override
-            public void chartChanged(ChartChangeEvent event) {
-               
-            }
-        });
-        ChartPanel chartpanel = new ChartPanel(jfreechart, false);
-        chartpanel.setVisible(true);
-        chartpanel.addChartMouseListener(new ChartMouseListener() {
-
-            @Override
-            public void chartMouseClicked(ChartMouseEvent event) {
-                
-                System.out.println("Shape Type: "+event.getEntity().getShapeType());
-            }
-
-            @Override
-            public void chartMouseMoved(ChartMouseEvent event) {
-                
-            }
-        });
-        return chartpanel;
-    }
-    
-
-    
-     private void doGraficarFuncion()
-     {
-          parser = new Parser(this,Double.parseDouble(this.txtH.getText()), 
-                            Double.parseDouble(this.txtXinicial.getText()), 
-                            Double.parseDouble(this.txtXfinal.getText()),
-                            this.getDecimales(), this.getTxtFuncion().getText());
-          parser.setCorte(Double.parseDouble(txtCorte.getText()));
-          graficarFuncion(); 
-     }
-
-     private XYDataset crearPuntosRaices()
-     {
-         XYSeries xyseries = new XYSeries("Raices");
-         
-         for(int i = 0; i< this.raices.size();i++)
-         {
-             xyseries.add((Double)raices.get(i),(Double)0d);
-         }
- 
-         XYSeriesCollection collection = new XYSeriesCollection(xyseries);
-         
-         return collection;
-     }
-     
-     private VectorSeries getVectorFlechasRojas(List<Flecha> flechas)
-     {
-         VectorSeries vSeries = new VectorSeries("Atractoras");
-         
-         for(int i = 0; i < flechas.size();i++)
-         {
-             Flecha flecha = flechas.get(i);
-             
-             if(flecha.getColor() == 'r')
-             {
-                 if(flecha.getDireccion() == 'i')
-                 {
-                     vSeries.add(flecha.getPunto().getX(), flecha.getPunto().getY(), -1, 0);
-                 }
-                 else
-                 {
-                      vSeries.add(flecha.getPunto().getX(), flecha.getPunto().getY(), 1, 0);
-                 }
-             }
-         }
-         
-         return vSeries;
-     }
-     
-     private VectorSeries getVectorFlechasVerdes(List<Flecha> flechas)
-     {
-         VectorSeries vSeries = new VectorSeries("Repulsoras");
-         
-         for(int i = 0; i < flechas.size();i++)
-         {
-             Flecha flecha = flechas.get(i);
-             
-             if(flecha.getColor() == 'v')
-             {
-                 if(flecha.getDireccion() == 'i')
-                 {
-                     vSeries.add(flecha.getPunto().getX(), flecha.getPunto().getY(), -1, 0);
-                 }
-                 else
-                 {
-                      vSeries.add(flecha.getPunto().getX(), flecha.getPunto().getY(), 1, 0);
-                 }
-             }
-         }
-         
-         return vSeries;
-     }
-     
-     
-     private void graficarFases(List<Flecha> flechas)
-     {
-         dataGraficoFases = crearPuntosRaices();
-         jTabbedFases.removeAll();
-         
-         NumberAxis numberaxisx = new NumberAxis("x");
-         numberaxisx.setAutoRangeIncludesZero(false);
-         
-         numberaxisx.setRange(-5d, 5d);
-         
-         NumberAxis numberaxisy = new NumberAxis("y");
-         numberaxisy.setAutoRangeIncludesZero(false); 
-         
-         numberaxisy.setRange(raices.get(0)-1d, raices.get(raices.size()-1)+1d);
- 
-         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
-         renderer.setSeriesPaint(0, Color.BLACK);
-         XYPlot plot = new XYPlot(dataGraficoFases, numberaxisy, numberaxisy, renderer);
-         plot.setRangeZeroBaselineVisible(true);
-         
-         VectorSeries vSeries = getVectorFlechasRojas(flechas);
-         
-         VectorSeriesCollection vsCol = new VectorSeriesCollection();
-         vsCol.addSeries(vSeries);
-         plot.setDataset(1, vsCol);
-         
-         VectorRenderer vRenderer = new VectorRenderer();
-         vRenderer.setSeriesPaint(0, Color.RED);
-         plot.setRenderer(1,vRenderer);
-
-         VectorSeries vSeries1 = getVectorFlechasVerdes(flechas);
-         
-         VectorSeriesCollection vsCol1 = new VectorSeriesCollection();
-         vsCol1.addSeries(vSeries1);
-         plot.setDataset(2, vsCol1);
-         
-         VectorRenderer vRenderer1 = new VectorRenderer();
-         vRenderer1.setSeriesPaint(0, Color.GREEN);
-         plot.setRenderer(2,vRenderer1);
-         
-         JFreeChart jfreeChart = new JFreeChart("Fases", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
-         
-         ChartPanel chartPanel = new ChartPanel(jfreeChart, false);
-         chartPanel.setVisible(true);
-
-         jTabbedFases.add("Fases",chartPanel);
-         
-         jTabbedFases.setVisible(true);
-         
-         jTabbedFases.repaint();
-         panelGraficoFases.repaint();
-         this.repaint();
-     }
-     
-     private void doGraficarFase()
-     {
-        List<Flecha> flechas = this.getFlechasFase();
-        this.graficarFases(flechas);
-     }
-     
-     private List<Flecha> getFlechasFase()
-     {
-         List<Flecha> ret = new ArrayList<Flecha>();
-         double h = Double.parseDouble(this.txtH.getText());
-         
-         for(int i = 0; i<raices.size();i++)
-         {
-             double raiz = raices.get(i);
-             Flecha fDer = null;
-             Flecha fIzq = null;
-             
-             try
-             {
-                  double izq = (Double)this.parser.getValor(raiz-h);
-                  fIzq = new Flecha();
-                              
-                  if(izq < 0) fIzq.setDireccion('i');
-                  else fIzq.setDireccion('d');  
-             }
-             catch(Exception e)
-             {
-                 
-             }
-             
-             try
-             {
-                double der = (Double)this.parser.getValor(raiz+h);
-                fDer = new Flecha();
-                
-                if(der < 0) fDer.setDireccion('i');
-                else fDer.setDireccion('d');
-             }
-             catch(Exception e)
-             {
-             
-             }
-             
-             if((fDer != null) && (fIzq !=null))
-             {
-                 if( (fDer.getDireccion() == 'i') &&  (fIzq.getDireccion() == 'd')   )
-                 {
-                     fDer.setColor('v');
-                     fIzq.setColor('v');
-                     fDer.setPunto(new Punto(raiz+1,0));
-                     fIzq.setPunto(new Punto(raiz-1,0));
-                 }
-                 else if( (fDer.getDireccion() == 'd') &&  (fIzq.getDireccion() == 'i')   )
-                 {
-                      fDer.setColor('r');
-                      fIzq.setColor('r');
-                      fDer.setPunto(new Punto(raiz,0));
-                      fIzq.setPunto(new Punto(raiz,0));
-                 }
-                 else
-                 {
-                      fDer.setColor('r');
-                      fIzq.setColor('r');
-                      
-                     if( (fDer.getDireccion() == 'd') &&  (fIzq.getDireccion() == 'd')   )
-                     {
-                        fDer.setPunto(new Punto(raiz,0));
-                        fIzq.setPunto(new Punto(raiz-1,0));
-                     }
-                     else
-                     {
-                        fDer.setPunto(new Punto(raiz+1,0));
-                        fIzq.setPunto(new Punto(raiz,0));
-                     }
-                 }
-                 ret.add(fIzq);
-                 ret.add(fDer);
-             }
-             else System.out.println("No se puede hacer una flecha aca.");
-         }
-         return ret;
-     }
-     
-     private double maxDifRaiz(double a)
-     {
-         double max = 0;
-         double newDif = 0;
-         for(int i = 0; i<this.raices.size();i++)
-         {
-             if(i == i)
-             {
-                 max = Math.abs(raices.get(i) - a);
-             }
-             
-             newDif=Math.abs(raices.get(i) - a);
-             
-             if(newDif > max)
-             {
-                 max = newDif;
-             }
-         }
-         
-         return max;
-     }
-     
-     private double[] fixEuler(double[] vec)
-     {
-         Vector<Double> aux = new Vector<Double>();
-         
-         for(int i =0; i< vec.length;i++)
-         {
-             if(!(Double.isInfinite(vec[i])))
-             {
-                 if(this.maxDifRaiz(vec[i]) < 5d)
-                 {
-                    aux.add(vec[i]);
-                 }
-             }
-         }
-         
-         double [] ret = new double[aux.size()];
-         
-         for(int i = 0; i<aux.size();i++)
-             ret [i] = aux.get(i);
-         
-         return ret;
-     }
-     
-    private XYDataset cargarEuler(){
-        
-        Euler e = new Euler(Double.parseDouble(this.txtHTiempo.getText()),
-                            Double.parseDouble(this.txtX0.getText()),
-                            Double.parseDouble(this.txtY0.getText()),
-                            this.getTxtFuncion().getText(),Double.parseDouble(this.txtTiempoMin.getText()),
-                            Double.parseDouble(this.txtTiempoMax.getText()),
-                            this.parser);
-        
-        XYSeries xyseries = new XYSeries("Euler");
-        double[] eu = e.getPoints();
-        
-        eu = this.fixEuler(eu);
-        
-        for(int i = 0 ; i < eu.length ; i++){
-            
-            xyseries.add(i,eu[i]);//Esto nose si es asi o al reves
-            System.out.println(eu[i] + "\n");
-        }
-       
-        
-        XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
-        return xyseriescollection;
-    }
-     
-     
-     private XYDataset cargarPuntosFvsT() 
-    {
-        XYSeries xyseries = new XYSeries("Series 1");
-        double inicio = Double.parseDouble(txtXinicial.getText());
-        double fin = Double.parseDouble(txtXfinal.getText());
-
-        XYSeriesCollection xyseriescollection = new XYSeriesCollection();
-        for(int i = 0; i< raices.size(); i++)
-        {
-            xyseries = new XYSeries("Series "+(i+1));
-            for(double j = -5; j < 5; j+=0.1)
-            {
-                xyseries.add(j,raices.get(i));
-            }
-            xyseriescollection.addSeries(xyseries);
-        }
-        //ACA FIJATE Q T CARGA UNA SERIE POR CADA RAIZ
-        //ENTONCES T PONE UNA DE CADA COLOR
-        
-        return xyseriescollection;
-    }
-     
-     private void doGraficarFvsT2(){
-         dataGraficoFvsT = this.cargarPuntosFvsT(); //Cargo XYSeries para las raices
-         XYDataset euler1 = this.cargarEuler(); //Cargo a euler en otra serie
-         jTabbedFvsT.removeAll();
-         
-         
-        JFreeChart jfreechart = ChartFactory.createXYLineChart("Line Chart Demo 4", "X", "Y", dataGraficoFvsT, PlotOrientation.VERTICAL, true, true, false);
-        XYPlot xyplot = (XYPlot)jfreechart.getPlot();
-        xyplot.setDataset(1,euler1);
-        xyplot.getDomainAxis().setLowerMargin(0.0D);
-        xyplot.getDomainAxis().setUpperMargin(0.0D);
-
-        XYLineAndShapeRenderer xylineandshaperenderer = (XYLineAndShapeRenderer)xyplot.getRenderer();
-        //xylineandshaperenderer.setLegendLine(new java.awt.geom.Rectangle2D.Double(-4D, -3D, 8D, 6D));
-        
-        ChartPanel chartPanel = new ChartPanel(jfreechart, false);
-        chartPanel.setVisible(true);
-        jTabbedFvsT.add("Fases",chartPanel);
-         
-         jTabbedFvsT.setVisible(true);
-         
-         jTabbedFvsT.repaint();
-         panelFvsT.repaint();
-         this.repaint();
-
-     }
-     
-     private void doGraficarFvsT()
-     {
-         dataGraficoFvsT = this.cargarPuntosFvsT();
-         XYDataset euler1 = this.cargarEuler();
-         
-         
-         jTabbedFvsT.removeAll();
-         
-         NumberAxis numberaxisx = new NumberAxis("t");
-         numberaxisx.setAutoRangeIncludesZero(false);
-      /*   numberaxisx.setUpperMargin(0.12D);
-         numberaxisx.setStandardTickUnits(NumberAxis.createIntegerTickUnits());*/
-         //numberaxisx.setRange(-5d, 5d);
-         
-         NumberAxis numberaxisy = new NumberAxis("x");
-         numberaxisy.setAutoRangeIncludesZero(false); 
-       /*  numberaxisy.setUpperMargin(0.12D);
-         numberaxisy.setStandardTickUnits(NumberAxis.createIntegerTickUnits());*/
-         
-        //   numberaxisy.setRange(raices.get(0)-1d, raices.get(raices.size()-1)+1d);
- 
-         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
-         renderer.setSeriesPaint(0, Color.black);
-         XYPlot plot = new XYPlot(dataGraficoFvsT, numberaxisx, numberaxisy, renderer);
-         plot.setRangeZeroBaselineVisible(true);
-         
-         plot.setDataset(1,euler1);
-         
-         
-         JFreeChart jfreeChart = new JFreeChart("F vs T", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
-         
-         ChartPanel chartPanel = new ChartPanel(jfreeChart, false);
-         chartPanel.setVisible(true);
-
-         jTabbedFvsT.add("Fases",chartPanel);
-         
-         jTabbedFvsT.setVisible(true);
-         
-         jTabbedFvsT.repaint();
-         panelFvsT.repaint();
-         this.repaint();
-     }
-     
-      private void vaciarTabbeds()
-     {
-         jTabbedFases.removeAll();
-         jTabbedFvsT.removeAll();
-         jTabbedPane1.removeAll();
-     }
-     
 private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFuncionKeyPressed
-     
-     if (evt.getKeyCode() == KeyEvent.VK_ENTER) 
-     {
+
+    if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
         vaciarTabbeds();
-        doGraficarFuncion();
-        raices = parser.getRaices();
-        
-        if(!(raices.isEmpty()))
-        {
-            doGraficarFase();
-            doGraficarFvsT2();
+        graficadorFuncion.graficarFuncion();
+        setRaices(rootFinder.findRoot(this.getTxtFuncion().getText(), Double.parseDouble(this.getTxtXinicial().getText()), Double.parseDouble(this.getTxtXfinal().getText()), 200));
+
+        if (!(raices.length == 0)) {
+            graficadorFases.graficarFases();
+            graficadorTvsX.graficarTvsX();
         }
-     }
+    }
 }//GEN-LAST:event_txtFuncionKeyPressed
 
 private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGraficarActionPerformed
-       
-        vaciarTabbeds();
-        doGraficarFuncion(); 
-        raices = parser.getRaices();
-        
-        if(!(raices.isEmpty()))
-        {
-            doGraficarFase();
-            doGraficarFvsT2();
-        }
-        
-        
-}//GEN-LAST:event_buttonGraficarActionPerformed
 
-private void txtFuncionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFuncionKeyTyped
-    
-}//GEN-LAST:event_txtFuncionKeyTyped
+    vaciarTabbeds();
+    graficadorFuncion.graficarFuncion();
+    setRaices(rootFinder.findRoot(this.getTxtFuncion().getText(), Double.parseDouble(this.getTxtXinicial().getText()), Double.parseDouble(this.getTxtXfinal().getText()), 200));
+
+    if (!(raices.length == 0)) {
+        graficadorFases.graficarFases();
+        graficadorTvsX.graficarTvsX();
+    }
+
+
+}//GEN-LAST:event_buttonGraficarActionPerformed
 
 private void txtFuncionCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtFuncionCaretUpdate
     String newExpressionString = getTxtFuncion().getText();
-    parser.agregarFuncion(newExpressionString);
+    getParser().agregarFuncion(newExpressionString);
 }//GEN-LAST:event_txtFuncionCaretUpdate
 
 private void setLookAndFeel() throws HeadlessException {
@@ -953,6 +438,142 @@ private void setLookAndFeel() throws HeadlessException {
 
     public void setButtonGraficar(javax.swing.JButton buttonGraficar) {
         this.buttonGraficar = buttonGraficar;
+    }
+
+    public Parser getParser() {
+        return parser;
+    }
+
+    public void setParser(Parser parser) {
+        this.parser = parser;
+    }
+
+    public javax.swing.JTextField getTxtCorte() {
+        return txtCorte;
+    }
+
+    public void setTxtCorte(javax.swing.JTextField txtCorte) {
+        this.txtCorte = txtCorte;
+    }
+
+    public javax.swing.JTextField getTxtH() {
+        return txtH;
+    }
+
+    public void setTxtH(javax.swing.JTextField txtH) {
+        this.txtH = txtH;
+    }
+
+    public javax.swing.JTextField getTxtXinicial() {
+        return txtXinicial;
+    }
+
+    public void setTxtXinicial(javax.swing.JTextField txtXinicial) {
+        this.txtXinicial = txtXinicial;
+    }
+
+    public javax.swing.JTextField getTxtXfinal() {
+        return txtXfinal;
+    }
+
+    public void setTxtXfinal(javax.swing.JTextField txtXfinal) {
+        this.txtXfinal = txtXfinal;
+    }
+
+    public javax.swing.JPanel getPanelGrafico1() {
+        return panelGrafico1;
+    }
+
+    public void setPanelGrafico1(javax.swing.JPanel panelGrafico1) {
+        this.panelGrafico1 = panelGrafico1;
+    }
+
+    public javax.swing.JTabbedPane getJTabbedPane1() {
+        return jTabbedPane1;
+    }
+
+    public void setJTabbedPane1(javax.swing.JTabbedPane jTabbedPane1) {
+        this.jTabbedPane1 = jTabbedPane1;
+    }
+
+    public javax.swing.JTabbedPane getJTabbedFases() {
+        return jTabbedFases;
+    }
+
+    public void setJTabbedFases(javax.swing.JTabbedPane jTabbedFases) {
+        this.jTabbedFases = jTabbedFases;
+    }
+
+    public javax.swing.JPanel getPanelGraficoFases() {
+        return panelGraficoFases;
+    }
+
+    public void setPanelGraficoFases(javax.swing.JPanel panelGraficoFases) {
+        this.panelGraficoFases = panelGraficoFases;
+    }
+
+    public double[] getRaices() {
+        return raices;
+    }
+
+    public void setRaices(double[] raices) {
+        this.raices = raices;
+    }
+
+    public javax.swing.JTabbedPane getJTabbedFvsT() {
+        return jTabbedFvsT;
+    }
+
+    public void setJTabbedFvsT(javax.swing.JTabbedPane jTabbedFvsT) {
+        this.jTabbedFvsT = jTabbedFvsT;
+    }
+
+    public javax.swing.JPanel getPanelFvsT() {
+        return panelFvsT;
+    }
+
+    public void setPanelFvsT(javax.swing.JPanel panelFvsT) {
+        this.panelFvsT = panelFvsT;
+    }
+
+    public javax.swing.JTextField getTxtHTiempo() {
+        return txtHTiempo;
+    }
+
+    public void setTxtHTiempo(javax.swing.JTextField txtHTiempo) {
+        this.txtHTiempo = txtHTiempo;
+    }
+
+    public javax.swing.JTextField getTxtX0() {
+        return txtX0;
+    }
+
+    public void setTxtX0(javax.swing.JTextField txtX0) {
+        this.txtX0 = txtX0;
+    }
+
+    public javax.swing.JTextField getTxtY0() {
+        return txtY0;
+    }
+
+    public void setTxtY0(javax.swing.JTextField txtY0) {
+        this.txtY0 = txtY0;
+    }
+
+    public javax.swing.JTextField getTxtTiempoMin() {
+        return txtTiempoMin;
+    }
+
+    public void setTxtTiempoMin(javax.swing.JTextField txtTiempoMin) {
+        this.txtTiempoMin = txtTiempoMin;
+    }
+
+    public javax.swing.JTextField getTxtTiempoMax() {
+        return txtTiempoMax;
+    }
+
+    public void setTxtTiempoMax(javax.swing.JTextField txtTiempoMax) {
+        this.txtTiempoMax = txtTiempoMax;
     }
 
 }
