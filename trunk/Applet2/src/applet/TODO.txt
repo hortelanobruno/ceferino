@@ -1,0 +1,9 @@
+Como graficar el diagrama de fases cuando no hay raiz ===> Acero
+
+Obtener coordenadas con el mouse.
+
+Poner flechas y automatizar Euler.
+
+Hacer parametros.
+
+Hacer documento.S
