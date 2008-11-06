@@ -367,8 +367,6 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
         graficadorFases.graficarFases();
         graficadorTvsX.graficarTvsX();
     }
-
-
 }//GEN-LAST:event_buttonGraficarActionPerformed
 
 private void txtFuncionCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtFuncionCaretUpdate
