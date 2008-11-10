@@ -7,7 +7,6 @@ package applet;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.MouseEvent;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
@@ -24,8 +23,6 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
-import org.w3c.dom.events.EventTarget;
-import org.w3c.dom.views.AbstractView;
 import parser.Parser;
 
 /**
@@ -116,19 +113,17 @@ public class GraficadorFuncion {
 
             @Override
             public void chartChanged(ChartChangeEvent event) {
-                
+               
             }
         });
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
-        chartpanel.setHorizontalAxisTrace(true);
-        chartpanel.setVerticalAxisTrace(true);
-        //chartpanel.mouseclicked(mouseevent);
         chartpanel.addChartMouseListener(new ChartMouseListener() {
 
             @Override
             public void chartMouseClicked(ChartMouseEvent event) {
-                   System.out.println("Hola");
+                
+                
             }
 
             @Override
