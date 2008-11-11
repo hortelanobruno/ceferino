@@ -29,6 +29,39 @@ public class GraficadorTvsX {
         this.vista = sistema;
     }
     
+    private XYSeries getSerieEuler(double seed)
+    {
+        Euler e = new Euler(Double.parseDouble(this.vista.getTxtHTiempo().getText()), Double.parseDouble(this.vista.getTxtX0().getText()),
+                            seed, this.vista.getTxtFuncion().getText(), Double.parseDouble(this.vista.getTxtTiempoMin().getText()),
+                            Double.parseDouble(this.vista.getTxtTiempoMax().getText()), this.vista.getParser());
+        XYSeries s = new XYSeries("serie ");
+        double[] eu = e.getPoints();
+        
+        for(int i = 0; i<eu.length;i++)
+        {
+            s.add(i,eu[i]);
+        }
+        
+        return s;
+    }
+    
+    private XYSeriesCollection getAllEulerSeries()
+    {
+        XYSeries xyseries = new XYSeries("Series 1");
+        XYSeriesCollection ret = new XYSeriesCollection(xyseries);
+        double seed = (Math.random()*this.vista.getRaices()[0]) + (this.vista.getRaices()[0] -1);
+        //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[0]-1));
+       // ret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
+        ret.addSeries(this.getSerieEuler(seed));
+        for(int i = 1; i < this.vista.getRaices().length-1;i++)
+        {  
+            seed =  (Math.random()*this.vista.getRaices()[i+1]) + (this.vista.getRaices()[i]);
+            ret.addSeries(this.getSerieEuler(seed));
+        }
+        
+        return ret;
+    }
+    
     public void graficarTvsX(){
         dataGraficoFvsT = this.cargarPuntosFvsT(); //Cargo XYSeries para las raices
         XYDataset euler1 = this.cargarEuler(); //Cargo a euler en otra serie
@@ -57,8 +90,8 @@ public class GraficadorTvsX {
     
     private XYDataset cargarPuntosFvsT() {
         XYSeries xyseries = new XYSeries("Series 1");
-        double inicio = Double.parseDouble(this.vista.getTxtXinicial().getText());
-        double fin = Double.parseDouble(this.vista.getTxtXfinal().getText());
+       // double inicio = Double.parseDouble(this.vista.getTxtXinicial().getText());
+        //double fin = Double.parseDouble(this.vista.getTxtXfinal().getText());
 
         XYSeriesCollection xyseriescollection = new XYSeriesCollection();
         for (int i = 0; i < this.vista.getRaices().length; i++) {
