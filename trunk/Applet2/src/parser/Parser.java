@@ -7,10 +7,13 @@ package parser;
 import applet.SistemasDinamicos;
 import com.singularsys.jep.EvaluationException;
 import com.singularsys.jep.Jep;
+import com.singularsys.jep.ParseException;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,8 +23,13 @@ public class Parser {
 
     private Jep jep;
     private SistemasDinamicos vista;
-    
 
+    public Parser(String funcion) {
+        iniciarParser();
+        this.addFunc(funcion);
+    }
+    
+    
     public Parser(SistemasDinamicos sis) {
         this.vista = sis;
         iniciarParser();
@@ -33,7 +41,15 @@ public class Parser {
         this.agregarFuncion(funcion);
     }
 
-
+    private void addFunc(String func)
+    {
+        try {
+            this.jep.parse(func);
+        } catch (ParseException ex) {
+            Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void agregarFuncion(String funcion) {
         try {
             this.jep.parse(funcion);

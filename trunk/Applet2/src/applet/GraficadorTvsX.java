@@ -35,17 +35,16 @@ public class GraficadorTvsX {
     
     private XYSeries getSerieEuler(double seed)
     {
-        Euler e = new Euler(Double.parseDouble(this.vista.getTxtHTiempo().getText()), Double.parseDouble(this.vista.getTxtX0().getText()),
-                            seed, this.vista.getTxtFuncion().getText(), Double.parseDouble(this.vista.getTxtTiempoMin().getText()),
+        Euler e = new Euler(Double.parseDouble(this.vista.getTxtHTiempo().getText()), 0, seed, 
+                            this.vista.getTxtFuncion().getText(), Double.parseDouble(this.vista.getTxtTiempoMin().getText()),
                             Double.parseDouble(this.vista.getTxtTiempoMax().getText()), this.vista.getParser());
+        
         XYSeries s = new XYSeries("serie ");
         List<Double> eu = e.getPoints();
         
         for(int i = 0; i<eu.size();i++)
-        {
             s.add(i,eu.get(i));
-        }
-        
+    
         return s;
     }
     
@@ -62,13 +61,13 @@ public class GraficadorTvsX {
             System.out.println("Semilla : " + seed);
             for(int i = 0; i < this.vista.getRaices().length-1;i++)
             {  
-                //seed = Math.ceil(Math.random()*raices[i+1]) + (raices[i]);
-                seed = raices[i];
+                seed = Math.ceil(Math.random()*raices[i+1]) + (raices[i]);
+                //seed = raices[i];
                 ret.addSeries(this.getSerieEuler(seed));
                 System.out.println("Semilla : " + seed);
             }
-            //seed =  (Math.random()*(raices[raices.length-1]+1)) + raices[raices.length-1];
-            seed = raices[raices.length-1]+Double.parseDouble(vista.getTxtH().getText());
+           // seed =  (Math.random()*(raices[raices.length-1]+1)) + raices[raices.length-1];
+            seed = raices[raices.length-1]+1;
             ret.addSeries(this.getSerieEuler(seed));
             System.out.println("Semilla : " + seed);
         }else{
