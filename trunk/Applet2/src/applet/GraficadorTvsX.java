@@ -49,35 +49,35 @@ public class GraficadorTvsX {
     {
         XYSeries xyseries = new XYSeries("Series 1");
         XYSeriesCollection ret = new XYSeriesCollection(xyseries);
-        double seed = (Math.random()*this.vista.getRaices()[0]) + (this.vista.getRaices()[0] -1);
-        System.out.println("seed: " + seed);
-        //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[0]-1));
-       // zret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
-        ret.addSeries(this.getSerieEuler(seed));
-        for(int i = 0; i < this.vista.getRaices().length-1;i++)
-        {  
-            seed = Math.ceil(Math.random()*this.vista.getRaices()[i+1]) + (this.vista.getRaices()[i]);
+        if(raices.length != 0){
+            double seed = (Math.random()*this.vista.getRaices()[0]) + (this.vista.getRaices()[0] -1);
             System.out.println("seed: " + seed);
+            //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[0]-1));
+            //zret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
+            ret.addSeries(this.getSerieEuler(seed));
+            for(int i = 0; i < this.vista.getRaices().length-1;i++)
+            {  
+                seed = Math.ceil(Math.random()*this.vista.getRaices()[i+1]) + (this.vista.getRaices()[i]);
+                System.out.println("seed: " + seed);
+                ret.addSeries(this.getSerieEuler(seed));
+            }
+
+             seed =  (Math.random()*this.vista.getRaices()[this.vista.getRaices().length-1]) + this.vista.getRaices()[this.vista.getRaices().length-1];
+             System.out.println("seed: " + seed);
+             ret.addSeries(this.getSerieEuler(seed));
+        }else{
+            double seed = 0;
             ret.addSeries(this.getSerieEuler(seed));
         }
-        
-         seed =  (Math.random()*this.vista.getRaices()[this.vista.getRaices().length-1]) + this.vista.getRaices()[this.vista.getRaices().length-1];
-         System.out.println("seed: " + seed);
-         ret.addSeries(this.getSerieEuler(seed));
-       // System.out.println("Ultima raiz: " + this.vista.getRaices()[this.vista.getRaices().length-1]);
-        
         return ret;
     }
     
-    private XYDataset cargarPuntosSeriesEuler() 
-    {
-        return this.getAllEulerSeries();
-    }
     
     public void graficarTvsX(){
+        raices = this.vista.getRaices();
         dataGraficoFvsT = this.cargarPuntosFvsT(); //Cargo XYSeries para las raices
         //XYDataset euler1 = this.cargarEuler(); //Cargo a euler en otra serie
-        XYDataset euler1 = this.cargarPuntosSeriesEuler(); //Cargo a euler en otra serie
+        XYDataset euler1 = this.getAllEulerSeries(); //Cargo a euler en otra serie
         this.vista.getJTabbedFvsT().removeAll();
 
 
@@ -119,25 +119,4 @@ public class GraficadorTvsX {
 
         return xyseriescollection;
     }
-    
-    private XYDataset cargarEuler() {
-
-        Euler e = new Euler(Double.parseDouble(this.vista.getTxtHTiempo().getText()),
-        Double.parseDouble(this.vista.getTxtX0().getText()),
-        Double.parseDouble(this.vista.getTxtY0().getText()),
-        this.vista.getTxtFuncion().getText(), Double.parseDouble(this.vista.getTxtTiempoMin().getText()),
-        Double.parseDouble(this.vista.getTxtTiempoMax().getText()), this.vista.getParser());
-
-        XYSeries xyseries = new XYSeries("Euler");
-        double[] eu = e.getPoints();
-        for (int i = 0; i < eu.length; i++) {
-
-            xyseries.add(i, eu[i]);//Esto nose si es asi o al reves
-        }
-
-
-        XYSeriesCollection xyseriescollection = new XYSeriesCollection(xyseries);
-        return xyseriescollection;
-    }
-
 }

@@ -6,7 +6,6 @@
 package applet;
 
 import java.awt.Color;
-import java.awt.Font;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
@@ -17,12 +16,9 @@ import org.jfree.chart.event.ChartChangeListener;
 import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.RectangleEdge;
 import parser.Parser;
 
 /**
@@ -39,8 +35,7 @@ public class GraficadorFuncion {
     }
 
     public void graficarFuncion(){
-        this.vista.setParser(new Parser(vista, Double.parseDouble(this.vista.getTxtH().getText()), Double.parseDouble(this.vista.getTxtXinicial().getText()), Double.parseDouble(this.vista.getTxtXfinal().getText()), this.vista.getDecimales(), this.vista.getTxtFuncion().getText()));
-        this.vista.getParser().setCorte(Double.parseDouble(this.vista.getTxtCorte().getText()));
+        this.vista.setParser(new Parser(vista, this.vista.getTxtFuncion().getText()));
         this.vista.getParser().agregarFuncion(this.vista.getTxtFuncion().getText());
         dataGraficoFuncion = cargarPuntosFuncion();  
         this.vista.getPanelGrafico1().removeAll();
@@ -102,35 +97,8 @@ public class GraficadorFuncion {
         xyplot.setDomainZeroBaselineVisible(true);
         xyplot.setRangeZeroBaselineVisible(true);     
         JFreeChart jfreechart = new JFreeChart("f vs x", JFreeChart.DEFAULT_TITLE_FONT, xyplot, true);
-        
-        TextTitle source = new TextTitle("f vs x");
-        source.setFont(new Font("SansSerif", Font.PLAIN, 10));
-        source.setPosition(RectangleEdge.BOTTOM);
-        source.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-        jfreechart.addSubtitle(source);
-        
-        jfreechart.addChangeListener(new ChartChangeListener() {
-
-            @Override
-            public void chartChanged(ChartChangeEvent event) {
-               
-            }
-        });
         ChartPanel chartpanel = new ChartPanel(jfreechart, false);
         chartpanel.setVisible(true);
-        chartpanel.addChartMouseListener(new ChartMouseListener() {
-
-            @Override
-            public void chartMouseClicked(ChartMouseEvent event) {
-                
-                
-            }
-
-            @Override
-            public void chartMouseMoved(ChartMouseEvent event) {
-                
-            }
-        });
         return chartpanel;
     }
     

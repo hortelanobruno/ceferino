@@ -9,8 +9,6 @@ import com.singularsys.jep.EvaluationException;
 import com.singularsys.jep.Jep;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.List;
-import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
@@ -21,153 +19,20 @@ import java.util.Locale;
 public class Parser {
 
     private Jep jep;
-    private double h;
-    private double xmin;
-    private double xmax;
-    private List<Double> raicesBiseccion;
-    private List<Double> raicesNewton;
-    private DecimalFormat money;
     private SistemasDinamicos vista;
-    private double corte;
-    private int decimales;
-    private double ultimoResultado;
+    
 
     public Parser(SistemasDinamicos sis) {
         this.vista = sis;
         iniciarParser();
     }
 
-    public Parser(SistemasDinamicos sis, double h, double xmin, double xmax, String cantDec, String funcion) {
+    public Parser(SistemasDinamicos sis, String funcion) {
         this.vista = sis;
-        this.raicesBiseccion = new ArrayList<Double>();
-        this.raicesNewton = new ArrayList<Double>();
         iniciarParser();
-        this.h = h;
-        this.xmax = xmax;
-        this.xmin = xmin;
-        this.money = new DecimalFormat(cantDec);
-        money.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.ENGLISH));
         this.agregarFuncion(funcion);
-
-
-    //agregarFuncion("2(x^2)+x-10");
-    // agregarFuncion("x^2");
-    //  biseccion();
-       /* for(int i=0 ; i < raicesBiseccion.size() ; i++){
-    System.out.println(raicesBiseccion.get(i));
-    }*/
     }
 
-    public List<Double> getRaices() {
-        this.raicesBiseccion = new ArrayList<Double>();
-        biseccion();
-        newton();
-        return this.raicesBiseccion;
-    }
-
-    
-    private void biseccion3(double xii, double xuu){
-        double xi =xii; 
-        double xu =xuu;
-        int iteraciones = 20;
-        double xr = xi;
-        double yr;
-        List<Double> xrs = new ArrayList<Double>();
-        double yi = (Double) getValor(xi);
-        double yu = (Double) getValor(xu);
-        for (int i = 1; i<=iteraciones; i++)
-        {
-                ultimoResultado = xr;
-                xr = (xu + xi)/2;
-                xrs.add(xr);
-                System.out.println("***********************");
-                System.out.println("it:"+i);
-                System.out.println("xu:"+xu+" - yu:"+yu);
-                System.out.println("xi:"+xi+" - yi:"+yi);
-                System.out.println("xr:"+xr);
-                yr = (Double) getValor(xr);
-                if ( (Math.abs((xr-ultimoResultado)/xr)*100 < getCorte()) && (Math.abs(yr) < getCorte()) )
-                {
-                        raicesBiseccion.add(xr);
-                }
-                if((yi * yr)<0)
-                {
-                        xu = xr;
-                        yu = yr;
-                }
-                else
-                {
-                        xi = xr;
-                        yi = yr;
-                }
-        }
-    }
-    
-    
-    
-    private void biseccion() {
-        double aux, a, b;
-        for (double i = xmin; i < xmax; i = i+h) {
-            //aux = Double.parseDouble(money.format(i + h).replace(',', '.'));
-            aux =(i + h);
-            try {
-                //a = Double.parseDouble(money.format(getValor(i)).replace(',', '.'));
-                a = (Double)getValor(i);
-                //b = Double.parseDouble(money.format((getValor(aux))).replace(',', '.'));
-                b = (Double) getValor(aux);
-                if ((a > 0) || (b > 0)) {
-                    if (a < getCorte()) {
-                        ultimoResultado = i;
-                        biseccion3(i, aux);
-                    } else if (b < getCorte()) {
-                        ultimoResultado = i;
-                        biseccion3(i, aux);
-                    }
-                } else {
-                    if ((a * b) < 0) {
-                        ultimoResultado = i;
-                        biseccion3(i, aux);
-                    }
-                }
-            } catch (Exception e) {
-            }
-        }
-    }
-
-    private void biseccion2(double a, double b) {
-        //double valorA = Double.parseDouble(money.format(getValor(a)).replace(',', '.'));
-        //double c = Double.parseDouble(money.format((a + b) / 2).replace(',', '.'));
-        //double valorC = Double.parseDouble(money.format(getValor(c)).replace(',', '.'));
-        double valorA = (Double) getValor(a);
-        double c = a+b/2;
-        double valorC = (Double) getValor(c);
-//        if(Double.parseDouble(money.format(valorA*valorC))<0){
-//            //La raiz esta en el intervalo "a" y "c"
-//            biseccion2(a,c);
-//        }else if(Double.parseDouble(money.format(valorA*valorC).replace(',', '.'))>0){
-//            //La raiz esta en el intervalo "c" y "b"
-//            biseccion2(c,b);
-//        }else if(Double.parseDouble(money.format(valorA*valorC).replace(',', '.'))==0){
-//            //La raiz es "c"
-//            if(!(raicesBiseccion.contains(c)))
-//                raicesBiseccion.add(c);
-//        }
-        //PROFE  if (Double.parseDouble(money.format(Math.abs(valorC)).replace(',', '.')) < getCorte())
-        if ((Math.abs((c-ultimoResultado)/c)*100 < getCorte()) && (Math.abs(valorC) < getCorte())) {
-            //La raiz es "c"
-            if (!(raicesBiseccion.contains(c))) {
-                raicesBiseccion.add(c);
-            }
-        }else if ((valorA * valorC) < 0) {
-            //La raiz esta en el intervalo "a" y "c"
-            ultimoResultado=c;
-            biseccion2(a, c);
-        } else if ((valorA * valorC) > 0) {
-            //La raiz esta en el intervalo "c" y "b"
-            ultimoResultado=c;
-            biseccion2(c, b);
-        }
-    }
 
     public void agregarFuncion(String funcion) {
         try {
@@ -186,7 +51,7 @@ public class Parser {
         jep.setImplicitMul(true);
         // Add and initialize x to 0
         jep.addVariable("x", 0);
-    //jep.addFunction("sen", new org.nfunk.jep.function.Sine());
+        //jep.addFunction("sen", new org.nfunk.jep.function.Sine());
     }
 
     public Object getValor(double x) {
@@ -202,54 +67,5 @@ public class Parser {
         } catch (EvaluationException e) {
             return result;
         }
-    }
-    
-    
-    private double derivada(double seed) //Dereivada centrada: (fi+1 - fi-1)2h
-    {
-        double adelante = (Double) this.getValor(seed + this.h);
-        double atras = (Double) this.getValor(seed - this.h);
-        return (adelante - atras)/(2*this.h);
-    }
-    
-    private double raizPorNewtonRaphson(double seed)
-    {
-        return seed - ((Double)this.getValor(seed)/this.derivada(seed));
-    }
-    
-    private void newton()
-    {
-        for(int j = 0 ; j < 5 ; j++){
-            double seed = (Math.random()*this.xmax)+this.xmin;
-            for(int i = 0; i< 200;i++){
-                double xold = seed;
-                seed = this.raizPorNewtonRaphson(seed);
-
-                if(seed == xold){
-                    raicesNewton.add(seed);
-                }
-            }
-            raicesNewton.add(seed);
-        }
-    }
-
-    public Double getCorte() {
-        return corte;
-    }
-
-    public void setCorte(Double corte) {
-        this.corte = corte;
-    }
-
-    public double round(double nD, int nDec) {
-        return Math.round(nD * Math.pow(10, nDec)) / Math.pow(10, nDec);
-    }
-
-    public int getDecimales() {
-        return decimales;
-    }
-
-    public void setDecimales(int decimales) {
-        this.decimales = decimales;
     }
 }
