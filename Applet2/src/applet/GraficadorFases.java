@@ -43,12 +43,12 @@ public class GraficadorFases {
         dataGraficoFases = crearPuntosRaices();
         this.vista.getJTabbedFases().removeAll();
 
-        NumberAxis numberaxisx = new NumberAxis("x");
+        NumberAxis numberaxisx = new NumberAxis("");
         numberaxisx.setAutoRangeIncludesZero(false);
 
         numberaxisx.setRange(-5d, 5d);
         
-        NumberAxis numberaxisy = new NumberAxis("y");
+        NumberAxis numberaxisy = new NumberAxis("x");
         numberaxisy.setAutoRangeIncludesZero(false);
         if(raices.length == 0){
             numberaxisy.setRange(-1d,1d);
@@ -57,7 +57,7 @@ public class GraficadorFases {
         }
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
         renderer.setSeriesPaint(0, Color.BLACK);
-        XYPlot plot = new XYPlot(dataGraficoFases, numberaxisy, numberaxisy, renderer);
+        XYPlot plot = new XYPlot(dataGraficoFases, numberaxisy, numberaxisx, renderer);
         plot.setRangeZeroBaselineVisible(true);
 
         VectorSeries vSeries = getVectorFlechasRojas(flechas);

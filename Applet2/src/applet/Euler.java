@@ -1,5 +1,7 @@
 package applet;
 
+import java.util.ArrayList;
+import java.util.List;
 import parser.Parser;
 
 /**
@@ -20,7 +22,7 @@ public class Euler
     private Parser parser;
     private double timeMax;
     private double timeMin;
-    private double[] internalGraphicPoints;
+    private List<Double> internalGraphicPoints;
     private String funcion;
     
     
@@ -60,16 +62,15 @@ public class Euler
         this.seedy= seed;
     }
     
-    public double[] getPoints()
+    public List<Double> getPoints()
     {
         if(this.internalGraphicPoints == null)
         {
             double index = this.getTimeMin();
             double top = this.getTimeMax();
-            int size =((int) Math.ceil( (this.getTimeMax() - this.getTimeMin())/h));
-            this.internalGraphicPoints = new double[size];
+            this.internalGraphicPoints = new ArrayList<Double>();
             int i = 0; 
-
+            
             double funcVal =(Double)this.parser.getValor(this.getSeedX());
             double xant = this.getSeedY();
             double x;
@@ -80,7 +81,7 @@ public class Euler
                 xant = x;
                 index+=this.getH();
                 funcVal =(Double)this.parser.getValor(xant);
-                this.internalGraphicPoints[i++] = x;
+                this.internalGraphicPoints.add(x);
             }
         }
         return this.internalGraphicPoints; 
