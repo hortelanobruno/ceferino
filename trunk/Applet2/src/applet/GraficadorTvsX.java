@@ -52,7 +52,7 @@ public class GraficadorTvsX {
         double seed = (Math.random()*this.vista.getRaices()[0]) + (this.vista.getRaices()[0] -1);
         System.out.println("seed: " + seed);
         //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[0]-1));
-       // ret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
+        //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
         ret.addSeries(this.getSerieEuler(seed));
         for(int i = 0; i < this.vista.getRaices().length-1;i++)
         {  
