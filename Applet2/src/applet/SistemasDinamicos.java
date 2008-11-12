@@ -46,9 +46,9 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                     getTxtX0().setText("0");
                     getTxtY0().setText("1");
                     getTxtHTiempo().setText("0.2");
-                    getTxtTiempoMin().setText("0");
+                    getTxtTiempoMin().setText("-0.5");
                     getTxtTiempoMax().setText("0.6");
-                    getTxtFuncion().setText("x^2");
+                    getTxtFuncion().setText("x^2-2");
                 }
             });
         } catch (Exception ex) {
