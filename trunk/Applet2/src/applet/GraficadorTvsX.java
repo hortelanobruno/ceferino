@@ -5,9 +5,13 @@
 
 package applet;
 
+import java.awt.Color;
+import java.util.List;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -35,11 +39,11 @@ public class GraficadorTvsX {
                             seed, this.vista.getTxtFuncion().getText(), Double.parseDouble(this.vista.getTxtTiempoMin().getText()),
                             Double.parseDouble(this.vista.getTxtTiempoMax().getText()), this.vista.getParser());
         XYSeries s = new XYSeries("serie ");
-        double[] eu = e.getPoints();
+        List<Double> eu = e.getPoints();
         
-        for(int i = 0; i<eu.length;i++)
+        for(int i = 0; i<eu.size();i++)
         {
-            s.add(i,eu[i]);
+            s.add(i,eu.get(i));
         }
         
         return s;
@@ -50,21 +54,23 @@ public class GraficadorTvsX {
         XYSeries xyseries = new XYSeries("Series 1");
         XYSeriesCollection ret = new XYSeriesCollection(xyseries);
         if(raices.length != 0){
-            double seed = (Math.random()*this.vista.getRaices()[0]) + (this.vista.getRaices()[0] -1);
-            System.out.println("seed: " + seed);
+            //double seed = (Math.random()*raices[0]) + (raices[0] -1);
+            double seed = raices[0]-Double.parseDouble(vista.getTxtH().getText());
             //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[0]-1));
             //zret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
             ret.addSeries(this.getSerieEuler(seed));
+            System.out.println("Semilla : " + seed);
             for(int i = 0; i < this.vista.getRaices().length-1;i++)
             {  
-                seed = Math.ceil(Math.random()*this.vista.getRaices()[i+1]) + (this.vista.getRaices()[i]);
-                System.out.println("seed: " + seed);
+                //seed = Math.ceil(Math.random()*raices[i+1]) + (raices[i]);
+                seed = raices[i];
                 ret.addSeries(this.getSerieEuler(seed));
+                System.out.println("Semilla : " + seed);
             }
-
-             seed =  (Math.random()*this.vista.getRaices()[this.vista.getRaices().length-1]) + this.vista.getRaices()[this.vista.getRaices().length-1];
-             System.out.println("seed: " + seed);
-             ret.addSeries(this.getSerieEuler(seed));
+            //seed =  (Math.random()*(raices[raices.length-1]+1)) + raices[raices.length-1];
+            seed = raices[raices.length-1]+Double.parseDouble(vista.getTxtH().getText());
+            ret.addSeries(this.getSerieEuler(seed));
+            System.out.println("Semilla : " + seed);
         }else{
             double seed = 0;
             ret.addSeries(this.getSerieEuler(seed));
@@ -81,18 +87,38 @@ public class GraficadorTvsX {
         this.vista.getJTabbedFvsT().removeAll();
 
 
-        JFreeChart jfreechart = ChartFactory.createXYLineChart("Line Chart Demo 4", "X", "Y", dataGraficoFvsT, PlotOrientation.VERTICAL, true, true, false);
+        JFreeChart jfreechart = ChartFactory.createXYLineChart("F vs T", "t", "x", dataGraficoFvsT, PlotOrientation.VERTICAL, true, true, false);
+        jfreechart.removeLegend();
         XYPlot xyplot = (XYPlot) jfreechart.getPlot();
+        
+        NumberAxis numberaxisy = new NumberAxis("x");
+        numberaxisy.setAutoRangeIncludesZero(false);
+        if(raices.length == 0){
+            numberaxisy.setRange(-1d,1d);
+        }else{
+            numberaxisy.setRange(raices[0] - 1d, raices[raices.length - 1] + 1d);
+        }
+        
+        xyplot.setRangeAxis(numberaxisy);
+        
         xyplot.setDataset(1, euler1);
         xyplot.getDomainAxis().setLowerMargin(0.0D);
         xyplot.getDomainAxis().setUpperMargin(0.0D);
 
-        XYLineAndShapeRenderer xylineandshaperenderer = (XYLineAndShapeRenderer) xyplot.getRenderer();
-        //xylineandshaperenderer.setLegendLine(new java.awt.geom.Rectangle2D.Double(-4D, -3D, 8D, 6D));
+        xyplot.getRenderer(0).setPaint(Color.black);
+        XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer();
+        xylineandshaperenderer.setShapesVisible(false);
+        xylineandshaperenderer.setPaint(Color.red);
+        xylineandshaperenderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
 
+        xyplot.setRenderer(1,xylineandshaperenderer);
+        
+        
         ChartPanel chartPanel = new ChartPanel(jfreechart, false);
         chartPanel.setVisible(true);
-        this.vista.getJTabbedFvsT().add("Fases", chartPanel);
+        
+        
+        this.vista.getJTabbedFvsT().add("f vs t", chartPanel);
 
         this.vista.getJTabbedFvsT().setVisible(true);
 
@@ -103,7 +129,7 @@ public class GraficadorTvsX {
     
     private XYDataset cargarPuntosFvsT() {
         XYSeries xyseries = new XYSeries("Series 1");
-       // double inicio = Double.parseDouble(this.vista.getTxtXinicial().getText());
+        //double inicio = Double.parseDouble(this.vista.getTxtXinicial().getText());
         //double fin = Double.parseDouble(this.vista.getTxtXfinal().getText());
 
         XYSeriesCollection xyseriescollection = new XYSeriesCollection();
