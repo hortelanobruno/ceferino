@@ -50,9 +50,11 @@ public class GraficadorFases {
         
         NumberAxis numberaxisy = new NumberAxis("y");
         numberaxisy.setAutoRangeIncludesZero(false);
-
-        numberaxisy.setRange(raices[0] - 1d, raices[raices.length - 1] + 1d);
-
+        if(raices.length == 0){
+            numberaxisy.setRange(-1d,1d);
+        }else{
+            numberaxisy.setRange(raices[0] - 1d, raices[raices.length - 1] + 1d);
+        }
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
         renderer.setSeriesPaint(0, Color.BLACK);
         XYPlot plot = new XYPlot(dataGraficoFases, numberaxisy, numberaxisy, renderer);
@@ -153,6 +155,18 @@ public class GraficadorFases {
             } else {
                 System.out.println("No se puede hacer una flecha aca.");
             }
+        }
+        if(ret.isEmpty()){
+            Flecha flecha = new Flecha();
+            flecha.setColor('r');
+            flecha.setPunto(new Punto(0,0));
+            double valor = (Double) this.vista.getParser().getValor(0);
+            if(valor>0){
+                flecha.setDireccion('d');
+            }else{
+                flecha.setDireccion('i');
+            }
+            ret.add(flecha);
         }
         return ret;
     }
