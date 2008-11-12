@@ -22,7 +22,8 @@ public class Euler
     private Parser parser;
     private double timeMax;
     private double timeMin;
-    private List<Double> internalGraphicPoints;
+    private List<Double> internalPositiveGraphicPoints;
+    private List<Double> internalNegativeGraphicPoints;
     private String funcion;
     
     
@@ -64,13 +65,12 @@ public class Euler
     
     public List<Double> getPoints()
     {
-        if(this.internalGraphicPoints == null)
+        if(this.internalPositiveGraphicPoints == null)
         {
             double index = this.getTimeMin();
             double top = this.getTimeMax();
-            this.internalGraphicPoints = new ArrayList<Double>();
-            int i = 0; 
-            
+            this.internalPositiveGraphicPoints = new ArrayList<Double>();
+           
             double funcVal =(Double)this.parser.getValor(this.getSeedX());
             double xant = this.getSeedY();
             double x;
@@ -81,10 +81,10 @@ public class Euler
                 xant = x;
                 index+=this.getH();
                 funcVal =(Double)this.parser.getValor(xant);
-                this.internalGraphicPoints.add(x);
+                this.internalPositiveGraphicPoints.add(x);
             }
         }
-        return this.internalGraphicPoints; 
+        return this.internalPositiveGraphicPoints; 
     }
 
     public double getTimeMax() {
