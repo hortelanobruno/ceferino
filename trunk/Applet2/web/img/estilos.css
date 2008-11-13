@@ -1,0 +1,23 @@
+body {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	margin-top:0;
+	margin-left:0;
+	/*background-color:#466779;*/
+	font-size: 10px;
+}
+
+.BotonAccion {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 12px;
+	color: #006699;
+	background-color: #FFFFFF;
+	text-decoration: none;
+	height: auto;
+	width: auto;
+	border: 1px solid #006699;
+}
+.BotonAccion:hover {
+	color: #000000;
+	text-decoration: underline;
+}
