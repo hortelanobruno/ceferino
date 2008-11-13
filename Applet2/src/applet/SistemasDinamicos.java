@@ -5,6 +5,7 @@
  */
 package applet;
 
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -26,33 +27,173 @@ public class SistemasDinamicos extends javax.swing.JApplet {
     private GraficadorFuncion graficadorFuncion;
     private GraficadorFases graficadorFases;
     private GraficadorTvsX graficadorTvsX;
-
+    
+    /*******************PARAMETROS********************************/
+    
+    private String funcion;
+    private double hTiempo;
+    private double h;
+    private double tMax;
+    private double tMin;
+    private double xInicial;
+    private double xFinal;
+    private String fondoForm;
+    private String fondoGrafico;    
+    private String fontColor;
+    
+    
+    /*******************FIN PARAMETROS********************************/
+    
     /** Initializes the applet SistemasDinamicos */
     @Override
-    public void init() {
-        try {
-            java.awt.EventQueue.invokeAndWait(new Runnable() {
+    public void init() 
+    {
+        try 
+        {
+            java.awt.EventQueue.invokeAndWait(new Runnable() 
+            {
 
                 @Override
-                public void run() {
+                public void run() 
+                {
                     initComponents();
                     initComponents2();
                     setLookAndFeel();
-                    getTxtH().setText("0.01");
-                    getTxtXfinal().setText("5");
-                    getTxtXinicial().setText("-5");
-                    getTxtX0().setText("0");
-                    getTxtHTiempo().setText("0.2");
-                    getTxtTiempoMin().setText("-0.5");
-                    getTxtTiempoMax().setText("0.6");
-                    getTxtFuncion().setText("x^2-2");
-                }
+                    loadDefaultParams();
+                    boolean okLoadParams = loadParams();
+                    
+                    if(okLoadParams)
+                        setParams();
+                }            
             });
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) 
+        {
             ex.printStackTrace();
         }
     }
-
+    
+    private void setParams()
+    {
+        if(this.funcion != null)
+            this.txtFuncion.setText(this.funcion);
+        
+        if(this.hTiempo != 0)
+            this.txtHTiempo.setText(String.valueOf(this.hTiempo));
+        
+        if(this.h != 0)
+            this.txtH.setText(String.valueOf(this.h));
+        
+        if(this.tMin != 0)
+            this.txtTiempoMin.setText(String.valueOf(this.tMin));
+        
+        if(this.tMax != 0)
+            this.txtTiempoMax.setText(String.valueOf(this.tMax));
+        
+        if(this.xInicial != 0)
+            this.txtXinicial.setText(String.valueOf(this.xInicial));
+        
+        if(this.xFinal != 0)
+            this.txtXfinal.setText(String.valueOf(this.xFinal));
+        
+        if(!(this.fondoForm.equalsIgnoreCase("")))
+        {
+            int i = Integer.valueOf(fondoForm, 16).intValue();
+            panelCentral.setBackground(new Color(i));
+            jPanel4.setBackground(new Color(i));
+            jLabel1.setBackground(new Color(i));
+            jLabel10.setBackground(new Color(i));
+            jLabel11.setBackground(new Color(i));
+            jLabel2.setBackground(new Color(i));
+            jLabel5.setBackground(new Color(i));
+            jLabel7.setBackground(new Color(i));
+            jLabel9.setBackground(new Color(i));
+            buttonGraficar.setBackground(new Color(i));
+        }
+        
+        if(!(this.fondoGrafico.equalsIgnoreCase("")))
+        {
+             int i = Integer.valueOf(fondoGrafico, 16).intValue();
+             panelFvsT.setBackground(new Color(i));
+             panelGrafico1.setBackground(new Color(i));
+             panelGraficoFases.setBackground(new Color(i));
+        }
+        
+        if(!(this.fontColor.equalsIgnoreCase("")))
+        {
+            int i = Integer.valueOf(fontColor, 16).intValue();
+            jLabel1.setForeground(new Color(i));
+            jLabel10.setForeground(new Color(i));
+            jLabel11.setForeground(new Color(i));
+            jLabel2.setForeground(new Color(i));
+            jLabel5.setForeground(new Color(i));
+            jLabel7.setForeground(new Color(i));
+            jLabel9.setForeground(new Color(i));
+        }
+    }
+    
+    private void loadDefaultParams() 
+    {
+        this.hTiempo = 0;
+        this.h = 0;
+        this.tMax = 0;
+        this.tMin =0;
+        this.xFinal = 0;
+        this.xInicial = 0;
+        getTxtH().setText("0.01");
+        getTxtXfinal().setText("5");
+        getTxtXinicial().setText("-5");
+        getTxtHTiempo().setText("0.2");
+        getTxtTiempoMin().setText("-0.5");
+        getTxtTiempoMax().setText("0.6");
+        getTxtFuncion().setText("x^2-2");
+        this.fondoForm = "";
+        this.fondoGrafico = "";
+        this.fontColor = "";
+    }
+    
+    private boolean loadParams()
+    {
+        try
+        {
+            if(this.getParameter("funcion") != null)
+                this.funcion = this.getParameter("funcion");
+            
+            if(this.getParameter("h") != null)
+                this.h = Double.parseDouble(this.getParameter("h"));
+            
+            if(this.getParameter("hTiempo") != null)
+                this.hTiempo = Double.parseDouble(this.getParameter("hTiempo"));
+            
+            if(this.getParameter("tMax") != null)
+                this.tMax = Double.parseDouble(this.getParameter("tMax"));
+            
+            if(this.getParameter("tMin") != null)
+                this.tMin = Double.parseDouble(this.getParameter("tMin"));
+            
+            if(this.getParameter("xFinal") != null)
+                this.xFinal = Double.parseDouble("xFinal");
+            
+            if(this.getParameter("xInicial") != null)
+                this.xInicial = Double.parseDouble("xInicial");
+            
+            if(this.getParameter("fondoForm") != null)
+                this.fondoForm = this.getParameter("fondoForm");
+            
+            if(this.getParameter("fondoGrafico") != null)
+                this.fondoGrafico = this.getParameter("fondoGrafico");            
+            
+            if(this.getParameter("fontColor") != null)
+                this.fontColor = this.getParameter("fontColor");
+            
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+    
     /** This method is called from within the init() method to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -72,8 +213,6 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         txtFuncion = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtH = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        txtX0 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtTiempoMax = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -114,8 +253,6 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         });
 
         jLabel2.setText("h= ");
-
-        jLabel3.setText("X0= ");
 
         jLabel5.setText("t max");
 
@@ -161,11 +298,7 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                                 .addComponent(txtHTiempo)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(39, 39, 39)
-                                .addComponent(txtX0, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                            .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel9)
                                     .addComponent(jLabel10))
@@ -173,9 +306,7 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtXinicial)
                                     .addComponent(txtXfinal, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(buttonGraficar)
-                                .addGap(18, 18, 18))))
+                            .addComponent(buttonGraficar)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
@@ -194,17 +325,13 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtX0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
                             .addComponent(txtXinicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
                             .addComponent(txtXfinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonGraficar))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -237,8 +364,8 @@ public class SistemasDinamicos extends javax.swing.JApplet {
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelFvsT, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
@@ -257,7 +384,7 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                         .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCentralLayout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(93, 93, 93)
+                        .addGap(18, 18, 18)
                         .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
@@ -338,7 +465,6 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
@@ -355,7 +481,6 @@ private void setLookAndFeel() throws HeadlessException {
     private javax.swing.JTextField txtHTiempo;
     private javax.swing.JTextField txtTiempoMax;
     private javax.swing.JTextField txtTiempoMin;
-    private javax.swing.JTextField txtX0;
     private javax.swing.JTextField txtXfinal;
     private javax.swing.JTextField txtXinicial;
     // End of variables declaration//GEN-END:variables
@@ -470,14 +595,6 @@ private void setLookAndFeel() throws HeadlessException {
 
     public void setTxtHTiempo(javax.swing.JTextField txtHTiempo) {
         this.txtHTiempo = txtHTiempo;
-    }
-
-    public javax.swing.JTextField getTxtX0() {
-        return txtX0;
-    }
-
-    public void setTxtX0(javax.swing.JTextField txtX0) {
-        this.txtX0 = txtX0;
     }
 
     public javax.swing.JTextField getTxtTiempoMin() {
