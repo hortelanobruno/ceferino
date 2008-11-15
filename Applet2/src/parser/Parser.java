@@ -5,15 +5,11 @@
 package parser;
 
 import applet.SistemasDinamicos;
-import com.singularsys.jep.EvaluationException;
-import com.singularsys.jep.Jep;
-import com.singularsys.jep.ParseException;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.nfunk.jep.JEP;
+import org.nfunk.jep.ParseException;
 
 /**
  *
@@ -21,15 +17,14 @@ import java.util.logging.Logger;
  */
 public class Parser {
 
-    private Jep jep;
+    private JEP jep;
     private SistemasDinamicos vista;
 
     public Parser(String funcion) {
         iniciarParser();
         this.addFunc(funcion);
     }
-    
-    
+
     public Parser(SistemasDinamicos sis) {
         this.vista = sis;
         iniciarParser();
@@ -41,47 +36,60 @@ public class Parser {
         this.agregarFuncion(funcion);
     }
 
-    private void addFunc(String func)
-    {
+    private void addFunc(String func) {
         try {
             this.jep.parse(func);
         } catch (ParseException ex) {
             Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void agregarFuncion(String funcion) {
         try {
             this.jep.parse(funcion);
             vista.getTxtFuncion().setForeground(Color.black);
             vista.getButtonGraficar().setEnabled(true);
-        } catch (com.singularsys.jep.ParseException ex) {
+        } catch (ParseException ex) {
             vista.getTxtFuncion().setForeground(Color.red);
             vista.getButtonGraficar().setEnabled(false);
         }
     }
 
     private void iniciarParser() {
-        jep = new Jep();
+        /*jep = new JEP();
         // Allow implicit multiplication
         jep.setImplicitMul(true);
         // Add and initialize x to 0
         jep.addVariable("x", 0);
-        //jep.addFunction("sen", new org.nfunk.jep.function.Sine());
+    //jep.addFunction("sen", new org.nfunk.jep.function.Sine());*/
+        jep = new JEP();
+        jep.addStandardFunctions(); // agrega las funciones matematicas comunes.
+        jep.addStandardConstants(); // agrega las constantes estandar.
+        jep.addComplex(); // agrega numeros complejos.
+        jep.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
+        jep.addVariable("x", 0);
+        jep.setImplicitMul(true); // permite 2x en vez de 2*x
+        jep.initFunTab();
+        jep.initSymTab();
+                
     }
 
     public Object getValor(double x) {
         jep.addVariable("x", x);
         Object result = null;
-        try {
-            result = jep.evaluate();
+       
+        try
+        {
+            result = jep.getValueAsObject();
             if (result instanceof Double) {
-                return ((Double) jep.evaluate()).doubleValue();
+                return ((Double) jep.getValue()).doubleValue();
             } else {
-                throw new EvaluationException("Non-Double result");
+               throw new Exception();
             }
-        } catch (EvaluationException e) {
-            return result;
+        }
+        catch(Exception e)
+        {
+            return 0;
         }
     }
 }
