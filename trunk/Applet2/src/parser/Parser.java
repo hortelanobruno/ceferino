@@ -46,31 +46,30 @@ public class Parser {
 
     public void agregarFuncion(String funcion) {
         try {
-            this.jep.parse(funcion);
+            this.jep.parseExpression(funcion);
             vista.getTxtFuncion().setForeground(Color.black);
             vista.getButtonGraficar().setEnabled(true);
-        } catch (ParseException ex) {
+        } catch (Exception ex) {
             vista.getTxtFuncion().setForeground(Color.red);
             vista.getButtonGraficar().setEnabled(false);
         }
     }
 
     private void iniciarParser() {
-        /*jep = new JEP();
+        jep = new JEP();
         // Allow implicit multiplication
         jep.setImplicitMul(true);
         // Add and initialize x to 0
         jep.addVariable("x", 0);
-    //jep.addFunction("sen", new org.nfunk.jep.function.Sine());*/
-        jep = new JEP();
-        jep.addStandardFunctions(); // agrega las funciones matematicas comunes.
-        jep.addStandardConstants(); // agrega las constantes estandar.
-        jep.addComplex(); // agrega numeros complejos.
-        jep.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
-        jep.addVariable("x", 0);
-        jep.setImplicitMul(true); // permite 2x en vez de 2*x
-        jep.initFunTab();
-        jep.initSymTab();
+    //jep.addFunction("sen", new org.nfunk.jep.function.Sine());
+//        jep = new JEP();
+//        jep.addStandardFunctions(); // agrega las funciones matematicas comunes.
+//        jep.addStandardConstants(); // agrega las constantes estandar.
+//        jep.addComplex(); // agrega numeros complejos.
+//        jep.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
+//        jep.addVariable("x", 0);
+//        jep.setImplicitMul(true); // permite 2x en vez de 2*x
+        
                 
     }
 
