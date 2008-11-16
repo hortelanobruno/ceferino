@@ -56,15 +56,22 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                 @Override
                 public void run() 
                 {
+                    boolean okLoadParams = loadParams();
                     initComponents();
                     initComponents2();
                     setLookAndFeel();
                     loadDefaultParams();
-                    boolean okLoadParams = loadParams();
+                    
                     
                     if(okLoadParams)
                         setParams();
-                }            
+                    
+                    setParser(new Parser(getInstance()));
+                    rootFinder = new RootFinder(getInstance());
+                    graficadorFuncion = new GraficadorFuncion(getInstance());
+                    graficadorFases = new GraficadorFases(getInstance());
+                    graficadorTvsX = new GraficadorTvsX(getInstance());           
+                }
             });
         } 
         catch (Exception ex) 
@@ -72,6 +79,24 @@ public class SistemasDinamicos extends javax.swing.JApplet {
             ex.printStackTrace();
         }
     }
+    
+    public SistemasDinamicos getInstance()
+    {
+        return this;
+    }
+    
+    private void printParams() {
+                    System.out.println(funcion);
+                    System.out.println(h);
+                    System.out.println(hTiempo);
+                    System.out.println(tMax);
+                    System.out.println(tMin);
+                    System.out.println(xFinal);
+                    System.out.println(xInicial);
+                    System.out.println(fondoForm);
+                    System.out.println(fondoGrafico);
+                    System.out.println(fontColor);
+                }
     
     private void setParams()
     {
@@ -165,6 +190,7 @@ public class SistemasDinamicos extends javax.swing.JApplet {
             if(this.getParameter("hTiempo") != null)
                 this.hTiempo = Double.parseDouble(this.getParameter("hTiempo"));
             
+            
             if(this.getParameter("tMax") != null)
                 this.tMax = Double.parseDouble(this.getParameter("tMax"));
             
@@ -172,24 +198,25 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                 this.tMin = Double.parseDouble(this.getParameter("tMin"));
             
             if(this.getParameter("xFinal") != null)
-                this.xFinal = Double.parseDouble("xFinal");
-            
+                this.xFinal = Double.parseDouble(this.getParameter("xFinal"));
+                
             if(this.getParameter("xInicial") != null)
-                this.xInicial = Double.parseDouble("xInicial");
-            
+                this.xInicial = Double.parseDouble(this.getParameter("xInicial"));
+                
             if(this.getParameter("fondoForm") != null)
                 this.fondoForm = this.getParameter("fondoForm");
-            
+                
             if(this.getParameter("fondoGrafico") != null)
                 this.fondoGrafico = this.getParameter("fondoGrafico");            
-            
+                
             if(this.getParameter("fontColor") != null)
                 this.fontColor = this.getParameter("fontColor");
-            
+                
             return true;
         }
         catch(Exception e)
         {
+            System.out.println("Exxxxxxxx");
             return false;
         }
     }
@@ -405,13 +432,6 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         getTxtFuncion().setBackground(java.awt.Color.white);
         getTxtFuncion().setFont(new java.awt.Font("Dialog", 0, 11));
         getTxtFuncion().setForeground(java.awt.Color.black);
-
-        setParser(new Parser(this));
-
-        rootFinder = new RootFinder(this);
-        graficadorFuncion = new GraficadorFuncion(this);
-        graficadorFases = new GraficadorFases(this);
-        graficadorTvsX = new GraficadorTvsX(this);
     }
 
     private void vaciarTabbeds() {
