@@ -57,19 +57,19 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                 {
                     initComponents();
                     initComponents2();
+                    
+                    setParser(new Parser(getInstance()));
+                    rootFinder = new RootFinder(getInstance());
+                    graficadorFuncion = new GraficadorFuncion(getInstance());
+                    graficadorFases = new GraficadorFases(getInstance());
+                    graficadorTvsX = new GraficadorTvsX(getInstance());           
+                    
                     loadDefaultParams();
                     boolean okLoadParams = loadParams();
                     setLookAndFeel();
                          
                     if(okLoadParams)
                         setParams();
-                    
-                    printParams();
-                    setParser(new Parser(getInstance()));
-                    rootFinder = new RootFinder(getInstance());
-                    graficadorFuncion = new GraficadorFuncion(getInstance());
-                    graficadorFases = new GraficadorFases(getInstance());
-                    graficadorTvsX = new GraficadorTvsX(getInstance());           
                 }
             });
         } 
@@ -83,19 +83,6 @@ public class SistemasDinamicos extends javax.swing.JApplet {
     {
         return this;
     }
-    
-    private void printParams() {
-                    System.out.println(this.funcion);
-                    System.out.println(this.h);
-                    System.out.println(this.hTiempo);
-                    System.out.println(this.tMax);
-                    System.out.println(this.tMin);
-                    System.out.println(this.xFinal);
-                    System.out.println(this.xInicial);
-                    System.out.println(this.fondoForm);
-                    System.out.println(this.fondoGrafico);
-                    System.out.println(this.fontColor);
-                }
     
     private void setParams()
     {
@@ -460,7 +447,7 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
 
 private void txtFuncionCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtFuncionCaretUpdate
     String newExpressionString = getTxtFuncion().getText();
-    //getParser().agregarFuncion(newExpressionString);
+    getParser().agregarFuncion(newExpressionString);
 }//GEN-LAST:event_txtFuncionCaretUpdate
 
 private void setLookAndFeel() throws HeadlessException {
