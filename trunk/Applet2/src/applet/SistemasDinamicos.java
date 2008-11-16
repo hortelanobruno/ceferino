@@ -52,20 +52,19 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         {
             java.awt.EventQueue.invokeAndWait(new Runnable() 
             {
-
                 @Override
                 public void run() 
                 {
-                    boolean okLoadParams = loadParams();
                     initComponents();
                     initComponents2();
-                    setLookAndFeel();
                     loadDefaultParams();
-                    
-                    
+                    boolean okLoadParams = loadParams();
+                    setLookAndFeel();
+                         
                     if(okLoadParams)
                         setParams();
                     
+                    printParams();
                     setParser(new Parser(getInstance()));
                     rootFinder = new RootFinder(getInstance());
                     graficadorFuncion = new GraficadorFuncion(getInstance());
@@ -86,16 +85,16 @@ public class SistemasDinamicos extends javax.swing.JApplet {
     }
     
     private void printParams() {
-                    System.out.println(funcion);
-                    System.out.println(h);
-                    System.out.println(hTiempo);
-                    System.out.println(tMax);
-                    System.out.println(tMin);
-                    System.out.println(xFinal);
-                    System.out.println(xInicial);
-                    System.out.println(fondoForm);
-                    System.out.println(fondoGrafico);
-                    System.out.println(fontColor);
+                    System.out.println(this.funcion);
+                    System.out.println(this.h);
+                    System.out.println(this.hTiempo);
+                    System.out.println(this.tMax);
+                    System.out.println(this.tMin);
+                    System.out.println(this.xFinal);
+                    System.out.println(this.xInicial);
+                    System.out.println(this.fondoForm);
+                    System.out.println(this.fondoGrafico);
+                    System.out.println(this.fontColor);
                 }
     
     private void setParams()
@@ -189,8 +188,7 @@ public class SistemasDinamicos extends javax.swing.JApplet {
             
             if(this.getParameter("hTiempo") != null)
                 this.hTiempo = Double.parseDouble(this.getParameter("hTiempo"));
-            
-            
+                        
             if(this.getParameter("tMax") != null)
                 this.tMax = Double.parseDouble(this.getParameter("tMax"));
             
@@ -211,7 +209,7 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                 
             if(this.getParameter("fontColor") != null)
                 this.fontColor = this.getParameter("fontColor");
-                
+                            
             return true;
         }
         catch(Exception e)
@@ -462,7 +460,7 @@ private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GE
 
 private void txtFuncionCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtFuncionCaretUpdate
     String newExpressionString = getTxtFuncion().getText();
-    getParser().agregarFuncion(newExpressionString);
+    //getParser().agregarFuncion(newExpressionString);
 }//GEN-LAST:event_txtFuncionCaretUpdate
 
 private void setLookAndFeel() throws HeadlessException {
