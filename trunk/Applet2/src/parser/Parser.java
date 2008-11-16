@@ -63,14 +63,13 @@ public class Parser {
         jep.addVariable("x", 0);
     //jep.addFunction("sen", new org.nfunk.jep.function.Sine());
 //        jep = new JEP();
-//        jep.addStandardFunctions(); // agrega las funciones matematicas comunes.
-//        jep.addStandardConstants(); // agrega las constantes estandar.
+        jep.addStandardFunctions(); // agrega las funciones matematicas comunes.
+        jep.addStandardConstants(); // agrega las constantes estandar.
 //        jep.addComplex(); // agrega numeros complejos.
 //        jep.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
 //        jep.addVariable("x", 0);
 //        jep.setImplicitMul(true); // permite 2x en vez de 2*x
-        
-                
+         
     }
 
     public Object getValor(double x) {
