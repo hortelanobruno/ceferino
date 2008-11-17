@@ -6,10 +6,7 @@
 package applet;
 
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -22,11 +19,8 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-/**
- *
- * @author Administrador
- */
-public class GraficadorTvsX {
+public class GraficadorTvsX 
+{
     
     private SistemasDinamicos vista;
     private double[] raices;
@@ -34,6 +28,13 @@ public class GraficadorTvsX {
     
     public GraficadorTvsX(SistemasDinamicos sistema) {
         this.vista = sistema;
+    }
+    
+    private boolean entra(double a)
+    {
+        double fin = raices[raices.length-1];
+        double inicio = raices[0];
+        return ( (a<(fin +2)) && (a>(inicio -2))  )?true:false;
     }
     
     private XYSeries getSerieEuler(double seed)
@@ -50,7 +51,8 @@ public class GraficadorTvsX {
         
         for(double i =0 ; i < Double.parseDouble(this.vista.getTxtTiempoMax().getText());i+=Double.parseDouble(this.vista.getTxtHTiempo().getText()))
         {
-            if(eu.get(index) < 4)
+            //if( (eu.get(index) < 4) && (eu.get(index) >-4))
+            if(entra(eu.get(index)))
                 s.add(i,eu.get(index++));
             else index++;
         }
@@ -84,7 +86,8 @@ public class GraficadorTvsX {
         
        for(double i =0 ; i > Double.parseDouble(this.vista.getTxtTiempoMin().getText());i-=Double.parseDouble(this.vista.getTxtHTiempo().getText()))
        {
-           if(eu.get(index) > -4)
+           //if( (eu.get(index) < 4) && (eu.get(index) > -4))
+           if(entra(eu.get(index)))
                 s.add(i,eu.get(index++));
            else index++;
        }
@@ -107,17 +110,30 @@ public class GraficadorTvsX {
             System.out.println("Semilla : " + seed);
             for(int i = 0; i < this.vista.getRaices().length-1;i++)
             {  
-                seed = Math.ceil(Math.random()*raices[i+1]) + (raices[i]);
-                //seed = raices[i];
-                ret.addSeries(this.getSerieEuler(seed));
-                ret.addSeries(this.getSerieEulerNegativa(seed));
-                System.out.println("Semilla : " + seed);
+                //seed = (Math.random()*raices[i+1]) + (raices[i]);
+                //seed = (Math.random()*raices[i]) + (raices[i+1]);
+                
+//                seed = (Math.random()*raices[i+1]) + raices[i];
+//                //seed+= 10*Double.parseDouble(this.vista.getTxtH().getText());
+//                if( (seed > raices[i]) && (seed < raices[i+1]))
+//                {
+//                    //seed = raices[i];
+//                    //seed = (raices[i+1] + raices[i])/2;
+//                    ret.addSeries(this.getSerieEuler(seed));
+//                    ret.addSeries(this.getSerieEulerNegativa(seed));
+//                    System.out.println("Semilla : " + seed + "   Raiz" + raices[i] + "--> Agregada");
+//                }
+               // else System.out.println("Semilla : " + seed + "   Raiz" + raices[i] + "--> N0 Agregada");
+                
+                 seed = (raices[i+1] + raices[i])/2;
+                 ret.addSeries(this.getSerieEuler(seed));
+                 ret.addSeries(this.getSerieEulerNegativa(seed));
             }
            // seed =  (Math.random()*(raices[raices.length-1]+1)) + raices[raices.length-1];
             seed = raices[raices.length-1]+1;
             ret.addSeries(this.getSerieEuler(seed));
             ret.addSeries(this.getSerieEulerNegativa(seed));
-            System.out.println("Semilla : " + seed);
+            System.out.println("Semilla : " + seed+ "   Raiz" +raices[raices.length-1]);
         }else{
             double seed = 0;
             ret.addSeries(this.getSerieEuler(seed));
