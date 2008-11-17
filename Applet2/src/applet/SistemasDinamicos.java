@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -438,16 +439,30 @@ private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
 
 private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGraficarActionPerformed
 
-    vaciarTabbeds();
-    graficadorFuncion.graficarFuncion();
-    setRaices(rootFinder.findRoot(this.getTxtFuncion().getText(), Double.parseDouble(this.getTxtXinicial().getText()), Double.parseDouble(this.getTxtXfinal().getText()), 200));
-    graficadorFases.graficarFases();
-    graficadorTvsX.graficarTvsX();
+    //if(this.parser.okParse(this.getTxtFuncion().getText()))
+    //{
+        vaciarTabbeds();
+        graficadorFuncion.graficarFuncion();
+        setRaices(rootFinder.findRoot(this.getTxtFuncion().getText(), Double.parseDouble(this.getTxtXinicial().getText()), Double.parseDouble(this.getTxtXfinal().getText()), 200));
+        graficadorFases.graficarFases();
+        graficadorTvsX.graficarTvsX();
+   /* }
+    else JOptionPane.showMessageDialog(this, "no se puede parsear");*/
 }//GEN-LAST:event_buttonGraficarActionPerformed
 
 private void txtFuncionCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtFuncionCaretUpdate
     String newExpressionString = getTxtFuncion().getText();
-    getParser().agregarFuncion(newExpressionString);
+    //getParser().agregarFuncion(newExpressionString);
+    if(!(this.getParser().okParse(newExpressionString)))
+    {
+       this.getTxtFuncion().setForeground(Color.red);
+       this.getButtonGraficar().setEnabled(false);
+    }
+    else
+    {
+        this.getTxtFuncion().setForeground(Color.black);
+        this.getButtonGraficar().setEnabled(true);
+    }
 }//GEN-LAST:event_txtFuncionCaretUpdate
 
 private void setLookAndFeel() throws HeadlessException {

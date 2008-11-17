@@ -54,6 +54,19 @@ public class Parser {
             vista.getButtonGraficar().setEnabled(false);
         }
     }
+    
+    public boolean okParse(String func)
+    {
+        try
+        {
+            this.jep.parse(func);
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
 
     private void iniciarParser() {
         jep = new JEP();
