@@ -107,6 +107,15 @@ public class GraficadorTvsX
             //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
             ret.addSeries(this.getSerieEuler(seed));
             ret.addSeries(this.getSerieEulerNegativa(seed));
+            
+            /* si se quiere una sola linea, borrar todo lo de abajo */
+            
+             seed += 50*Double.parseDouble(this.vista.getTxtH().getText());
+                 ret.addSeries(this.getSerieEuler(seed));
+                 ret.addSeries(this.getSerieEulerNegativa(seed));
+                 
+            /* si se quiere una sola linea, borrar todo lo de arriba */
+            
             System.out.println("Semilla : " + seed);
             for(int i = 0; i < this.vista.getRaices().length-1;i++)
             {  
@@ -128,11 +137,31 @@ public class GraficadorTvsX
                  seed = (raices[i+1] + raices[i])/2;
                  ret.addSeries(this.getSerieEuler(seed));
                  ret.addSeries(this.getSerieEulerNegativa(seed));
+                 
+                 /* si se quiere una sola linea, borrar todo lo de abajo */
+                  seed += 50*Double.parseDouble(this.vista.getTxtH().getText());
+                 ret.addSeries(this.getSerieEuler(seed));
+                 ret.addSeries(this.getSerieEulerNegativa(seed));
+                 
+                 seed -= 100*Double.parseDouble(this.vista.getTxtH().getText());
+                 
+                 ret.addSeries(this.getSerieEuler(seed));
+                 ret.addSeries(this.getSerieEulerNegativa(seed));
+                 
+                 /* si se quiere una sola linea, borrar todo lo de arriba */
             }
            // seed =  (Math.random()*(raices[raices.length-1]+1)) + raices[raices.length-1];
             seed = raices[raices.length-1]+1;
             ret.addSeries(this.getSerieEuler(seed));
             ret.addSeries(this.getSerieEulerNegativa(seed));
+            
+             /* si se quiere una sola linea, borrar todo lo de abajo */
+            
+             seed += 50*Double.parseDouble(this.vista.getTxtH().getText());
+                 ret.addSeries(this.getSerieEuler(seed));
+                 ret.addSeries(this.getSerieEulerNegativa(seed));
+                 
+            /* si se quiere una sola linea, borrar todo lo de arriba */
             System.out.println("Semilla : " + seed+ "   Raiz" +raices[raices.length-1]);
         }else{
             double seed = 0;
