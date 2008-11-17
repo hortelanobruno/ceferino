@@ -86,7 +86,7 @@ public class GraficadorFuncion {
         numberaxis1.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         numberaxis1.setUpperMargin(0.12D);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer(false, true);
-        xylineandshaperenderer.setSeriesPaint(0, Color.black);
+        xylineandshaperenderer.setSeriesPaint(0, Color.blue);
         xylineandshaperenderer.setBaseShapesVisible(true);
         xylineandshaperenderer.setBaseItemLabelsVisible(true);
         xylineandshaperenderer.setSeriesLinesVisible(0, true);

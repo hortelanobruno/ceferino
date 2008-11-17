@@ -6,7 +6,10 @@
 package applet;
 
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -38,14 +41,55 @@ public class GraficadorTvsX {
         Euler e = new Euler(Double.parseDouble(this.vista.getTxtHTiempo().getText()), 0, seed, 
                             this.vista.getTxtFuncion().getText(), Double.parseDouble(this.vista.getTxtTiempoMin().getText()),
                             Double.parseDouble(this.vista.getTxtTiempoMax().getText()), this.vista.getParser());
-        
+        int index = 0;
         XYSeries s = new XYSeries("serie ");
         List<Double> eu = e.getPoints();
         
-        for(int i = 0; i<eu.size();i++)
-            s.add(i,eu.get(i));
+       /* for(int i = 0; i<eu.size();i++)
+            s.add(i,eu.get(i));*/
+        
+        for(double i =0 ; i < Double.parseDouble(this.vista.getTxtTiempoMax().getText());i+=Double.parseDouble(this.vista.getTxtHTiempo().getText()))
+        {
+            if(eu.get(index) < 4)
+                s.add(i,eu.get(index++));
+            else index++;
+        }
+            
+        /*HashMap<Double,Double> points = e.getPoints();
+        
+        
+        Set<Double> a =  points.keySet();
+        
+        for(Iterator<Double> i = a.iterator(); i.hasNext();)
+        {
+            Double key = i.next();
+            s.add(key,points.get(key));
+        }*/
+        
     
         return s;
+    }
+    
+    private XYSeries getSerieEulerNegativa(double seed)
+    {
+        Euler e = new Euler(Double.parseDouble(this.vista.getTxtHTiempo().getText()), 0, seed, 
+                            this.vista.getTxtFuncion().getText(), Double.parseDouble(this.vista.getTxtTiempoMin().getText()),
+                            Double.parseDouble(this.vista.getTxtTiempoMax().getText()), this.vista.getParser());
+        int index = 0;
+        XYSeries s = new XYSeries("serie ");
+        List<Double> eu = e.getNegativePoints();
+        
+       /* for(int i = 0; i<eu.size();i++)
+            s.add(i,eu.get(i));*/
+        
+       for(double i =0 ; i > Double.parseDouble(this.vista.getTxtTiempoMin().getText());i-=Double.parseDouble(this.vista.getTxtHTiempo().getText()))
+       {
+           if(eu.get(index) > -4)
+                s.add(i,eu.get(index++));
+           else index++;
+       }
+        
+       return s;
     }
     
     private XYSeriesCollection getAllEulerSeries()
@@ -54,21 +98,25 @@ public class GraficadorTvsX {
         XYSeriesCollection ret = new XYSeriesCollection(xyseries);
         if(raices.length != 0){
             //double seed = (Math.random()*raices[0]) + (raices[0] -1);
-            double seed = raices[0]-Double.parseDouble(vista.getTxtH().getText());
+            //double seed = raices[0]-Double.parseDouble(vista.getTxtH().getText());  //con esto grafica, pero no hace casi nada abajo
+            double seed = raices[0] -1; //si pones esto (es lo mismo que hacemos con la ultima raiz) no anda nada
             //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[0]-1));
-            //zret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
+            //ret.addSeries(this.getSerieEuler(this.vista.getRaices()[this.vista.getRaices().length-1]-1));
             ret.addSeries(this.getSerieEuler(seed));
+            ret.addSeries(this.getSerieEulerNegativa(seed));
             System.out.println("Semilla : " + seed);
             for(int i = 0; i < this.vista.getRaices().length-1;i++)
             {  
                 seed = Math.ceil(Math.random()*raices[i+1]) + (raices[i]);
                 //seed = raices[i];
                 ret.addSeries(this.getSerieEuler(seed));
+                ret.addSeries(this.getSerieEulerNegativa(seed));
                 System.out.println("Semilla : " + seed);
             }
            // seed =  (Math.random()*(raices[raices.length-1]+1)) + raices[raices.length-1];
             seed = raices[raices.length-1]+1;
             ret.addSeries(this.getSerieEuler(seed));
+            ret.addSeries(this.getSerieEulerNegativa(seed));
             System.out.println("Semilla : " + seed);
         }else{
             double seed = 0;
@@ -76,7 +124,6 @@ public class GraficadorTvsX {
         }
         return ret;
     }
-    
     
     public void graficarTvsX(){
         raices = this.vista.getRaices();
@@ -98,16 +145,17 @@ public class GraficadorTvsX {
             numberaxisy.setRange(raices[0] - 1d, raices[raices.length - 1] + 1d);
         }
         
-        xyplot.setRangeAxis(numberaxisy);
+        xyplot.setDomainZeroBaselineVisible(true);
+        xyplot.setRangeZeroBaselineVisible(true);
         
         xyplot.setDataset(1, euler1);
         xyplot.getDomainAxis().setLowerMargin(0.0D);
         xyplot.getDomainAxis().setUpperMargin(0.0D);
-
+        
         xyplot.getRenderer(0).setPaint(Color.black);
         XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer();
         xylineandshaperenderer.setShapesVisible(false);
-        xylineandshaperenderer.setPaint(Color.red);
+        xylineandshaperenderer.setPaint(Color.blue);
         xylineandshaperenderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
 
         xyplot.setRenderer(1,xylineandshaperenderer);
@@ -128,13 +176,14 @@ public class GraficadorTvsX {
     
     private XYDataset cargarPuntosFvsT() {
         XYSeries xyseries = new XYSeries("Series 1");
-        //double inicio = Double.parseDouble(this.vista.getTxtXinicial().getText());
-        //double fin = Double.parseDouble(this.vista.getTxtXfinal().getText());
+        double inicio = Double.parseDouble(this.vista.getTxtTiempoMin().getText())-1;
+        double fin = Double.parseDouble(this.vista.getTxtTiempoMax().getText())+1;
 
         XYSeriesCollection xyseriescollection = new XYSeriesCollection();
         for (int i = 0; i < this.vista.getRaices().length; i++) {
             xyseries = new XYSeries("Series " + (i + 1));
-            for (double j = -10; j < 10; j += 0.1) {
+           // for (double j = -10; j < 10; j += 0.1) {
+            for(double j = inicio; j < fin;j+=0.1){
                 xyseries.add(j, this.vista.getRaices()[i]);
             }
             xyseriescollection.addSeries(xyseries);

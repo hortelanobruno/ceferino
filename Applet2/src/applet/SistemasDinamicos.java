@@ -154,9 +154,9 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         getTxtH().setText("0.01");
         getTxtXfinal().setText("5");
         getTxtXinicial().setText("-5");
-        getTxtHTiempo().setText("0.2");
-        getTxtTiempoMin().setText("-0.5");
-        getTxtTiempoMax().setText("0.6");
+        getTxtHTiempo().setText("0.01");
+        getTxtTiempoMin().setText("-2");
+        getTxtTiempoMax().setText("2");
         getTxtFuncion().setText("x^2-2");
         this.fondoForm = "";
         this.fondoGrafico = "";
