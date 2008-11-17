@@ -65,27 +65,74 @@ public class Euler
     
     public List<Double> getPoints()
     {
-        if(this.internalPositiveGraphicPoints == null)
+        
+        double index = this.getTimeMin();
+        //double index = 0;
+        double top = this.getTimeMax();
+        this.internalPositiveGraphicPoints = new ArrayList<Double>();
+
+        double funcVal =(Double)this.parser.getValor(this.getSeedX());
+        double xant = this.getSeedY();
+        double x;
+
+        while(index<=top)
         {
-            double index = this.getTimeMin();
-            double top = this.getTimeMax();
-            this.internalPositiveGraphicPoints = new ArrayList<Double>();
-           
-            double funcVal =(Double)this.parser.getValor(this.getSeedX());
-            double xant = this.getSeedY();
-            double x;
-            
-            while(index<=top)
-            {
-                x = xant + (this.getH()*funcVal);
-                xant = x;
-                index+=this.getH();
-                funcVal =(Double)this.parser.getValor(xant);
-                this.internalPositiveGraphicPoints.add(x);
-            }
+            x = xant + (this.getH()*funcVal);
+            xant = x;
+            index+=this.getH();
+            funcVal =(Double)this.parser.getValor(xant);
+            this.internalPositiveGraphicPoints.add(x);
         }
-        return this.internalPositiveGraphicPoints; 
+       
+        return this.internalPositiveGraphicPoints;
     }
+    
+    public List<Double> getNegativePoints()
+    { 
+        double index =0;
+        double top = this.getTimeMin();
+        this.internalNegativeGraphicPoints = new ArrayList<Double>();
+
+        double funcVal =(Double)this.parser.getValor(this.getSeedX());
+        double xant = this.getSeedY();
+        double x;
+
+        while(index>=top)
+        {
+            x = xant- (this.getH()*funcVal);
+            xant = x;
+            index-=this.getH();
+            funcVal =(Double)this.parser.getValor(xant);
+            this.internalNegativeGraphicPoints.add(x);
+        }
+        
+        return this.internalNegativeGraphicPoints; 
+    }
+    
+//     public HashMap<Double,Double> getPoints()
+//    {
+//        if(this.internalPositiveGraphicPoints == null)
+//        {
+//            double index = this.getTimeMin();
+//            double top = this.getTimeMax();
+//            this.internalPositiveGraphicPoints = new HashMap<Double, Double>();
+//           
+//            double funcVal =(Double)this.parser.getValor(this.getSeedX());
+//            double xant = this.getSeedY();
+//            double x;
+//            
+//            while(index<=top)
+//            {
+//                x = xant + (this.getH()*funcVal);
+//                xant = x;
+//                
+//                funcVal =(Double)this.parser.getValor(xant);
+//                this.internalPositiveGraphicPoints.put(index, x);
+//                index+=this.getH();
+//            }
+//        }
+//        return this.internalPositiveGraphicPoints; 
+//    }
 
     public double getTimeMax() {
         return timeMax;
