@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -418,6 +417,15 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         getTxtFuncion().setBackground(java.awt.Color.white);
         getTxtFuncion().setFont(new java.awt.Font("Dialog", 0, 11));
         getTxtFuncion().setForeground(java.awt.Color.black);
+        
+        this.getTxtFuncion().setNextFocusableComponent(this.getTxtH());
+        this.getTxtH().setNextFocusableComponent(this.getTxtTiempoMin());
+        this.getTxtTiempoMin().setNextFocusableComponent(this.getTxtTiempoMax());
+        this.getTxtTiempoMax().setNextFocusableComponent(this.getTxtHTiempo());
+        this.getTxtHTiempo().setNextFocusableComponent(this.getTxtXinicial());
+        this.getTxtXinicial().setNextFocusableComponent(this.getTxtXfinal());
+        this.getTxtXfinal().setNextFocusableComponent(this.getButtonGraficar());
+        this.getButtonGraficar().setNextFocusableComponent(this.getTxtFuncion());
     }
 
     private void vaciarTabbeds() {

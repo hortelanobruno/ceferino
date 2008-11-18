@@ -24,7 +24,7 @@ public class GraficadorTvsX
     
     private SistemasDinamicos vista;
     private double[] raices;
-    private XYDataset dataGraficoFvsT;
+    private XYDataset repulsoras;
     
     public GraficadorTvsX(SistemasDinamicos sistema) {
         this.vista = sistema;
@@ -168,17 +168,18 @@ public class GraficadorTvsX
             ret.addSeries(this.getSerieEuler(seed));
         }
         return ret;
-    }
+    }    
     
     public void graficarTvsX(){
         raices = this.vista.getRaices();
-        dataGraficoFvsT = this.cargarPuntosFvsT(); //Cargo XYSeries para las raices
+        repulsoras = this.cargarRepulsoras(); //Cargo XYSeries para las raices
         //XYDataset euler1 = this.cargarEuler(); //Cargo a euler en otra serie
         XYDataset euler1 = this.getAllEulerSeries(); //Cargo a euler en otra serie
+        XYDataset atractoras = this.cargarAtractoras();
         this.vista.getJTabbedFvsT().removeAll();
 
 
-        JFreeChart jfreechart = ChartFactory.createXYLineChart("F vs T", "t", "x", dataGraficoFvsT, PlotOrientation.VERTICAL, true, true, false);
+        JFreeChart jfreechart = ChartFactory.createXYLineChart("F vs T", "t", "x", repulsoras, PlotOrientation.VERTICAL, true, true, false);
         jfreechart.removeLegend();
         XYPlot xyplot = (XYPlot) jfreechart.getPlot();
         
@@ -194,16 +195,28 @@ public class GraficadorTvsX
         xyplot.setRangeZeroBaselineVisible(true);
         
         xyplot.setDataset(1, euler1);
+        xyplot.setDataset(2, atractoras);
         xyplot.getDomainAxis().setLowerMargin(0.0D);
         xyplot.getDomainAxis().setUpperMargin(0.0D);
         
-        xyplot.getRenderer(0).setPaint(Color.black);
-        XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer();
+        xyplot.getRenderer(0).setPaint(Color.red);
+        /*XYLineAndShapeRenderer xylineandshaperenderer = new XYLineAndShapeRenderer();
         xylineandshaperenderer.setShapesVisible(false);
         xylineandshaperenderer.setPaint(Color.blue);
-        xylineandshaperenderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
+        xylineandshaperenderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());*/
+        
+        XYLineAndShapeRenderer xylineandshaperenderer2 = new XYLineAndShapeRenderer();
+        xylineandshaperenderer2.setShapesVisible(false);
+        xylineandshaperenderer2.setPaint(Color.green);
+        xylineandshaperenderer2.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
+        xyplot.setRenderer(2,xylineandshaperenderer2);
+        
+        XYLineAndShapeRenderer xylineandshaperenderer3 = new XYLineAndShapeRenderer();
+        xylineandshaperenderer3.setShapesVisible(false);
+        xylineandshaperenderer3.setPaint(Color.blue);
+        xylineandshaperenderer3.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
 
-        xyplot.setRenderer(1,xylineandshaperenderer);
+        xyplot.setRenderer(1,xylineandshaperenderer3);
         
         
         ChartPanel chartPanel = new ChartPanel(jfreechart, false);
@@ -219,19 +232,63 @@ public class GraficadorTvsX
         this.vista.repaint();
     }
     
-    private XYDataset cargarPuntosFvsT() {
+    private XYDataset cargarAtractoras() {
         XYSeries xyseries = new XYSeries("Series 1");
         double inicio = Double.parseDouble(this.vista.getTxtTiempoMin().getText())-1;
         double fin = Double.parseDouble(this.vista.getTxtTiempoMax().getText())+1;
+        
+        
+        double h = Double.valueOf(this.vista.getTxtH().getText());
 
         XYSeriesCollection xyseriescollection = new XYSeriesCollection();
-        for (int i = 0; i < this.vista.getRaices().length; i++) {
-            xyseries = new XYSeries("Series " + (i + 1));
+        
+        for (int i = 0; i < this.vista.getRaices().length; i++) 
+        {
+            double raiz = raices[i];
+            double izq = (Double) this.vista.getParser().getValor(raiz - h);
+            double der = (Double) this.vista.getParser().getValor(raiz + h);
+            
+            if( (der < 0) && (izq > 0))
+            {
+                xyseries = new XYSeries("Series " + (i + 1));
            // for (double j = -10; j < 10; j += 0.1) {
-            for(double j = inicio; j < fin;j+=0.1){
-                xyseries.add(j, this.vista.getRaices()[i]);
+                for(double j = inicio; j < fin;j+=0.1){
+                    xyseries.add(j, this.vista.getRaices()[i]);
+                }
+                xyseriescollection.addSeries(xyseries);
             }
-            xyseriescollection.addSeries(xyseries);
+        }
+        //ACA FIJATE Q T CARGA UNA SERIE POR CADA RAIZ
+        //ENTONCES T PONE UNA DE CADA COLOR
+
+        return xyseriescollection;
+    }
+    
+    private XYDataset cargarRepulsoras() {
+        XYSeries xyseries = new XYSeries("Series 1");
+        double inicio = Double.parseDouble(this.vista.getTxtTiempoMin().getText())-1;
+        double fin = Double.parseDouble(this.vista.getTxtTiempoMax().getText())+1;
+        
+        
+        double h = Double.valueOf(this.vista.getTxtH().getText());
+
+        XYSeriesCollection xyseriescollection = new XYSeriesCollection();
+        
+        for (int i = 0; i < this.vista.getRaices().length; i++) 
+        {
+            double raiz = raices[i];
+            double izq = (Double) this.vista.getParser().getValor(raiz - h);
+            double der = (Double) this.vista.getParser().getValor(raiz + h);
+            
+            if( ((der > 0) && (izq < 0)) || (((der < 0) && (izq < 0)) || ((der > 0) && (izq > 0))))
+            {
+                xyseries = new XYSeries("Series " + (i + 1));
+           // for (double j = -10; j < 10; j += 0.1) {
+                for(double j = inicio; j < fin;j+=0.1){
+                    xyseries.add(j, this.vista.getRaices()[i]);
+                }
+                xyseriescollection.addSeries(xyseries);
+            }
         }
         //ACA FIJATE Q T CARGA UNA SERIE POR CADA RAIZ
         //ENTONCES T PONE UNA DE CADA COLOR
