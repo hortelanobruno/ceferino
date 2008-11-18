@@ -9,9 +9,13 @@ import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.Iterator;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.nfunk.jep.FunctionTable;
 import parser.Parser;
 
 /**
@@ -218,8 +222,6 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         panelCentral = new javax.swing.JPanel();
         panelGraficoFases = new javax.swing.JPanel();
         jTabbedFases = new javax.swing.JTabbedPane();
-        panelFvsT = new javax.swing.JPanel();
-        jTabbedFvsT = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtFuncion = new javax.swing.JTextField();
@@ -236,6 +238,8 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         txtHTiempo = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtTiempoMin = new javax.swing.JTextField();
+        panelFvsT = new javax.swing.JPanel();
+        jTabbedFvsT = new javax.swing.JTabbedPane();
         panelGrafico1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
 
@@ -243,11 +247,6 @@ public class SistemasDinamicos extends javax.swing.JApplet {
         panelGraficoFases.setPreferredSize(new java.awt.Dimension(150, 150));
         panelGraficoFases.setLayout(new java.awt.GridLayout(0, 1));
         panelGraficoFases.add(jTabbedFases);
-
-        panelFvsT.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 3"));
-        panelFvsT.setPreferredSize(new java.awt.Dimension(150, 150));
-        panelFvsT.setLayout(new java.awt.GridLayout(0, 1));
-        panelFvsT.add(jTabbedFvsT);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Panel Data"));
 
@@ -364,6 +363,11 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                 .addContainerGap())
         );
 
+        panelFvsT.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 3"));
+        panelFvsT.setPreferredSize(new java.awt.Dimension(150, 150));
+        panelFvsT.setLayout(new java.awt.GridLayout(0, 1));
+        panelFvsT.add(jTabbedFvsT);
+
         panelGrafico1.setBorder(javax.swing.BorderFactory.createTitledBorder("Grafico 1"));
         panelGrafico1.setPreferredSize(new java.awt.Dimension(150, 150));
         panelGrafico1.setLayout(new java.awt.GridLayout(0, 1));
@@ -379,9 +383,9 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelFvsT, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-                    .addComponent(panelGrafico1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE))
+                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelGrafico1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelFvsT, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelCentralLayout.setVerticalGroup(
@@ -390,26 +394,30 @@ public class SistemasDinamicos extends javax.swing.JApplet {
                 .addContainerGap()
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
                         .addComponent(panelGrafico1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addComponent(panelFvsT, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelCentralLayout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addComponent(panelGraficoFases, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(241, 241, 241))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelCentral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelCentral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(414, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -445,15 +453,28 @@ private void txtFuncionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
     }
 }//GEN-LAST:event_txtFuncionKeyPressed
 
+private boolean okDominio()
+{
+    return (Double.valueOf(this.getTxtXinicial().getText())<Double.valueOf(this.getTxtXfinal().getText()))?true:false;
+}
+
 private void buttonGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGraficarActionPerformed
 
     //if(this.parser.okParse(this.getTxtFuncion().getText()))
     //{
+    if(okDominio())
+    {
+        
         vaciarTabbeds();
         graficadorFuncion.graficarFuncion();
         setRaices(rootFinder.findRoot(this.getTxtFuncion().getText(), Double.parseDouble(this.getTxtXinicial().getText()), Double.parseDouble(this.getTxtXfinal().getText()), 200));
         graficadorFases.graficarFases();
         graficadorTvsX.graficarTvsX();
+    }
+    else
+    {
+        JOptionPane.showMessageDialog(this, "EL x-inicial debe ser menor que el x-final");
+    }
    /* }
     else JOptionPane.showMessageDialog(this, "no se puede parsear");*/
 }//GEN-LAST:event_buttonGraficarActionPerformed

@@ -8,6 +8,7 @@ import applet.SistemasDinamicos;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.nfunk.jep.FunctionTable;
 import org.nfunk.jep.JEP;
 import org.nfunk.jep.ParseException;
 
@@ -78,7 +79,7 @@ public class Parser {
 //        jep = new JEP();
         jep.addStandardFunctions(); // agrega las funciones matematicas comunes.
         jep.addStandardConstants(); // agrega las constantes estandar.
-        jep.addComplex();
+        //jep.addComplex();
 //        jep.addComplex(); // agrega numeros complejos.
 //        jep.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
 //        jep.addVariable("x", 0);
