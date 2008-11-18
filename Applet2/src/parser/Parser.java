@@ -78,6 +78,7 @@ public class Parser {
 //        jep = new JEP();
         jep.addStandardFunctions(); // agrega las funciones matematicas comunes.
         jep.addStandardConstants(); // agrega las constantes estandar.
+        jep.addComplex();
 //        jep.addComplex(); // agrega numeros complejos.
 //        jep.addFunction("sen", new org.nfunk.jep.function.Sine());// habilitar 'sen'
 //        jep.addVariable("x", 0);
